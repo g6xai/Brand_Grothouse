@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200">
+  <title>G26x — Editorial Wordmark (Light)</title>
+  <defs>
+    <linearGradient id="wm-l" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3944BC"></stop>
+      <stop offset="1" stop-color="#1A2244"></stop>
+    </linearGradient>
+  </defs>
+  <g font-family="&#39;Source Serif 4&#39;, Georgia, serif" font-weight="700">
+    <text x="60" y="130" font-size="130" fill="#1A2244" letter-spacing="-0.03em">G<tspan dx="2">2</tspan><tspan dx="2">6</tspan></text>
+    <text x="370" y="130" font-size="130" font-style="italic" font-weight="400" fill="url(#wm-l)" letter-spacing="-0.02em">x</text>
+  </g>
+  <line x1="60" y1="160" x2="540" y2="160" stroke="#3944BC" stroke-width="1" opacity="0.5"></line>
+  <text x="60" y="180" font-family="&#39;JetBrains Mono&#39;, monospace" font-size="10" font-weight="700" letter-spacing="0.4em" fill="#3944BC">GROTHOUSE · FAMILY · XPERIENCE · EST 2026</text>
+</svg>
