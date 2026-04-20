@@ -1,15 +1,292 @@
-<!DOCTYPE html>
-<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="medium" data-theme="dark">
+<!doctype html>
+<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="subtle" data-preset="editorial" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Brand Dashboard — Grothouse</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Grothouse Family — Brand System</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="kit/grothouse-system.css" />
+<link rel="stylesheet" href="kit/theme-toggle.css" />
+<style>
+  :root { color-scheme: light; }
+  html, body { background: var(--g-bg); color: var(--g-fg); }
+  body { margin: 0; font-family: var(--g-f-body); font-size: 15px; line-height: 1.65; }
+  main { max-width: 1180px; margin: 0 auto; padding: 80px 60px 120px; position: relative; }
+
+  /* ambient orb */
+  .ambient { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: -1; }
+  .ambient .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .35; }
+  .ambient .a { width: 420px; height: 420px; top: -120px; left: -80px; background: rgba(var(--g-accent-rgb), .55); animation: drift-a 13s linear infinite; }
+  .ambient .b { width: 340px; height: 340px; bottom: -100px; right: -60px; background: rgba(var(--g-accent-rgb), .35); animation: drift-b 16s linear infinite; }
+  @keyframes drift-a { 0%,100% { transform: translate(0,0); } 50% { transform: translate(50px, 30px); } }
+  @keyframes drift-b { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-40px, -20px); } }
+
+  .eyebrow { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 22px; display: flex; align-items: center; gap: 14px; }
+  .eyebrow .rule { flex: 1; max-width: 120px; height: 1px; background: var(--g-accent); opacity: .5; }
+
+  h1.page { font-family: var(--g-f-display); font-weight: 700; font-size: clamp(52px, 6vw, 92px); line-height: 1.02; letter-spacing: -0.024em; margin: 0 0 24px; color: var(--g-fg-strong); max-width: 16ch; }
+  h1.page em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  .lead { color: var(--g-fg-stone); font-size: 19px; line-height: 1.55; max-width: 56ch; margin: 0 0 40px; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 28px; font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--g-fg-muted); border-top: 1px solid var(--g-border); padding-top: 18px; margin-top: 40px; }
+  .meta strong { color: var(--g-fg-strong); font-weight: 700; margin-left: 6px; }
+
+  section { margin-top: 96px; }
+  section.tight { margin-top: 64px; }
+  .sec-head { display: flex; align-items: baseline; gap: 20px; margin-bottom: 28px; }
+  .sec-num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; color: var(--g-accent); text-transform: uppercase; }
+  .sec-title { font-family: var(--g-f-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--g-fg-strong); }
+  .sec-head .rule { flex: 1; height: 1px; background: var(--g-border); }
+
+  /* Primary docs */
+  .docs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .doc { position: relative; background: var(--g-card); border: 1px solid var(--g-border); border-radius: 6px; padding: 36px 32px 28px; text-decoration: none; color: inherit; transition: border-color .2s, transform .25s cubic-bezier(.4,0,.2,1); overflow: hidden; }
+  .doc::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--g-accent), var(--g-accent-hot)); opacity: 0; transition: opacity .25s; }
+  .doc:hover { border-color: var(--g-border-strong); transform: translateY(-2px); }
+  .doc:hover::before { opacity: 1; }
+  .doc .num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: var(--g-accent); margin-bottom: 28px; }
+  .doc h2 { font-family: var(--g-f-display); font-size: 28px; line-height: 1.12; font-weight: 700; color: var(--g-fg-strong); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .doc h2 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  .doc p { font-size: 14px; line-height: 1.55; color: var(--g-fg-stone); margin: 0 0 24px; min-height: 66px; }
+  .doc .contains { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.24em; color: var(--g-fg-muted); text-transform: uppercase; padding-top: 14px; border-top: 1px dashed var(--g-border); line-height: 1.8; }
+  .doc .open { display: flex; align-items: center; gap: 10px; font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.26em; color: var(--g-accent); text-transform: uppercase; margin-top: 20px; }
+  .doc .open::after { content: ""; width: 18px; height: 1px; background: var(--g-accent); transition: width .2s; }
+  .doc:hover .open::after { width: 40px; }
+
+  /* Resources */
+  .resources { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .res { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 20px 22px; text-decoration: none; color: inherit; transition: border-color .2s, background .2s; }
+  .res:hover { border-color: var(--g-border-strong); background: var(--g-card-mid); }
+  .res .tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.28em; color: var(--g-accent); text-transform: uppercase; margin-bottom: 8px; }
+  .res .name { font-family: var(--g-f-display); font-size: 17px; font-weight: 600; color: var(--g-fg-strong); margin-bottom: 4px; line-height: 1.2; }
+  .res .desc { font-size: 12px; color: var(--g-fg-stone); line-height: 1.5; }
+
+  /* File tree */
+  .tree { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 28px 32px; font-family: var(--g-f-mono); font-size: 12px; line-height: 2; color: var(--g-fg); }
+  .tree .dir { color: var(--g-accent); font-weight: 700; }
+  .tree .file { color: var(--g-fg); }
+  .tree .note { color: var(--g-fg-muted); font-style: italic; margin-left: 8px; }
+
+  /* Usage */
+  .usage { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .usage > div { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 28px 32px; }
+  .usage h3 { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: var(--g-accent); text-transform: uppercase; margin: 0 0 10px; }
+  .usage p { font-size: 14px; line-height: 1.55; color: var(--g-fg); margin: 0 0 14px; }
+  .usage pre { font-family: var(--g-f-mono); font-size: 12px; line-height: 1.7; background: var(--g-surface-sunken); padding: 14px 16px; border-radius: 3px; color: var(--g-fg-strong); margin: 0; overflow-x: auto; }
+  .usage ol { margin: 0; padding-left: 22px; }
+  .usage ol li { margin-bottom: 6px; font-size: 14px; line-height: 1.55; }
+
+  footer { margin-top: 96px; padding-top: 28px; border-top: 1px solid var(--g-border); display: flex; justify-content: space-between; font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.24em; color: var(--g-fg-muted); text-transform: uppercase; }
+  footer strong { color: var(--g-fg-strong); }
+
+  @media (max-width: 900px) {
+    main { padding: 40px 24px 80px; }
+    .docs { grid-template-columns: 1fr; }
+    .resources { grid-template-columns: 1fr 1fr; }
+    .usage { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+
+<div class="ambient"><div class="orb a"></div><div class="orb b"></div></div>
+
+<main>
+  <div class="eyebrow"><span class="rule"></span> Brand System · v1.0 · Canonical Release</div>
+  <h1 class="page">The Grothouse<br>Family <em>Brand System</em>.</h1>
+  <p class="lead">A complete, code-native brand system for a 24-entity family office. This package contains the <em>foundation</em> — guidelines, tokens, typography, motion, logos. It does not contain websites, templates, or collateral. Those build on top of this.</p>
+
+  <div class="meta">
+    <span>Version<strong>1.0</strong></span>
+    <span>Default<strong>Light</strong></span>
+    <span>Entities<strong>24</strong></span>
+    <span>Archetypes<strong>8</strong></span>
+    <span>Preset<strong>Editorial</strong></span>
+  </div>
+
+  <!-- ========= PRIMARY DOCS ========= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-title">Primary Documents</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="docs">
+      <a class="doc" href="Brand Guidelines.html">
+        <div class="num">01 · Brand</div>
+        <h2>Brand <em>Guidelines</em></h2>
+        <p>Principles, logo system, color, archetypes, entity directory, voice. The master document — start here.</p>
+        <div class="contains">Principles · Logo · Color · Archetypes · Entities · Voice · Application</div>
+        <div class="open">Open Document</div>
+      </a>
+
+      <a class="doc" href="Typography Spec.html">
+        <div class="num">02 · Type</div>
+        <h2>Typography <em>Spec</em></h2>
+        <p>Three families, ten-step scale, canonical pairings, five presets, print rules.</p>
+        <div class="contains">Families · Scale · Pairings · Rules · Presets · Print</div>
+        <div class="open">Open Document</div>
+      </a>
+
+      <a class="doc" href="Motion Spec.html">
+        <div class="num">03 · Motion</div>
+        <h2>Motion <em>Spec</em></h2>
+        <p>Six easings, archetype speed multipliers, radiance levels, interaction timings, accessibility.</p>
+        <div class="contains">Principles · Easing · Speeds · Radiance · Timings · A11y</div>
+        <div class="open">Open Document</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========= RESOURCES ========= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-title">Resources</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="resources">
+      <a class="res" href="G26x Logos.html">
+        <div class="tag">Marks</div>
+        <div class="name">Logo Package</div>
+        <div class="desc">Three marks × four variants. Download SVGs. Clearspace and misuse reference.</div>
+      </a>
+      <a class="res" href="kit/Theme Playground.html">
+        <div class="tag">Tool</div>
+        <div class="name">Theme Playground</div>
+        <div class="desc">Live 24-entity switcher. Audit tokens in both themes.</div>
+      </a>
+      <a class="res" href="kit/tokens.json">
+        <div class="tag">Data</div>
+        <div class="name">tokens.json</div>
+        <div class="desc">Source of truth. Entities, archetypes, surfaces, glow levels.</div>
+      </a>
+      <a class="res" href="kit/grothouse-system.css">
+        <div class="tag">Code</div>
+        <div class="name">grothouse-system.css</div>
+        <div class="desc">Universal radiance layer. Import in every application.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========= FILE STRUCTURE ========= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Package Contents</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="tree">
+<span class="dir">/</span>
+├── <a href="Brand Guidelines.html" class="file" style="border:0; color: var(--g-accent); text-decoration: none;">Brand Guidelines.html</a>        <span class="note"># principles · logo · color · voice</span>
+├── <a href="Typography Spec.html" class="file" style="border:0; color: var(--g-accent); text-decoration: none;">Typography Spec.html</a>         <span class="note"># families · scale · pairings</span>
+├── <a href="Motion Spec.html" class="file" style="border:0; color: var(--g-accent); text-decoration: none;">Motion Spec.html</a>             <span class="note"># easings · timings · radiance</span>
+├── <a href="G26x Logos.html" class="file" style="border:0; color: var(--g-accent); text-decoration: none;">G26x Logos.html</a>              <span class="note"># 3 marks × 4 variants</span>
+├── <span class="file">CLAUDE.md</span>                    <span class="note"># project instructions</span>
+├── <span class="file">archetypes.json</span>              <span class="note"># 8 archetypes, machine-readable</span>
+│
+├── <span class="dir">logos/</span>
+│   ├── <span class="dir">01-monogram/</span>               <span class="note"># 4 variants · favicon + avatar</span>
+│   ├── <span class="dir">02-wordmark/</span>               <span class="note"># 4 variants · primary lockup</span>
+│   └── <span class="dir">03-tech/</span>                   <span class="note"># 4 variants · digital + dev</span>
+│
+└── <span class="dir">kit/</span>
+    ├── <span class="file">tokens.json</span>               <span class="note"># source of truth · 24 entities</span>
+    ├── <span class="file">tokens.js</span>                 <span class="note"># same tokens, JS global</span>
+    ├── <span class="file">grothouse-system.css</span>      <span class="note"># radiance primitives + tokens</span>
+    ├── <span class="file">tailwind.preset.js</span>        <span class="note"># Tailwind v3/v4 preset</span>
+    ├── <span class="file">theme-toggle.css</span>          <span class="note"># drop-in sun/moon toggle</span>
+    ├── <span class="file">theme-toggle.js</span>           <span class="note"># persists to localStorage</span>
+    ├── <span class="file">react/index.jsx</span>           <span class="note"># React primitives</span>
+    └── <a href="kit/Theme Playground.html" class="file" style="border:0; color: var(--g-accent); text-decoration: none;">Theme Playground.html</a>    <span class="note"># live 24-entity audit tool</span>
+    </div>
+  </section>
+
+  <!-- ========= USAGE ========= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-title">How to Build on This</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="usage">
+      <div>
+        <h3>For a new site or product</h3>
+        <ol>
+          <li>Pick an entity from <code>kit/tokens.json</code>.</li>
+          <li>Set its attributes on <code>&lt;html&gt;</code>.</li>
+          <li>Import <code>kit/grothouse-system.css</code>.</li>
+          <li>Load the three Google Fonts.</li>
+          <li>Compose using only <code>--g-*</code> semantic tokens.</li>
+          <li>Reference the three spec documents when making decisions.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Root template</h3>
+<pre>&lt;html data-entity="grothouse_family"
+      data-archetype="holding"
+      data-surface="cool"
+      data-glow="medium"
+      data-preset="editorial"
+      data-theme="light"&gt;
+  &lt;link rel="stylesheet"
+        href="kit/grothouse-system.css"&gt;
+&lt;/html&gt;</pre>
+        <p style="font-size: 12px; color: var(--g-fg-muted); font-style: italic; margin-top: 12px; margin-bottom: 0;">Light is the default — always set the theme attribute explicitly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========= WHAT COMES NEXT ========= -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <span class="sec-title">What Comes Next</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="usage">
+      <div>
+        <h3>Build on this foundation</h3>
+        <p>This package is the <em>constitution</em>, not the country. With these three documents and the kit, any team can produce:</p>
+        <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 1.7; color: var(--g-fg);">
+          <li>Marketing websites for any of the 24 entities</li>
+          <li>Product UI for internal tools and customer apps</li>
+          <li>Printed collateral — letterhead, business cards, annual reports</li>
+          <li>Pitch decks and investor communications</li>
+          <li>Signage, wayfinding, and environmental graphics</li>
+          <li>Social and ad creative</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Spec sheets, handed to design</h3>
+        <p>When a new artifact is needed, the commissioning brief should cite:</p>
+        <ul style="margin: 0; padding-left: 22px; font-size: 14px; line-height: 1.7; color: var(--g-fg);">
+          <li>The <b>entity</b> (or confirm it's family-level)</li>
+          <li>The <b>archetype</b> (drives motion + radii)</li>
+          <li>The <b>preset</b> (editorial / brutalist / glass / minimal / maximalist)</li>
+          <li>The <b>surface tone</b> and <b>glow level</b></li>
+        </ul>
+        <p style="margin-top: 14px; font-size: 12px; color: var(--g-fg-muted); font-style: italic;">All four are enumerated in <code>kit/tokens.json</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>The Grothouse Family · Brand System · v1.0</span>
+    <span>© <strong>2024</strong></span>
+  </footer>
+</main>
+
+<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+<script src="kit/theme-toggle.js" defer></script>
+
 </body>
 </html>

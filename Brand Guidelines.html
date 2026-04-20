@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="subtle" data-preset="editorial" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Brand Guidelines — The Grothouse Family Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="kit/grothouse-system.css" />
+<link rel="stylesheet" href="kit/theme-toggle.css" />
+<style>
+  :root { color-scheme: light; }
+  html, body { background: var(--g-bg); color: var(--g-fg); }
+  body { margin: 0; font-family: var(--g-f-body); font-size: 15px; line-height: 1.65; }
+  a { color: var(--g-accent); text-decoration: none; border-bottom: 1px solid rgba(var(--g-accent-rgb), 0.3); }
+  a:hover { border-bottom-color: var(--g-accent); }
+
+  /* ---------- Layout shell ---------- */
+  .shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+  nav.toc {
+    position: sticky; top: 0; height: 100vh; padding: 44px 28px 40px;
+    border-right: 1px solid var(--g-border);
+    background: var(--g-card);
+    overflow-y: auto;
+  }
+  nav.toc .brand { font-family: var(--g-f-display); font-size: 20px; font-weight: 700; color: var(--g-fg-strong); line-height: 1.15; margin-bottom: 4px; }
+  nav.toc .brand em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  nav.toc .ver  { font-family: var(--g-f-mono); font-size: 9px; letter-spacing: 0.32em; color: var(--g-fg-muted); text-transform: uppercase; margin-bottom: 32px; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: sect; }
+  nav.toc ol > li { counter-increment: sect; margin-bottom: 6px; }
+  nav.toc ol > li > a {
+    display: block; padding: 6px 0; border: 0;
+    font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--g-fg); transition: color .15s;
+  }
+  nav.toc ol > li > a::before { content: counter(sect, decimal-leading-zero) "  "; color: var(--g-accent); }
+  nav.toc ol > li > a:hover { color: var(--g-accent); }
+  nav.toc ol ol { padding-left: 28px; counter-reset: sub; margin-top: 4px; margin-bottom: 10px; }
+  nav.toc ol ol > li { counter-increment: sub; margin-bottom: 2px; }
+  nav.toc ol ol > li > a {
+    font-family: var(--g-f-body); font-size: 12px; font-weight: 400; letter-spacing: 0;
+    text-transform: none; color: var(--g-fg-muted); padding: 3px 0;
+  }
+  nav.toc ol ol > li > a::before { content: ""; }
+  nav.toc ol ol > li > a:hover { color: var(--g-accent); }
+
+  main { padding: 60px 80px 160px; max-width: 1100px; }
+
+  /* ---------- Section framing ---------- */
+  section.chapter { padding-top: 40px; scroll-margin-top: 20px; }
+  section.chapter + section.chapter { border-top: 1px dashed var(--g-border); margin-top: 72px; padding-top: 72px; }
+  .chapter-head { margin-bottom: 40px; }
+  .chapter-num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .chapter-num .rule { flex: 1; height: 1px; background: var(--g-border); }
+  h1 { font-family: var(--g-f-display); font-weight: 700; font-size: clamp(44px, 4.8vw, 72px); line-height: 1.04; letter-spacing: -0.022em; margin: 0 0 20px; color: var(--g-fg-strong); max-width: 20ch; }
+  h1 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  .chapter-head p.lead { font-size: 17px; line-height: 1.6; color: var(--g-fg-stone); max-width: 56ch; margin: 0; }
+
+  h2 { font-family: var(--g-f-display); font-weight: 700; font-size: 32px; line-height: 1.15; letter-spacing: -0.012em; color: var(--g-fg-strong); margin: 56px 0 18px; max-width: 28ch; }
+  h2 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  h3 { font-family: var(--g-f-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); margin: 36px 0 14px; }
+
+  p { margin: 0 0 14px; max-width: 62ch; color: var(--g-fg); }
+  p.note { color: var(--g-fg-muted); font-size: 13px; font-style: italic; }
+
+  ul.notes, ol.notes { margin: 0 0 18px; padding-left: 22px; max-width: 62ch; }
+  ul.notes li, ol.notes li { margin-bottom: 6px; color: var(--g-fg); }
+  ul.notes li::marker { color: var(--g-accent); }
+
+  /* ---------- Reusable panels ---------- */
+  .panel { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 24px 28px; margin: 18px 0 26px; }
+  .panel h3:first-child { margin-top: 0; }
+  .panel .panel-label { position: absolute; top: -8px; left: 18px; background: var(--g-bg); padding: 0 8px; font-family: var(--g-f-mono); font-size: 9px; letter-spacing: 0.28em; color: var(--g-accent); text-transform: uppercase; }
+  .panel { position: relative; }
+
+  .kv { display: grid; grid-template-columns: 200px 1fr; gap: 0; border-top: 1px solid var(--g-border); }
+  .kv div { padding: 10px 0; border-bottom: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 12px; }
+  .kv div:first-child, .kv div:nth-child(odd) { color: var(--g-fg-muted); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; padding-right: 16px; }
+  .kv div:nth-child(even) { color: var(--g-fg-strong); }
+
+  /* ---------- Color swatches ---------- */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin: 18px 0 26px; }
+  .swatch { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; overflow: hidden; }
+  .swatch .chip { height: 96px; position: relative; }
+  .swatch .chip::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.08)); pointer-events: none; }
+  .swatch .meta { padding: 12px 14px; }
+  .swatch .name { font-family: var(--g-f-display); font-size: 15px; font-weight: 600; color: var(--g-fg-strong); }
+  .swatch .role { font-family: var(--g-f-mono); font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--g-fg-muted); margin-bottom: 10px; }
+  .swatch .hex  { font-family: var(--g-f-mono); font-size: 11px; color: var(--g-fg); letter-spacing: 0.04em; }
+  .swatch .rgb  { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-fg-muted); margin-top: 2px; }
+
+  /* ---------- Entity accent grid (24) ---------- */
+  .entities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+  .entity-card { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .entity-card .bar { width: 4px; align-self: stretch; background: var(--ec); border-radius: 2px; }
+  .entity-card .t { flex: 1; min-width: 0; }
+  .entity-card .n { font-family: var(--g-f-display); font-size: 13px; font-weight: 600; color: var(--g-fg-strong); line-height: 1.2; }
+  .entity-card .m { font-family: var(--g-f-mono); font-size: 8px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--g-fg-muted); }
+  .entity-card .h { font-family: var(--g-f-mono); font-size: 9px; color: var(--ec); font-weight: 700; }
+
+  /* ---------- Archetype grid ---------- */
+  .arch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin: 18px 0 26px; }
+  .arch { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 20px 22px; }
+  .arch .code { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.26em; color: var(--g-accent); text-transform: uppercase; }
+  .arch .name { font-family: var(--g-f-display); font-size: 18px; font-weight: 700; color: var(--g-fg-strong); margin: 4px 0 6px; }
+  .arch .char { font-size: 13px; color: var(--g-fg-stone); font-style: italic; line-height: 1.5; margin-bottom: 12px; min-height: 42px; }
+  .arch .attrs { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 10px; font-family: var(--g-f-mono); font-size: 10px; }
+  .arch .attrs dt { color: var(--g-fg-muted); letter-spacing: 0.16em; text-transform: uppercase; font-size: 8px; }
+  .arch .attrs dd { margin: 0 0 6px; color: var(--g-fg-strong); }
+
+  /* ---------- Logo clearspace / misuse visual ---------- */
+  .logo-spec { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 18px 0 26px; }
+  .logo-spec figure { margin: 0; background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; overflow: hidden; }
+  .logo-spec .display { padding: 40px; min-height: 200px; display: flex; align-items: center; justify-content: center; background:
+    linear-gradient(var(--g-border) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--g-border) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--g-card);
+  }
+  .logo-spec .display img { max-width: 100%; max-height: 160px; }
+  .logo-spec figcaption { padding: 14px 18px; border-top: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--g-fg-muted); text-transform: uppercase; display: flex; justify-content: space-between; }
+  .logo-spec figcaption b { color: var(--g-fg-strong); font-weight: 700; letter-spacing: 0.26em; }
+
+  .rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 18px 0 26px; }
+  .rule { background: var(--g-card); border-left: 3px solid var(--ok, var(--g-accent)); border-top: 1px solid var(--g-border); border-right: 1px solid var(--g-border); border-bottom: 1px solid var(--g-border); padding: 14px 18px; }
+  .rule.bad { --ok: #B63D4B; }
+  .rule.good { --ok: #3B8F4A; }
+  .rule .tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ok); }
+  .rule .what { font-size: 13px; color: var(--g-fg); margin-top: 6px; line-height: 1.55; }
+
+  /* ---------- Token table ---------- */
+  table.tok { width: 100%; border-collapse: collapse; margin: 14px 0 24px; }
+  table.tok th, table.tok td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 12px; vertical-align: top; }
+  table.tok th { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-fg-muted); background: var(--g-card); }
+  table.tok td.tok-name { color: var(--g-accent); font-weight: 700; }
+  table.tok td.tok-val { color: var(--g-fg-strong); }
+  table.tok td.tok-use { color: var(--g-fg); font-family: var(--g-f-body); font-size: 13px; }
+
+  /* ---------- Voice panel ---------- */
+  .voice { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 18px 0 26px; }
+  .voice > div { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 20px 24px; }
+  .voice .head { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 10px; }
+  .voice .yes .head { color: #3B8F4A; }
+  .voice .no .head  { color: #B63D4B; }
+  .voice ul { margin: 0; padding-left: 18px; }
+  .voice li { font-size: 13px; line-height: 1.55; margin-bottom: 6px; color: var(--g-fg); }
+
+  /* ---------- Type scale demo ---------- */
+  .type-scale { display: grid; grid-template-columns: 80px 1fr auto; align-items: baseline; gap: 18px; padding: 14px 0; border-bottom: 1px dashed var(--g-border); }
+  .type-scale .label { font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--g-fg-muted); }
+  .type-scale .demo { color: var(--g-fg-strong); }
+  .type-scale .size { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-fg-muted); }
+
+  /* ---------- Small intro hero on page 1 ---------- */
+  header.page-hero {
+    padding: 80px 0 60px;
+    position: relative;
+  }
+  header.page-hero .eyebrow { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 22px; display: flex; align-items: center; gap: 14px; }
+  header.page-hero .eyebrow .rule { flex: 1; max-width: 120px; height: 1px; background: var(--g-accent); opacity: .5; }
+  header.page-hero h1 { margin-bottom: 24px; }
+  header.page-hero .sub { color: var(--g-fg-stone); font-size: 17px; line-height: 1.6; max-width: 56ch; }
+  header.page-hero .meta { margin-top: 28px; display: flex; gap: 24px; font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--g-fg-muted); border-top: 1px solid var(--g-border); padding-top: 16px; }
+  header.page-hero .meta span strong { color: var(--g-fg-strong); font-weight: 700; margin-left: 6px; }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    nav.toc { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--g-border); }
+    main { padding: 36px 28px 120px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<nav class="toc">
+  <div class="brand">The Grothouse<br><em>Family</em></div>
+  <div class="ver">Brand · v1.0 · Canonical</div>
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#logo">Logo System</a>
+      <ol>
+        <li><a href="#logo-marks">The three marks</a></li>
+        <li><a href="#logo-variants">Variants &amp; usage</a></li>
+        <li><a href="#logo-clearspace">Clearspace &amp; sizing</a></li>
+        <li><a href="#logo-misuse">Misuse</a></li>
+      </ol>
+    </li>
+    <li><a href="#color">Color System</a>
+      <ol>
+        <li><a href="#color-greys">Base greys</a></li>
+        <li><a href="#color-accents">Entity accents</a></li>
+        <li><a href="#color-surfaces">Surface tones</a></li>
+        <li><a href="#color-semantic">Semantic tokens</a></li>
+        <li><a href="#color-contrast">Contrast &amp; accessibility</a></li>
+      </ol>
+    </li>
+    <li><a href="#archetypes">Archetypes</a></li>
+    <li><a href="#entities">Entity directory</a></li>
+    <li><a href="#voice">Voice &amp; tone</a></li>
+    <li><a href="#application">Applying the system</a></li>
+  </ol>
+  <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--g-fg-muted); text-transform: uppercase; line-height: 1.7;">
+    Companion docs<br>
+    <a href="Typography Spec.html" style="border:0; color: var(--g-accent);">Typography Spec →</a><br>
+    <a href="Motion Spec.html" style="border:0; color: var(--g-accent);">Motion Spec →</a><br>
+    <a href="G26x Logos.html" style="border:0; color: var(--g-accent);">Logo Package →</a>
+  </div>
+</nav>
+
+<main>
+
+<header class="page-hero" id="introduction">
+  <div class="eyebrow"><span class="rule"></span> Brand Guidelines · Grothouse · v1.0</div>
+  <h1>One family. <em>Twenty-four voices.</em> <em>Same bones.</em></h1>
+  <p class="sub">The Grothouse Family is a multi-entity design system. Every company, product, and initiative across the family speaks with its own accent while sharing the same skeleton — typography, layout rhythm, radiance language, motion grammar. This document is the source of truth for the visual and behavioral rules that make that possible.</p>
+  <div class="meta">
+    <span>Default theme <strong>Light</strong></span>
+    <span>Typography <strong>Serif + Sans + Mono</strong></span>
+    <span>Archetypes <strong>8</strong></span>
+    <span>Entities <strong>24</strong></span>
+  </div>
+</header>
+
+<!-- ============================================================
+     CHAPTER 02 — PRINCIPLES
+     ============================================================ -->
+<section class="chapter" id="principles">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>02</span><span class="rule"></span><span>Principles</span></div>
+    <h1>What this <em>brand holds</em> to be true.</h1>
+    <p class="lead">Five principles guide every decision — from the width of a hairline rule to the pace of an aurora drift. If a design choice violates one of these, the design is wrong, not the principle.</p>
+  </div>
+
+  <h3>01 · Editorial, not marketing</h3>
+  <p>Grothouse writes like a publication, not an ad. The default hero is a <em>headline and a single sentence</em>, not a value prop stack. Serif display type, generous whitespace, and a <em>quiet</em> radiance — never loud gradient marketing.</p>
+
+  <h3>02 · Light is the default</h3>
+  <p>All components, templates, and marketing surfaces are designed <em>light-first</em>. Paper-white backgrounds, ink-on-paper text, a single accent for emphasis. Dark mode exists and is fully supported, but as a user preference — not as the brand's native voice.</p>
+
+  <h3>03 · One accent per surface</h3>
+  <p>Every entity owns exactly one accent color from the blue family (hue 210–260°). That accent appears on <em>at most</em> 8% of any surface — in italic display type, micro-rules, a single button, an orb glow. If you want two accents, you are on the wrong entity or the wrong surface.</p>
+
+  <h3>04 · Radiance is atmospheric, not decorative</h3>
+  <p>The aurora mesh, orb glow, and noise texture are the family's signature — a soft gravitational pull toward the accent. They are <em>atmospheric</em>: they occupy the background only. Never put radiance in front of content. Never increase it to compete with copy.</p>
+
+  <h3>05 · Archetype before entity</h3>
+  <p>Each entity inherits its motion speed, border weight, and corner radius from its archetype (Holding, Financial, Real Estate, AI/Tech, Consumer, Charitable, Platform, Consulting). The archetype decides how the entity <em>behaves</em>; the accent decides how it <em>looks</em>. Both must agree.</p>
+</section>
+
+<!-- ============================================================
+     CHAPTER 03 — LOGO SYSTEM
+     ============================================================ -->
+<section class="chapter" id="logo">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>03</span><span class="rule"></span><span>Logo System</span></div>
+    <h1>Three marks. <em>Four variants each.</em></h1>
+    <p class="lead">The Grothouse identity is built around three logo marks at different scales of expression. Each mark ships in four variants — Dark, Light, Black, and White — to cover every surface, medium, and contrast condition.</p>
+  </div>
+
+  <h2 id="logo-marks">The three marks</h2>
+  <div class="logo-spec">
+    <figure>
+      <div class="display"><img src="logos/02-wordmark/light.svg" alt="Editorial Wordmark" /></div>
+      <figcaption><span>Primary Lockup</span><b>Wordmark</b></figcaption>
+    </figure>
+    <figure>
+      <div class="display"><img src="logos/01-monogram/light.svg" alt="Monogram" /></div>
+      <figcaption><span>App, Favicon, Avatar</span><b>Monogram</b></figcaption>
+    </figure>
+    <figure>
+      <div class="display"><img src="logos/03-tech/light.svg" alt="Tech Modern" /></div>
+      <figcaption><span>Digital, API, Terminal</span><b>Tech</b></figcaption>
+    </figure>
+  </div>
+
+  <h3>When to reach for each</h3>
+  <ul class="notes">
+    <li><b>Wordmark</b> — the default for anything representative of the brand: letterhead, annual report covers, site header, press releases, signage. If in doubt, use this.</li>
+    <li><b>Monogram</b> — constrained square surfaces: favicons, app icons, avatars, social profile images, physical ID badges, embroidery.</li>
+    <li><b>Tech</b> — digital-native and developer-facing surfaces: API docs, terminal outputs, dev portal, engineering blog, product UI chrome.</li>
+  </ul>
+
+  <h2 id="logo-variants">Variants &amp; usage</h2>
+  <div class="panel">
+    <table class="tok">
+      <thead><tr><th>Variant</th><th>Surface</th><th>When to use</th></tr></thead>
+      <tbody>
+        <tr><td class="tok-name">Dark</td><td class="tok-val">Dark backgrounds (#0B0E14 and near-black)</td><td class="tok-use">Default for dark-theme digital surfaces, dark reports, dark video backgrounds.</td></tr>
+        <tr><td class="tok-name">Light</td><td class="tok-val">Light backgrounds (paper, #F0F2F5 and lighter)</td><td class="tok-use">Default for print, stationery, light-theme digital — the primary variant in most contexts.</td></tr>
+        <tr><td class="tok-name">Black</td><td class="tok-val">Single-ink print (one-color)</td><td class="tok-use">Newspaper, fax, legal documents, embroidery, engraving — any single-ink reproduction on light.</td></tr>
+        <tr><td class="tok-name">White</td><td class="tok-val">Single-ink print reversed</td><td class="tok-use">Dark apparel, dark signage, video watermarks, single-ink reversed on dark.</td></tr>
+      </tbody>
+    </table>
+    <p class="note">For all four variants across all three marks, see the <a href="G26x Logos.html">Logo Package</a>.</p>
+  </div>
+
+  <h2 id="logo-clearspace">Clearspace &amp; minimum sizing</h2>
+  <ul class="notes">
+    <li><b>Clearspace</b> — at least one "x-height" of the wordmark's cap height on all four sides. For the monogram, one full inner-ring diameter. No other graphic, photo, or text may enter this zone.</li>
+    <li><b>Minimum size (digital)</b> — Wordmark: 120px wide. Monogram: 32px square. Tech: 140px wide.</li>
+    <li><b>Minimum size (print)</b> — Wordmark: 24mm wide. Monogram: 8mm square. Tech: 28mm wide.</li>
+    <li><b>Favicon</b> — always use the Monogram, never the Wordmark. Generate 16/32/48/192/512 PNG variants from <code>logos/01-monogram/dark.svg</code> or <code>light.svg</code> depending on surface.</li>
+  </ul>
+
+  <h2 id="logo-misuse">Misuse</h2>
+  <div class="rule-grid">
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Recolor the mark. The accent is always cobalt (or the entity's accent). Never use brand-foreign colors.</div></div>
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Rotate, skew, or stretch. All marks are locked to their published proportions.</div></div>
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Add a drop shadow, outer glow, or bevel. The mark does not wear effects.</div></div>
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Place over busy photography without an at-least 20%-opacity scrim behind the mark.</div></div>
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Substitute a different serif or sans for the wordmark. The type is drawn, not set.</div></div>
+    <div class="rule bad"><div class="tag">✕ Don't</div><div class="what">Use the monogram as a decorative pattern, tiled, or faded into backgrounds.</div></div>
+    <div class="rule good"><div class="tag">✓ Do</div><div class="what">Use the SVG files from the Logo Package for all digital and print reproductions.</div></div>
+    <div class="rule good"><div class="tag">✓ Do</div><div class="what">Pick the variant that matches the surface's luminance — Light on paper, Dark on near-black.</div></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 04 — COLOR SYSTEM
+     ============================================================ -->
+<section class="chapter" id="color">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>04</span><span class="rule"></span><span>Color System</span></div>
+    <h1>Ink, paper, and <em>a single blue.</em></h1>
+    <p class="lead">The Grothouse palette is tight by design. Five base greys, one accent per entity (always blue-family), five surface tones, and a set of semantic tokens. Every color in the system can be named in one breath.</p>
+  </div>
+
+  <h2 id="color-greys">Base greys</h2>
+  <p>The neutrals shared by all 24 entities. These are the <em>ink and paper</em> of the brand — every surface uses them.</p>
+  <div class="swatch-grid">
+    <div class="swatch"><div class="chip" style="background: #757C88"></div><div class="meta"><div class="role">Base · Neutral</div><div class="name">Slate</div><div class="hex">#757C88</div><div class="rgb">rgb(117 124 136)</div></div></div>
+    <div class="swatch"><div class="chip" style="background: #59788E"></div><div class="meta"><div class="role">Base · Cool</div><div class="name">Stone</div><div class="hex">#59788E</div><div class="rgb">rgb(89 120 142)</div></div></div>
+    <div class="swatch"><div class="chip" style="background: #2C3E4C"></div><div class="meta"><div class="role">Base · Deep</div><div class="name">Spruce</div><div class="hex">#2C3E4C</div><div class="rgb">rgb(44 62 76)</div></div></div>
+    <div class="swatch"><div class="chip" style="background: #B8BCC8"></div><div class="meta"><div class="role">Base · Light</div><div class="name">Mist</div><div class="hex">#B8BCC8</div><div class="rgb">rgb(184 188 200)</div></div></div>
+    <div class="swatch"><div class="chip" style="background: #D8DCE4"></div><div class="meta"><div class="role">Base · Paper</div><div class="name">Fog</div><div class="hex">#D8DCE4</div><div class="rgb">rgb(216 220 228)</div></div></div>
+  </div>
+
+  <h2 id="color-accents">Entity accents — all in the blue family</h2>
+  <p>Every entity owns exactly one accent. All 24 accents live in the blue family (hue 210–260°) for consistency. Each accent has a <em>dark-mode</em> variant (used on dark surfaces) and a <em>light-mode</em> variant (shifted ~10% darker for proper contrast on white).</p>
+  <div id="entity-accents" class="entities-grid"></div>
+
+  <h2 id="color-surfaces">Surface tones</h2>
+  <p>Five named surface tones. An entity picks one to match its archetype's personality. Light values are the default; dark values apply when the user opts into dark mode.</p>
+  <div class="panel">
+    <table class="tok">
+      <thead><tr><th>Tone</th><th>Light bg</th><th>Light card</th><th>Dark bg</th><th>Dark card</th><th>Feel</th></tr></thead>
+      <tbody>
+        <tr><td class="tok-name">iceCool</td><td class="tok-val">#F2F4F8</td><td class="tok-val">#FFFFFF</td><td class="tok-val">#07090F</td><td class="tok-val">#0E1320</td><td class="tok-use">Clinical, crisp. Defaults for financial/AI entities.</td></tr>
+        <tr><td class="tok-name">cool</td><td class="tok-val">#F0F2F5</td><td class="tok-val">#FFFFFF</td><td class="tok-val">#0B0E14</td><td class="tok-val">#111520</td><td class="tok-use">The family canonical surface. Holding, Real Estate.</td></tr>
+        <tr><td class="tok-name">neutral</td><td class="tok-val">#F4F4F2</td><td class="tok-val">#FFFFFF</td><td class="tok-val">#0C0D10</td><td class="tok-val">#14151A</td><td class="tok-use">Warm-ish paper. Consulting, platform.</td></tr>
+        <tr><td class="tok-name">warm</td><td class="tok-val">#F6F5F1</td><td class="tok-val">#FFFEFB</td><td class="tok-val">#0E0D0B</td><td class="tok-val">#1A1714</td><td class="tok-use">Editorial-warm. Consumer, charitable.</td></tr>
+        <tr><td class="tok-name">emberWarm</td><td class="tok-val">#F8F4EE</td><td class="tok-val">#FFFDF8</td><td class="tok-val">#120E0A</td><td class="tok-val">#1E1814</td><td class="tok-use">Soft hearth. Hospitality-adjacent consumer.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="color-semantic">Semantic tokens</h2>
+  <p>These are what you reach for in code. Never use a hex literal; reference the semantic token and the system will flip correctly between themes.</p>
+  <table class="tok">
+    <thead><tr><th>Token</th><th>Light value</th><th>Dark value</th><th>Use for</th></tr></thead>
+    <tbody>
+      <tr><td class="tok-name">--g-bg</td><td class="tok-val">surface tone</td><td class="tok-val">surface tone</td><td class="tok-use">Page background.</td></tr>
+      <tr><td class="tok-name">--g-bg-deep</td><td class="tok-val">surface tone</td><td class="tok-val">surface tone</td><td class="tok-use">Alternating section recess.</td></tr>
+      <tr><td class="tok-name">--g-card</td><td class="tok-val">#FFFFFF</td><td class="tok-val">surface card</td><td class="tok-use">Elevated card, panel, pop-over.</td></tr>
+      <tr><td class="tok-name">--g-card-mid</td><td class="tok-val">tinted card</td><td class="tok-val">tinted card</td><td class="tok-use">Secondary card (row stripes, sub-tiles).</td></tr>
+      <tr><td class="tok-name">--g-fg</td><td class="tok-val">#1A1D26</td><td class="tok-val">#E8EAF0</td><td class="tok-use">Body copy.</td></tr>
+      <tr><td class="tok-name">--g-fg-strong</td><td class="tok-val">#0B0E14</td><td class="tok-val">#F5F6FA</td><td class="tok-use">Display, headlines, emphasized text.</td></tr>
+      <tr><td class="tok-name">--g-fg-muted</td><td class="tok-val">#6A6F7A</td><td class="tok-val">Slate</td><td class="tok-use">Metadata, captions, labels.</td></tr>
+      <tr><td class="tok-name">--g-fg-stone</td><td class="tok-val">Stone</td><td class="tok-val">#8A9BAD</td><td class="tok-use">Long-form reading text (softer than --g-fg).</td></tr>
+      <tr><td class="tok-name">--g-accent</td><td class="tok-val">entity accent · light</td><td class="tok-val">entity accent · dark</td><td class="tok-use">Italic display emphasis, CTA, single rule, orb core.</td></tr>
+      <tr><td class="tok-name">--g-accent-hot</td><td class="tok-val">entity accent-hot</td><td class="tok-val">entity accent-hot</td><td class="tok-use">Hover, gradient partner, highlight glow.</td></tr>
+      <tr><td class="tok-name">--g-border</td><td class="tok-val">accent @ 14% α</td><td class="tok-val">accent @ 16% α</td><td class="tok-use">Hairline rules, card borders.</td></tr>
+      <tr><td class="tok-name">--g-border-strong</td><td class="tok-val">accent @ 24% α</td><td class="tok-val">accent @ 28% α</td><td class="tok-use">Emphasized borders, input focus rings.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="color-contrast">Contrast &amp; accessibility</h2>
+  <ul class="notes">
+    <li><b>Body copy</b> — <code>--g-fg</code> on <code>--g-bg</code> is audited to AA on all 5 surface tones in both themes.</li>
+    <li><b>Accent on white</b> — All 24 light-mode accents are darker shifts of their dark-mode counterparts specifically so accent-on-white text meets AA for 14px body type.</li>
+    <li><b>Accent on accent</b> — never. Don't put accent-colored text on a tinted accent card; use <code>--g-fg-strong</code> instead.</li>
+    <li><b>Italic serif display</b> — has a lower effective contrast; always use <code>--g-fg-strong</code> for the surrounding upright setting to compensate.</li>
+  </ul>
+</section>
+
+<!-- ============================================================
+     CHAPTER 05 — ARCHETYPES
+     ============================================================ -->
+<section class="chapter" id="archetypes">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>05</span><span class="rule"></span><span>Archetypes</span></div>
+    <h1>Eight behaviors. <em>One grammar.</em></h1>
+    <p class="lead">Each of the 24 entities inherits its behavioral DNA from one of eight archetypes. An archetype sets how the entity moves, what shape its corners take, and how the radiance breathes. Two entities in the same archetype feel like cousins; two entities across archetypes feel like a family, not strangers.</p>
+  </div>
+
+  <div class="arch-grid" id="archetypes-grid"></div>
+
+  <h3>Choosing an archetype for a new entity</h3>
+  <p>Read the <em>character</em> line for each archetype and pick the one that most closely describes how the entity should <em>feel</em> to a customer. If two feel close, pick the one with the more restrained motion — restraint is always on-brand.</p>
+</section>
+
+<!-- ============================================================
+     CHAPTER 06 — ENTITIES
+     ============================================================ -->
+<section class="chapter" id="entities">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>06</span><span class="rule"></span><span>Entity Directory</span></div>
+    <h1>Twenty-four entities. <em>One skeleton.</em></h1>
+    <p class="lead">Every entity in the family, grouped by archetype. Each card shows the entity's accent color (light-mode hex) and its ticker. Full token data is in <code>kit/tokens.json</code>.</p>
+  </div>
+  <div id="entities-directory"></div>
+</section>
+
+<!-- ============================================================
+     CHAPTER 07 — VOICE & TONE
+     ============================================================ -->
+<section class="chapter" id="voice">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>07</span><span class="rule"></span><span>Voice &amp; Tone</span></div>
+    <h1>How the family <em>speaks</em>.</h1>
+    <p class="lead">The visual system is only half the brand. The way Grothouse writes is the other half. Editorial, sober, quietly confident — the voice of a family office that has already won and doesn't need to sell you on it.</p>
+  </div>
+
+  <h3>Tone spectrum</h3>
+  <p>The family voice sits near the <em>editorial</em> end of the spectrum — closer to a long-form quarterly letter than a product page. Short paragraphs. Full stops. A period between the weight-bearing word and its modifier. <em>Built on faith. Driven by purpose.</em></p>
+
+  <div class="voice">
+    <div class="yes">
+      <div class="head">✓ Yes</div>
+      <ul>
+        <li>"A diversified portfolio of operating companies, held across generations."</li>
+        <li>"Twenty-one years of compounding. Twelve operating entities. One family."</li>
+        <li>"We invest where stewardship outlasts cycles."</li>
+        <li>Understated numbers. Precise commas.</li>
+        <li>Italic serif for the weight-bearing word.</li>
+      </ul>
+    </div>
+    <div class="no">
+      <div class="head">✕ No</div>
+      <ul>
+        <li>"We're transforming the future of [category]!"</li>
+        <li>"Unlock the power of..." / "The leader in..."</li>
+        <li>Exclamation points. Emoji. Superlatives.</li>
+        <li>Acronyms without expansion on first use.</li>
+        <li>Hero copy that reads like a pitch deck bullet.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Per-archetype voice modulation</h3>
+  <ul class="notes">
+    <li><b>Holding</b> — authoritative, generational. Sentences are short, declarative. Use <em>we</em> sparingly.</li>
+    <li><b>Financial</b> — precise, numerate. Every claim carries a figure. No rhetorical flourishes.</li>
+    <li><b>Real Estate</b> — grounded, physical. Reference place, tenure, craft. Materials named.</li>
+    <li><b>AI/Tech</b> — electric, sharp. One technical noun per sentence. No metaphors.</li>
+    <li><b>Consumer</b> — warm, direct, second-person. Still restrained.</li>
+    <li><b>Charitable</b> — quiet, humble. First-person stories from participants, not the foundation.</li>
+    <li><b>Platform</b> — infrastructural. Verbs of scale: <em>power, connect, route.</em></li>
+    <li><b>Consulting</b> — strategic, executive. One insight per paragraph, delivered with confidence.</li>
+  </ul>
+</section>
+
+<!-- ============================================================
+     CHAPTER 08 — APPLYING THE SYSTEM
+     ============================================================ -->
+<section class="chapter" id="application">
+  <div class="chapter-head">
+    <div class="chapter-num"><span>08</span><span class="rule"></span><span>Applying the System</span></div>
+    <h1>How to build <em>on this foundation</em>.</h1>
+    <p class="lead">Any new site, product surface, or piece of collateral starts from the same four decisions. Make them in order. The rest of the design system follows.</p>
+  </div>
+
+  <h3>Step 01 — Pick the entity</h3>
+  <p>From the 24 in the directory, or add a new one by appending to <code>kit/tokens.json &gt; entities</code>. The entity sets the accent and secondary colors.</p>
+
+  <h3>Step 02 — Inherit the archetype</h3>
+  <p>The entity's <code>archetype</code> field determines motion speed, border weight, and corner radius. Do not override these locally.</p>
+
+  <h3>Step 03 — Set the root attributes</h3>
+  <div class="panel">
+    <pre style="font-family: var(--g-f-mono); font-size: 12px; line-height: 1.7; margin: 0; color: var(--g-fg-strong); overflow-x: auto;">&lt;html data-entity=&quot;grothouse_family&quot;
+      data-archetype=&quot;holding&quot;
+      data-surface=&quot;cool&quot;
+      data-glow=&quot;subtle&quot;
+      data-preset=&quot;editorial&quot;
+      data-theme=&quot;light&quot;&gt;</pre>
+  </div>
+  <p class="note">Always set <code>data-theme="light"</code> explicitly on <code>&lt;html&gt;</code>. The kit defaults to light if missing, but an explicit declaration protects against regressions.</p>
+
+  <h3>Step 04 — Import the kit</h3>
+  <div class="panel">
+    <pre style="font-family: var(--g-f-mono); font-size: 12px; line-height: 1.7; margin: 0; color: var(--g-fg-strong); overflow-x: auto;">&lt;link rel=&quot;stylesheet&quot; href=&quot;kit/grothouse-system.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;kit/theme-toggle.css&quot;&gt;
+&lt;!-- optional, only if you want the toggle --&gt;
+&lt;script src=&quot;kit/theme-toggle.js&quot; defer&gt;&lt;/script&gt;</pre>
+  </div>
+
+  <h3>Step 05 — Compose with semantic tokens only</h3>
+  <p>Every color, font, and radius in your stylesheet must reference a <code>--g-*</code> token. If you find yourself typing a hex value in the <em>application</em> layer, stop — either add a token to the system or reuse an existing one.</p>
+
+  <h3>What this brand system is <em>not</em></h3>
+  <ul class="notes">
+    <li>A component library. The kit defines tokens and primitives only. Components are the application's responsibility.</li>
+    <li>A CMS. Copy, imagery, and IA are authored in whatever CMS the application picks.</li>
+    <li>A marketing page. The <em>Theme Playground</em> exists to audit the system, not to sell it.</li>
+  </ul>
+
+  <h3>Files shipped with this system</h3>
+  <table class="tok">
+    <thead><tr><th>File</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td class="tok-name">kit/grothouse-system.css</td><td class="tok-use">The radiance primitives and all semantic tokens. Import first.</td></tr>
+      <tr><td class="tok-name">kit/tokens.json</td><td class="tok-use">Source of truth. All 24 entities, archetypes, surface tones, glow levels.</td></tr>
+      <tr><td class="tok-name">kit/tokens.js</td><td class="tok-use">Same tokens as a JS global for static HTML pages.</td></tr>
+      <tr><td class="tok-name">kit/tailwind.preset.js</td><td class="tok-use">Drop-in Tailwind v3/v4 preset.</td></tr>
+      <tr><td class="tok-name">kit/react/index.jsx</td><td class="tok-use">React primitives (ThemeProvider, Radiance, GlowCard, Section, Display).</td></tr>
+      <tr><td class="tok-name">kit/theme-toggle.css / .js</td><td class="tok-use">Drop-in sun/moon toggle. Persists to localStorage.</td></tr>
+      <tr><td class="tok-name">kit/Theme Playground.html</td><td class="tok-use">Live 24-entity switcher. Use to audit tokens after edits.</td></tr>
+      <tr><td class="tok-name">logos/</td><td class="tok-use">Three marks × four variants each. SVG only.</td></tr>
+      <tr><td class="tok-name">Brand Guidelines.html</td><td class="tok-use">This document.</td></tr>
+      <tr><td class="tok-name">Typography Spec.html</td><td class="tok-use">Full type scale, pairings, sample compositions.</td></tr>
+      <tr><td class="tok-name">Motion Spec.html</td><td class="tok-use">Radiance timings, archetype speed multipliers, easing curves.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</div>
+
+<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+
+<script src="kit/tokens.js"></script>
+<script src="kit/theme-toggle.js" defer></script>
+<script>
+  // ----- Render entity accent grid (24 cards) -----
+  (function(){
+    const tokens = window.GROTHOUSE_TOKENS || {};
+    const grid = document.getElementById('entity-accents');
+    const ents = tokens.entities || [];
+    grid.innerHTML = ents.map(e => {
+      const hex = e.accent?.light || e.accent?.dark || '#3944BC';
+      return `<div class="entity-card" style="--ec:${hex}">
+        <div class="bar"></div>
+        <div class="t">
+          <div class="n">${e.name}</div>
+          <div class="m">${e.ticker} · ${e.archetype.replace('_',' ')}</div>
+        </div>
+        <div class="h">${hex}</div>
+      </div>`;
+    }).join('');
+  })();
+
+  // ----- Render archetypes -----
+  (function(){
+    const tokens = window.GROTHOUSE_TOKENS || {};
+    const grid = document.getElementById('archetypes-grid');
+    const archs = tokens.archetypes || {};
+    const items = [
+      ['holding',     'Holding'],
+      ['financial',   'Financial'],
+      ['real_estate', 'Real Estate'],
+      ['ai_tech',     'AI / Tech'],
+      ['consumer',    'Consumer'],
+      ['charitable',  'Charitable'],
+      ['platform',    'Platform'],
+      ['consulting',  'Consulting'],
+    ];
+    grid.innerHTML = items.map(([k, label], i) => {
+      const a = archs[k] || {};
+      return `<div class="arch">
+        <div class="code">${String(i+1).padStart(2,'0')} · ${k}</div>
+        <div class="name">${label}</div>
+        <div class="char">${a.character || '—'}</div>
+        <dl class="attrs">
+          <dt>Speed</dt><dd>${a.animationSpeed ?? '—'}×</dd>
+          <dt>Motion</dt><dd>${a.motion || '—'}</dd>
+          <dt>Border</dt><dd>${a.borderStyle || '—'}</dd>
+          <dt>Radii</dt><dd>${a.radiiScale ?? '—'}×</dd>
+        </dl>
+      </div>`;
+    }).join('');
+  })();
+
+  // ----- Render entities directory grouped by archetype -----
+  (function(){
+    const tokens = window.GROTHOUSE_TOKENS || {};
+    const root = document.getElementById('entities-directory');
+    const ents = tokens.entities || [];
+    const groups = {};
+    ents.forEach(e => {
+      (groups[e.archetype] = groups[e.archetype] || []).push(e);
+    });
+    const order = ['holding','real_estate','financial','ai_tech','consumer','charitable','platform','consulting'];
+    root.innerHTML = order.filter(k => groups[k]).map(k => {
+      const label = k.replace('_',' ').replace(/\b\w/g, c => c.toUpperCase());
+      const cards = groups[k].map(e => {
+        const hex = e.accent?.light || e.accent?.dark || '#3944BC';
+        return `<div class="entity-card" style="--ec:${hex}">
+          <div class="bar"></div>
+          <div class="t">
+            <div class="n">${e.name}</div>
+            <div class="m">${e.ticker}</div>
+          </div>
+          <div class="h">${hex}</div>
+        </div>`;
+      }).join('');
+      return `<h3 style="margin-top: 28px;">${label} · ${groups[k].length}</h3>
+        <div class="entities-grid">${cards}</div>`;
+    }).join('');
+  })();
+</script>
+
+</body>
+</html>

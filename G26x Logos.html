@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en" data-entity="g26x" data-archetype="holding" data-surface="cool" data-glow="medium" data-preset="editorial" data-theme="dark">
+<html lang="en" data-entity="g26x" data-archetype="holding" data-surface="cool" data-glow="medium" data-preset="editorial" data-theme="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>G26x · Logo Package — Est. 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="kit/grothouse-system.css">
+<link rel="stylesheet" href="kit/theme-toggle.css" />
 <style>
   body { margin: 0; font-family: var(--g-f-body); background: var(--g-bg); color: var(--g-fg); }
   header { position: relative; padding: 80px 48px 44px; isolation: isolate; overflow: hidden; }
@@ -22,13 +23,16 @@
   .pkg-head h2 { font-family: var(--g-f-display); font-weight: 700; font-size: 22px; margin: 0; color: var(--g-fg-strong); letter-spacing: -0.01em; }
   .pkg-head .num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: var(--g-accent); }
   .pkg-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .pkg-body.mono { grid-template-columns: 1fr 1fr; border-top: 1px dashed var(--g-border); }
   .mode { padding: 40px; min-height: 320px; display: flex; align-items: center; justify-content: center; position: relative; }
-  .mode.dark  { background: radial-gradient(420px circle at center, rgba(var(--g-accent-rgb),0.08), transparent 70%), var(--g-bg); border-right: 1px solid var(--g-border); }
+  .mode.dark  { background: radial-gradient(420px circle at center, rgba(var(--g-accent-rgb),0.18), transparent 70%), #0B0E14; border-right: 1px solid var(--g-border); }
   .mode.light { background: #FFFFFF; }
+  .mode.black { background: #0B0E14; border-right: 1px solid var(--g-border); min-height: 220px; }
+  .mode.white { background: #FFFFFF; min-height: 220px; }
   .mode::after { content: attr(data-label); position: absolute; top: 14px; left: 18px; font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; }
-  .mode.dark::after  { color: var(--g-accent); }
-  .mode.light::after { color: #3944BC; }
-  .mode svg, .mode object { max-width: 100%; max-height: 260px; }
+  .mode.dark::after, .mode.black::after  { color: rgba(255,255,255,0.55); }
+  .mode.light::after, .mode.white::after { color: rgba(0,0,0,0.55); }
+  .mode svg, .mode object, .mode img { max-width: 100%; max-height: 260px; width: auto; height: auto; }
   .pkg-foot { padding: 18px 28px; border-top: 1px solid var(--g-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
   .pkg-desc { color: var(--g-fg-stone); font-size: 13px; line-height: 1.6; max-width: 640px; margin: 0; }
   .dl { display: flex; gap: 8px; }
@@ -49,8 +53,8 @@
   <div class="g-orb g-orb-sky" style="width:360px;height:360px;top:0;right:-8%;animation-delay:-4s"></div>
   <div class="g-noise"></div>
   <div class="eyebrow">● G26X · Final Logo Package · Est. 2026</div>
-  <h1>Three marks. <span class="it">Dark and light.</span></h1>
-  <p>Monogram, Editorial Wordmark, Radiant Monolith — each with a dedicated dark and light variant. Light variants use deep navy (#1A2244) and cobalt (#3944BC) for proper contrast on white surfaces.</p>
+  <h1>Three marks. <span class="it">Four variants each.</span></h1>
+  <p>Monogram, Editorial Wordmark, Tech Modern — each with dedicated Dark and Light variants for brand-color reproduction, plus Black and White single-ink variants for print, embroidery, favicons, and subdued applications.</p>
 </header>
 
 <div class="packages">
@@ -58,14 +62,20 @@
   <section class="pkg">
     <div class="pkg-head"><h2>Monogram</h2><span class="num">01 · GEOMETRIC</span></div>
     <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><object type="image/svg+xml" data="logos/01-monogram/dark.svg"></object></div>
-      <div class="mode light" data-label="● Light"><object type="image/svg+xml" data="logos/01-monogram/light.svg"></object></div>
+      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/01-monogram/dark.svg" alt="" /></div>
+      <div class="mode light" data-label="● Light"><img src="logos/01-monogram/light.svg" alt="" /></div>
+    </div>
+    <div class="pkg-body mono">
+      <div class="mode black" data-label="○ White / 1-color"><img src="logos/01-monogram/white.svg" alt="" /></div>
+      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/01-monogram/black.svg" alt="" /></div>
     </div>
     <div class="pkg-foot">
-      <p class="pkg-desc">Open-ring G with the 2·6 stacked inside as mono numerals; the x sits as a cobalt cross. App icon, avatar, favicon.</p>
+      <p class="pkg-desc">Open-ring G with the 2·6 stacked inside as mono numerals; the x sits as a cobalt cross. App icon, avatar, favicon. Mono variants for single-color print, embroidery, and subdued applications.</p>
       <div class="dl">
         <a href="logos/01-monogram/dark.svg" download>Dark SVG</a>
         <a href="logos/01-monogram/light.svg" download>Light SVG</a>
+        <a href="logos/01-monogram/white.svg" download>White SVG</a>
+        <a href="logos/01-monogram/black.svg" download>Black SVG</a>
       </div>
     </div>
   </section>
@@ -73,14 +83,20 @@
   <section class="pkg">
     <div class="pkg-head"><h2>Editorial Wordmark</h2><span class="num">02 · PRIMARY LOCKUP</span></div>
     <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><object type="image/svg+xml" data="logos/02-wordmark/dark.svg"></object></div>
-      <div class="mode light" data-label="● Light"><object type="image/svg+xml" data="logos/02-wordmark/light.svg"></object></div>
+      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/02-wordmark/dark.svg" alt="" /></div>
+      <div class="mode light" data-label="● Light"><img src="logos/02-wordmark/light.svg" alt="" /></div>
+    </div>
+    <div class="pkg-body mono">
+      <div class="mode black" data-label="○ White / 1-color"><img src="logos/02-wordmark/white.svg" alt="" /></div>
+      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/02-wordmark/black.svg" alt="" /></div>
     </div>
     <div class="pkg-foot">
-      <p class="pkg-desc">Source Serif 4 display with italic cobalt "x". The primary lockup — letterhead, reports, site header, annual statements.</p>
+      <p class="pkg-desc">Source Serif 4 display with italic cobalt "x". The primary lockup — letterhead, reports, site header, annual statements. Mono variants strip the accent for single-ink reproduction.</p>
       <div class="dl">
         <a href="logos/02-wordmark/dark.svg" download>Dark SVG</a>
         <a href="logos/02-wordmark/light.svg" download>Light SVG</a>
+        <a href="logos/02-wordmark/white.svg" download>White SVG</a>
+        <a href="logos/02-wordmark/black.svg" download>Black SVG</a>
       </div>
     </div>
   </section>
@@ -88,19 +104,30 @@
   <section class="pkg">
     <div class="pkg-head"><h2>Tech Modern</h2><span class="num">03 · DIGITAL / MODERN</span></div>
     <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><object type="image/svg+xml" data="logos/03-tech/dark.svg"></object></div>
-      <div class="mode light" data-label="● Light"><object type="image/svg+xml" data="logos/03-tech/light.svg"></object></div>
+      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/03-tech/dark.svg" alt="" /></div>
+      <div class="mode light" data-label="● Light"><img src="logos/03-tech/light.svg" alt="" /></div>
+    </div>
+    <div class="pkg-body mono">
+      <div class="mode black" data-label="○ White / 1-color"><img src="logos/03-tech/white.svg" alt="" /></div>
+      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/03-tech/black.svg" alt="" /></div>
     </div>
     <div class="pkg-foot">
-      <p class="pkg-desc">Mono G26 with the x rendered as a precision crosshair/cursor — the live-reticle gesture. Terminal-grade, API-aware. Best for tech-adjacent surfaces and modern digital contexts.</p>
+      <p class="pkg-desc">Mono G26 with the x rendered as a precision crosshair/cursor — the live-reticle gesture. Terminal-grade, API-aware. Best for tech-adjacent surfaces and modern digital contexts. Mono variants for terminal screenshots, dev-docs, single-ink print.</p>
       <div class="dl">
         <a href="logos/03-tech/dark.svg" download>Dark SVG</a>
         <a href="logos/03-tech/light.svg" download>Light SVG</a>
+        <a href="logos/03-tech/white.svg" download>White SVG</a>
+        <a href="logos/03-tech/black.svg" download>Black SVG</a>
       </div>
     </div>
   </section>
 
 </div>
 
+<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
+  <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+<script src="kit/theme-toggle.js" defer></script>
 </body>
 </html>

@@ -18,17 +18,19 @@
   --g-accent-rgb:     57, 68, 188;
   --g-secondary-rgb:  21, 32, 166;
 
-  /* Surfaces (overridden by surface tone) */
-  --g-bg:        #0B0E14;
-  --g-bg-deep:   #07090F;
-  --g-card:      #111520;
-  --g-card-mid:  #1A1E2C;
-  --g-fg:        #E8EAF0;
-  --g-fg-strong: #F5F6FA;
-  --g-fg-muted:  var(--g-slate);
-  --g-fg-stone:  #8A9BAD;
-  --g-border:        rgba(var(--g-accent-rgb), 0.16);
-  --g-border-strong: rgba(var(--g-accent-rgb), 0.28);
+  /* Surfaces — default to LIGHT mode. Dark is a theme override below.
+     Pages SHOULD set data-theme="light" explicitly but this default
+     protects pages that forget. */
+  --g-bg:        #F0F2F5;
+  --g-bg-deep:   #E4E7EC;
+  --g-card:      #FFFFFF;
+  --g-card-mid:  #F5F7FA;
+  --g-fg:        #1A1D26;
+  --g-fg-strong: #0B0E14;
+  --g-fg-muted:  #6A6F7A;
+  --g-fg-stone:  var(--g-stone);
+  --g-border:        rgba(var(--g-accent-rgb), 0.14);
+  --g-border-strong: rgba(var(--g-accent-rgb), 0.24);
 
   /* Intensities (per-entity glow level) */
   --g-orb-i:   1;
@@ -46,37 +48,49 @@
   --g-f-mono:    'JetBrains Mono', ui-monospace, Consolas, monospace;
 }
 
-/* ============= SURFACE TONES ============= */
-[data-surface="iceCool"] {
-  --g-bg: #151A24; --g-bg-deep: #0F131B; --g-card: #1C2230; --g-card-mid: #242B3A;
-}
-[data-surface="cool"] {
-  --g-bg: #181C26; --g-bg-deep: #131620; --g-card: #1F2431; --g-card-mid: #272D3C;
-}
-[data-surface="neutral"] {
-  --g-bg: #1A1C22; --g-bg-deep: #14151B; --g-card: #23252D; --g-card-mid: #2B2D36;
-}
-[data-surface="warm"] {
-  --g-bg: #1C1A17; --g-bg-deep: #15130F; --g-card: #272320; --g-card-mid: #302B27;
-}
-[data-surface="emberWarm"] {
-  --g-bg: #1F1A15; --g-bg-deep: #18130E; --g-card: #2A2320; --g-card-mid: #342C28;
+/* ============= SURFACE TONES =============
+   Light-mode surface values are the defaults (applied on all [data-surface]).
+   Dark-mode values only apply under [data-theme="dark"].
+   The Grothouse system is light-first; dark is an opt-in inversion. */
+
+[data-surface="iceCool"]   { --g-bg: #F2F4F8; --g-bg-deep: #E8ECF2; --g-card: #FFFFFF; --g-card-mid: #F7F9FC; }
+[data-surface="cool"]      { --g-bg: #F0F2F5; --g-bg-deep: #E4E7EC; --g-card: #FFFFFF; --g-card-mid: #F5F7FA; }
+[data-surface="neutral"]   { --g-bg: #F4F4F2; --g-bg-deep: #EAEAE6; --g-card: #FFFFFF; --g-card-mid: #F7F7F4; }
+[data-surface="warm"]      { --g-bg: #F6F5F1; --g-bg-deep: #ECEBE5; --g-card: #FFFEFB; --g-card-mid: #F9F7F2; }
+[data-surface="emberWarm"] { --g-bg: #F8F4EE; --g-bg-deep: #EFE8DE; --g-card: #FFFDF8; --g-card-mid: #FAF5ED; }
+
+/* Dark-mode surface overrides */
+[data-theme="dark"][data-surface="iceCool"]   { --g-bg: #151A24; --g-bg-deep: #0F131B; --g-card: #1C2230; --g-card-mid: #242B3A; }
+[data-theme="dark"][data-surface="cool"]      { --g-bg: #181C26; --g-bg-deep: #131620; --g-card: #1F2431; --g-card-mid: #272D3C; }
+[data-theme="dark"][data-surface="neutral"]   { --g-bg: #1A1C22; --g-bg-deep: #14151B; --g-card: #23252D; --g-card-mid: #2B2D36; }
+[data-theme="dark"][data-surface="warm"]      { --g-bg: #1C1A17; --g-bg-deep: #15130F; --g-card: #272320; --g-card-mid: #302B27; }
+[data-theme="dark"][data-surface="emberWarm"] { --g-bg: #1F1A15; --g-bg-deep: #18130E; --g-card: #2A2320; --g-card-mid: #342C28; }
+
+[data-theme="dark"] {
+  --g-fg:        #E8EAF0;
+  --g-fg-strong: #F5F6FA;
+  --g-fg-muted:  var(--g-slate);
+  --g-fg-stone:  #8A9BAD;
+  --g-border:        rgba(var(--g-accent-rgb), 0.16);
+  --g-border-strong: rgba(var(--g-accent-rgb), 0.28);
 }
 
-/* Light-mode surface overrides */
-[data-theme="light"][data-surface="iceCool"]   { --g-bg: #F2F4F8; --g-bg-deep: #E8ECF2; --g-card: #FFFFFF; --g-card-mid: #F7F9FC; }
-[data-theme="light"][data-surface="cool"]      { --g-bg: #F0F2F5; --g-bg-deep: #E4E7EC; --g-card: #FFFFFF; --g-card-mid: #F5F7FA; }
-[data-theme="light"][data-surface="neutral"]   { --g-bg: #F4F4F2; --g-bg-deep: #EAEAE6; --g-card: #FFFFFF; --g-card-mid: #F7F7F4; }
-[data-theme="light"][data-surface="warm"]      { --g-bg: #F6F5F1; --g-bg-deep: #ECEBE5; --g-card: #FFFEFB; --g-card-mid: #F9F7F2; }
-[data-theme="light"][data-surface="emberWarm"] { --g-bg: #F8F4EE; --g-bg-deep: #EFE8DE; --g-card: #FFFDF8; --g-card-mid: #FAF5ED; }
-
-[data-theme="light"] {
-  --g-fg:        #1A1D26;
-  --g-fg-strong: #0B0E14;
-  --g-fg-muted:  #6A6F7A;
-  --g-fg-stone:  var(--g-stone);
-  --g-border:        rgba(var(--g-accent-rgb), 0.14);
-  --g-border-strong: rgba(var(--g-accent-rgb), 0.24);
+/* ============= OVERLAY / SURFACE FILL TOKENS =============
+   Semi-opaque fills for sticky topbars, sunken wells, tile backgrounds.
+   Light values are default; dark values only apply under [data-theme="dark"]. */
+:root {
+  --g-bg-overlay:         rgba(255,255,255,0.82);  /* fixed topbar, nav */
+  --g-bg-overlay-strong:  rgba(255,255,255,0.94);  /* section pinned bars */
+  --g-surface-sunken:     rgba(var(--g-accent-rgb), 0.06);
+  --g-surface-raised:     rgba(var(--g-accent-rgb), 0.04);
+  --g-surface-raised-soft:rgba(var(--g-accent-rgb), 0.03);
+}
+[data-theme="dark"] {
+  --g-bg-overlay:         rgba(11,14,20,0.80);
+  --g-bg-overlay-strong:  rgba(11,14,20,0.92);
+  --g-surface-sunken:     rgba(0,0,0,0.50);
+  --g-surface-raised:     rgba(0,0,0,0.30);
+  --g-surface-raised-soft:rgba(0,0,0,0.25);
 }
 
 /* ============= GLOW LEVELS ============= */

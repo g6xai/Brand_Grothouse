@@ -1,0 +1,55 @@
+/* Grothouse theme toggle — sun/moon pill, top-right floating, minimal chrome */
+.g-theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 20px;
+  z-index: 200;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--g-card);
+  border: 1px solid var(--g-border-strong);
+  border-radius: 50%;
+  color: var(--g-fg-strong);
+  cursor: pointer;
+  transition: all .2s ease;
+  backdrop-filter: blur(10px);
+}
+.g-theme-toggle:hover {
+  border-color: var(--g-accent);
+  color: var(--g-accent);
+  transform: scale(1.05);
+}
+.g-theme-toggle svg {
+  width: 16px; height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.g-theme-toggle .sun { display: none; }
+.g-theme-toggle .moon { display: block; }
+.g-theme-toggle[data-current="dark"] .sun  { display: block; }
+.g-theme-toggle[data-current="dark"] .moon { display: none; }
+
+/* Inline variant — sits inside switcher bars instead of floating */
+.g-theme-toggle.inline {
+  position: static;
+  width: 32px; height: 32px;
+  background: transparent;
+}
+
+/* =========================================================
+   Light-mode compatibility layer
+   Pages built dark-first hardcode #fff / rgba(0,0,0,...) / #000
+   directly in inline styles or <style> blocks. When such a page
+   flips to light, those hardcodes become invisible (white-on-white,
+   black-on-white is OK but black-in-dark-card was the intent).
+   This layer provides a safety net: pages can opt in by adding
+   data-compat="auto" on <html>.
+   ========================================================= */
+[data-theme="light"][data-compat="auto"] {
+  /* Most legacy styles use raw white text on darker bg-deep surfaces.
+     We flip the fg baseline on a few common shells. */
+  color-scheme: light;
+}

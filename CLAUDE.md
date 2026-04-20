@@ -1,6 +1,8 @@
-﻿# CLAUDE.md — The Grothouse Family
+# CLAUDE.md — The Grothouse Family
 
-This repository operates under the **G26x Agent Operating System**.
+This repository operates under the **G26x Agent Operating System**, and contains
+**The Grothouse Family brand system**. The governance layer is defined first; the
+brand system this repo actually ships is defined below it.
 
 ## Canonical sources
 
@@ -43,3 +45,129 @@ The engineering standard applies to every file in this repository.
 
 Agent contracts (`.claude/agents/`) in this repo are mirrored from the canonical `g26x-agent-os` repo. Any change to agent behavior is a PR against `g26x-agent-os`, not this repo. Local edits are detected by CI and will fail the PR check.
 
+---
+
+# Grothouse Brand System
+
+This project contains **The Grothouse Family brand system** — guidelines,
+tokens, typography spec, motion spec, and logos. It is the foundation that
+sites, products, and collateral build on top of. It does NOT contain those
+artifacts itself.
+
+## Canonical defaults — always
+
+**The Grothouse Family** (family-level, holding archetype)
+- Accent: Cobalt `#3944BC` (dark) / `#1338BE` (light)
+- Secondary: Azure `#5464D8` (dark) / `#1520A6` (light)
+- Surface: `cool` · Glow: `medium` · Archetype: `holding`
+- Preset: `editorial` · Layout: `classic`
+- **Theme: `light` (default)** — the family is designed light-first.
+  Dark mode is a user preference, not the brand's native voice.
+
+Unless the user explicitly names a different entity from `kit/tokens.json`,
+always start with The Grothouse Family.
+
+## Core rules
+
+1. **Import `kit/grothouse-system.css` as the base layer.** It defines every
+   radiance primitive (aurora mesh, orbs, noise, glow, cards, buttons, dividers)
+   and reads everything from CSS variables. All defaults are light-mode;
+   `[data-theme="dark"]` overrides flip values for dark mode.
+2. **Set entity attrs on `<html>` — always include `data-theme="light"` explicitly:**
+   ```html
+   <html data-entity="grothouse_family"
+         data-archetype="holding"
+         data-surface="cool"
+         data-glow="medium"
+         data-preset="editorial"
+         data-theme="light">
+   ```
+3. **Never invent colors.** All 24 entity accents sit in the blue family
+   (hue 210–260°). Pick from `kit/tokens.json > entities`. Use the `.light`
+   variant when rendering on light surfaces (default); use `.dark` only under
+   `data-theme="dark"`.
+4. **Typography:** Source Serif 4 (display) · Outfit (body) · JetBrains Mono (mono).
+   Load via Google Fonts. See `Typography Spec.html` for the ten-step scale.
+5. **Motion:** all transitions inherit archetype speed multipliers. See
+   `Motion Spec.html` for easing tokens, radiance levels, and timing tables.
+6. **Drop-in theme toggle:** include `kit/theme-toggle.css` + `kit/theme-toggle.js`
+   for a standard sun/moon toggle that persists to localStorage.
+7. **React projects:** use `ThemeProvider`, `Radiance`, `GlowCard`, `Section`,
+   `Display`, `DividerGlow` from `kit/react/index.jsx`.
+8. **Tailwind projects:** extend with `kit/tailwind.preset.js`.
+
+## Five style presets (Style DNA)
+
+Each entity can render in one of five presets. `editorial` is the canonical default.
+
+| Preset | Character |
+|---|---|
+| `editorial` | Serif display, generous whitespace, subtle radiance |
+| `brutalist` | Mono-first, 0-radius, heavy borders |
+| `glass` | Frosted translucent cards, max radiance |
+| `minimal` | Sans-only, flat, near-monochrome |
+| `maximalist` | Gradients everywhere, oversize type |
+
+## Four hero layouts
+
+`classic` (default) · `split` (copy + data visual) · `centered` · `asymmetric`
+
+## 24 entities
+
+See `kit/tokens.json`. Organized by archetype:
+- **Holding:** G26x · Grothouse Family
+- **Real Estate:** GXRE · Hearth · Residential · Commercial
+- **Financial:** RevoSure · The 5th Yr
+- **AI/Tech:** Co-Operate · G6x AI · Unorthodox Labs · Neural Vault
+- **Consumer:** Xperience Mortgage · HobbyBox
+- **Charitable:** The Foundation
+- **Platforms:** G6x Intelligence · Axon · Hive · OptX · ReVault · Node
+- **Consulting:** G6 Consulting · GXMG · Family Office
+
+## What this project IS
+
+- Brand Guidelines, Typography Spec, Motion Spec (3 HTML documents)
+- Logo package (3 marks × 4 variants each)
+- Design tokens (`kit/tokens.json` is source of truth)
+- Radiance CSS primitives + React primitives + Tailwind preset
+- Theme Playground for auditing tokens
+
+## What this project is NOT
+
+- Not a website or product for any entity
+- Not a component library (tokens + primitives only)
+- Not marketing collateral
+
+When the user asks for a site, product UI, deck, letterhead, or any
+artifact that builds on the brand — that is new work that references this
+system. Do not add those files here unless explicitly instructed.
+
+## Quick commands
+
+- **Explore themes visually:** open `kit/Theme Playground.html`
+- **Read the brand rules:** open `Brand Guidelines.html`
+- **Audit type:** open `Typography Spec.html`
+- **Audit motion:** open `Motion Spec.html`
+- **Add a new entity:** append to `kit/tokens.json > entities` — all primitives
+  auto-reskin.
+
+## Files
+
+```
+/
+├── index.html                   ← Brand system hub
+├── Brand Guidelines.html        ← Master document
+├── Typography Spec.html         ← Families, scale, pairings, presets
+├── Motion Spec.html             ← Easings, speeds, radiance, timings
+├── G26x Logos.html              ← 3 marks × 4 variants
+├── archetypes.json              ← 8 archetypes, machine-readable
+├── logos/                       ← 12 SVG files
+└── kit/
+    ├── tokens.json              ← Source of truth
+    ├── tokens.js                ← JS global
+    ├── grothouse-system.css     ← Radiance + semantic tokens (light-default)
+    ├── tailwind.preset.js
+    ├── theme-toggle.css/.js     ← Drop-in toggle
+    ├── react/index.jsx
+    └── Theme Playground.html
+```

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="subtle" data-preset="editorial" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Typography Spec — The Grothouse Family</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600;1,8..60,700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="kit/grothouse-system.css" />
+<link rel="stylesheet" href="kit/theme-toggle.css" />
+<style>
+  :root { color-scheme: light; }
+  html, body { background: var(--g-bg); color: var(--g-fg); }
+  body { margin: 0; font-family: var(--g-f-body); font-size: 15px; line-height: 1.65; }
+  main { max-width: 1040px; margin: 0 auto; padding: 80px 60px 160px; }
+
+  .eyebrow { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 22px; display: flex; align-items: center; gap: 14px; }
+  .eyebrow .rule { flex: 1; max-width: 120px; height: 1px; background: var(--g-accent); opacity: .5; }
+  h1.page { font-family: var(--g-f-display); font-weight: 700; font-size: clamp(44px, 4.8vw, 72px); line-height: 1.04; letter-spacing: -0.022em; margin: 0 0 18px; color: var(--g-fg-strong); max-width: 20ch; }
+  h1.page em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  .lead { color: var(--g-fg-stone); font-size: 17px; line-height: 1.6; max-width: 56ch; margin: 0 0 40px; }
+
+  section { padding-top: 72px; border-top: 1px dashed var(--g-border); margin-top: 72px; }
+  section:first-of-type { border-top: 0; margin-top: 24px; padding-top: 0; }
+
+  .num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .num .rule { flex: 1; height: 1px; background: var(--g-border); }
+  h2 { font-family: var(--g-f-display); font-weight: 700; font-size: 36px; line-height: 1.12; letter-spacing: -0.012em; color: var(--g-fg-strong); margin: 0 0 16px; max-width: 28ch; }
+  h2 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  h3 { font-family: var(--g-f-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); margin: 40px 0 14px; }
+  p { margin: 0 0 14px; max-width: 62ch; }
+  p.note { color: var(--g-fg-muted); font-size: 13px; font-style: italic; }
+
+  /* Family cards */
+  .families { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 20px 0 28px; }
+  .fam { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 28px 28px 24px; }
+  .fam .tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--g-accent); }
+  .fam .specimen { font-size: 72px; line-height: 1; letter-spacing: -0.02em; margin: 16px 0 10px; color: var(--g-fg-strong); }
+  .fam.display .specimen { font-family: 'Source Serif 4', serif; font-weight: 400; font-style: italic; }
+  .fam.body .specimen    { font-family: 'Outfit', sans-serif; font-weight: 500; }
+  .fam.mono .specimen    { font-family: 'JetBrains Mono', monospace; font-weight: 500; letter-spacing: -0.02em; }
+  .fam .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-top: 14px; font-family: var(--g-f-mono); font-size: 10px; }
+  .fam .meta dt { color: var(--g-fg-muted); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }
+  .fam .meta dd { margin: 0 0 4px; color: var(--g-fg-strong); }
+  .fam .why { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--g-border); font-size: 13px; line-height: 1.5; color: var(--g-fg-stone); font-style: italic; }
+
+  .weights { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .weights span { font-family: inherit; font-size: 11px; padding: 3px 8px; border: 1px solid var(--g-border); border-radius: 2px; color: var(--g-fg-muted); }
+
+  /* Type scale table */
+  .scale-row {
+    display: grid; grid-template-columns: 100px 1fr auto auto;
+    align-items: baseline; gap: 20px; padding: 18px 0;
+    border-bottom: 1px dashed var(--g-border);
+  }
+  .scale-row .label { font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--g-fg-muted); font-weight: 700; }
+  .scale-row .demo { color: var(--g-fg-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .scale-row .size { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-fg-muted); white-space: nowrap; }
+  .scale-row .use { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-accent); letter-spacing: 0.06em; white-space: nowrap; }
+
+  /* Demo sizes — display */
+  .d-display  { font-family: 'Source Serif 4'; font-weight: 700; font-size: 84px; line-height: 1.04; letter-spacing: -0.024em; }
+  .d-h1       { font-family: 'Source Serif 4'; font-weight: 700; font-size: 56px; line-height: 1.08; letter-spacing: -0.02em; }
+  .d-h2       { font-family: 'Source Serif 4'; font-weight: 700; font-size: 36px; line-height: 1.15; letter-spacing: -0.012em; }
+  .d-h3       { font-family: 'Source Serif 4'; font-weight: 600; font-size: 24px; line-height: 1.3; letter-spacing: -0.004em; }
+  .d-lead     { font-family: 'Outfit'; font-weight: 400; font-size: 20px; line-height: 1.55; color: var(--g-fg-stone); }
+  .d-body     { font-family: 'Outfit'; font-weight: 400; font-size: 15px; line-height: 1.65; color: var(--g-fg); }
+  .d-small    { font-family: 'Outfit'; font-weight: 400; font-size: 13px; line-height: 1.55; color: var(--g-fg-muted); }
+  .d-caption  { font-family: 'Outfit'; font-weight: 500; font-size: 11px; line-height: 1.45; color: var(--g-fg-muted); }
+  .d-eyebrow  { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); }
+  .d-mono     { font-family: 'JetBrains Mono'; font-weight: 500; font-size: 13px; color: var(--g-fg); letter-spacing: 0.01em; }
+
+  /* Pairings block */
+  .pair { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 40px 44px; margin-bottom: 18px; }
+  .pair .pair-tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 14px; }
+  .pair-1 .eb  { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .pair-1 .eb .r { width: 40px; height: 1px; background: var(--g-accent); opacity: .5; }
+  .pair-1 h3 { font-family: 'Source Serif 4'; font-weight: 700; font-style: normal; font-size: 48px; line-height: 1.08; letter-spacing: -0.018em; color: var(--g-fg-strong); margin: 0 0 14px; text-transform: none; max-width: 18ch; }
+  .pair-1 h3 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
+  .pair-1 p { font-family: 'Outfit'; font-size: 16px; line-height: 1.6; color: var(--g-fg-stone); max-width: 58ch; margin: 0; }
+
+  .pair-2 .mono { font-family: 'JetBrains Mono'; font-weight: 500; font-size: 11px; color: var(--g-fg-muted); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .pair-2 .num-big { font-family: 'Source Serif 4'; font-weight: 400; font-size: 72px; line-height: 1; letter-spacing: -0.02em; color: var(--g-fg-strong); }
+  .pair-2 .num-big em { font-style: italic; color: var(--g-accent); }
+  .pair-2 .sub { font-family: 'Outfit'; font-size: 13px; color: var(--g-fg-muted); margin-top: 8px; }
+
+  .pair-3 .eb  { font-family: 'JetBrains Mono'; font-weight: 700; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 12px; }
+  .pair-3 blockquote { font-family: 'Source Serif 4'; font-style: italic; font-weight: 400; font-size: 28px; line-height: 1.35; color: var(--g-fg-strong); margin: 0 0 18px; max-width: 32ch; }
+  .pair-3 cite { font-family: 'Outfit'; font-style: normal; font-weight: 500; font-size: 13px; color: var(--g-fg); }
+  .pair-3 cite .r { color: var(--g-fg-muted); font-weight: 400; }
+
+  /* Rules panel */
+  .rules { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 24px 28px; margin: 18px 0 28px; }
+  .rules ol { margin: 0; padding-left: 22px; }
+  .rules li { margin-bottom: 10px; color: var(--g-fg); line-height: 1.55; }
+  .rules li b { color: var(--g-fg-strong); }
+  .rules li code { font-family: var(--g-f-mono); font-size: 12px; color: var(--g-accent); background: rgba(var(--g-accent-rgb), 0.06); padding: 1px 6px; border-radius: 2px; }
+
+  /* Do/Don't */
+  .dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0 28px; }
+  .dodont > div { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 22px 26px; }
+  .dodont .tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 14px; }
+  .dodont .yes .tag { color: #3B8F4A; }
+  .dodont .no .tag  { color: #B63D4B; }
+  .dodont .yes { border-left: 3px solid #3B8F4A; }
+  .dodont .no  { border-left: 3px solid #B63D4B; }
+  .dodont ul { margin: 0; padding-left: 18px; }
+  .dodont li { margin-bottom: 6px; font-size: 13px; line-height: 1.55; }
+
+  .tok-table { width: 100%; border-collapse: collapse; }
+  .tok-table th, .tok-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 12px; vertical-align: top; }
+  .tok-table th { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-fg-muted); background: var(--g-card); }
+  .tok-table td.n { color: var(--g-accent); font-weight: 700; }
+  .tok-table td.v { color: var(--g-fg-strong); }
+  .tok-table td.u { color: var(--g-fg); font-family: var(--g-f-body); font-size: 13px; }
+
+  .crumb { font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.22em; color: var(--g-fg-muted); text-transform: uppercase; margin-bottom: 8px; }
+  .crumb a { color: var(--g-accent); border-bottom: 1px solid rgba(var(--g-accent-rgb),.3); text-decoration: none; }
+
+  @media (max-width: 860px) {
+    main { padding: 40px 24px 120px; }
+    .families { grid-template-columns: 1fr; }
+    .dodont { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="crumb"><a href="index.html">Brand System</a> · Typography Spec</div>
+  <div class="eyebrow"><span class="rule"></span> Typography Spec · Grothouse · v1.0</div>
+  <h1 class="page">Three families. <em>One conversation.</em></h1>
+  <p class="lead">A serif for what's <em>argued</em>, a sans for what's <em>said</em>, and a mono for what's <em>measured</em>. The Grothouse family uses exactly three type families — Source Serif 4, Outfit, and JetBrains Mono — in a tight scale built around the golden ratio.</p>
+
+  <!-- ===== 01 · FAMILIES ===== -->
+  <section>
+    <div class="num"><span>01</span><span class="rule"></span><span>The Three Families</span></div>
+    <h2>A serif, a sans, <em>a mono</em>.</h2>
+
+    <div class="families">
+      <div class="fam display">
+        <div class="tag">Display</div>
+        <div class="specimen">Aa</div>
+        <dl class="meta">
+          <dt>Family</dt><dd>Source Serif 4</dd>
+          <dt>Category</dt><dd>Transitional serif</dd>
+          <dt>Designer</dt><dd>Frank Grießhammer</dd>
+          <dt>License</dt><dd>SIL OFL</dd>
+        </dl>
+        <div class="weights">
+          <span style="font-weight:300">300</span>
+          <span style="font-weight:400">400</span>
+          <span style="font-weight:500">500</span>
+          <span style="font-weight:600">600</span>
+          <span style="font-weight:700">700</span>
+        </div>
+        <div class="why">Editorial authority with a calm, architectural cadence. Italic cuts are the workhorse — used for every accent phrase in the family.</div>
+      </div>
+
+      <div class="fam body">
+        <div class="tag">Body</div>
+        <div class="specimen">Aa</div>
+        <dl class="meta">
+          <dt>Family</dt><dd>Outfit</dd>
+          <dt>Category</dt><dd>Geometric sans</dd>
+          <dt>Designer</dt><dd>Smith + Indian Type Foundry</dd>
+          <dt>License</dt><dd>SIL OFL</dd>
+        </dl>
+        <div class="weights">
+          <span style="font-weight:300">300</span>
+          <span style="font-weight:400">400</span>
+          <span style="font-weight:500">500</span>
+          <span style="font-weight:600">600</span>
+          <span style="font-weight:700">700</span>
+        </div>
+        <div class="why">Open, quiet, legible at small sizes. Sits under the serif without competing for attention.</div>
+      </div>
+
+      <div class="fam mono">
+        <div class="tag">Mono</div>
+        <div class="specimen">Aa</div>
+        <dl class="meta">
+          <dt>Family</dt><dd>JetBrains Mono</dd>
+          <dt>Category</dt><dd>Technical mono</dd>
+          <dt>Designer</dt><dd>Philipp Nurullin</dd>
+          <dt>License</dt><dd>SIL OFL</dd>
+        </dl>
+        <div class="weights">
+          <span style="font-weight:400">400</span>
+          <span style="font-weight:500">500</span>
+          <span style="font-weight:600">600</span>
+          <span style="font-weight:700">700</span>
+        </div>
+        <div class="why">For data, tickers, code, metadata, and the family's signature uppercase-tracked eyebrows.</div>
+      </div>
+    </div>
+
+    <h3>Loading the families</h3>
+    <div class="rules">
+      <pre style="font-family: var(--g-f-mono); font-size: 12px; line-height: 1.7; margin: 0; color: var(--g-fg-strong); overflow-x: auto;">&lt;link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Outfit:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</pre>
+    </div>
+
+    <h3>Semantic tokens</h3>
+    <table class="tok-table">
+      <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td class="n">--g-f-display</td><td class="v">'Source Serif 4', Georgia, serif</td><td class="u">Display, h1–h3, italic accent phrases, pull quotes.</td></tr>
+        <tr><td class="n">--g-f-body</td><td class="v">'Outfit', system-ui, sans-serif</td><td class="u">Body copy, leads, UI labels, form inputs, buttons.</td></tr>
+        <tr><td class="n">--g-f-mono</td><td class="v">'JetBrains Mono', monospace</td><td class="u">Eyebrows, tickers, tokens, code, metadata labels.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== 02 · SCALE ===== -->
+  <section>
+    <div class="num"><span>02</span><span class="rule"></span><span>Type Scale</span></div>
+    <h2>Ten steps. <em>Quiet hierarchy.</em></h2>
+    <p class="lead" style="margin-bottom: 24px;">A compressed scale. There are no ten-step display fireworks here — the family leans on <em>weight</em>, <em>whitespace</em>, and <em>italic</em> to build hierarchy, not size.</p>
+
+    <div class="scale-row">
+      <div class="label">Display</div>
+      <div class="demo d-display">Aa — Held</div>
+      <div class="size">84 / 88 · -0.024em</div>
+      <div class="use">hero</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">H1</div>
+      <div class="demo d-h1">Built on faith, driven by purpose</div>
+      <div class="size">56 / 60 · -0.020em</div>
+      <div class="use">page title</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">H2</div>
+      <div class="demo d-h2">Twenty-four entities, one family</div>
+      <div class="size">36 / 42 · -0.012em</div>
+      <div class="use">section head</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">H3</div>
+      <div class="demo d-h3">Diversified, durable, deeply held</div>
+      <div class="size">24 / 31 · -0.004em</div>
+      <div class="use">sub-section</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Lead</div>
+      <div class="demo d-lead">A disciplined capital stack across eight archetypes and twenty-four operating entities.</div>
+      <div class="size">20 / 31</div>
+      <div class="use">intro para</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Body</div>
+      <div class="demo d-body">The family office maintains a diversified portfolio with long-duration holdings in real estate, financial infrastructure, and operating companies.</div>
+      <div class="size">15 / 25</div>
+      <div class="use">body copy</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Small</div>
+      <div class="demo d-small">Metadata, captions, and secondary prose sit at this step.</div>
+      <div class="size">13 / 20</div>
+      <div class="use">caption</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Caption</div>
+      <div class="demo d-caption">Figure 01 · 2024 annual letter, p. 3</div>
+      <div class="size">11 / 16</div>
+      <div class="use">micro</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Eyebrow</div>
+      <div class="demo d-eyebrow">Quarterly Letter · Q3 2024</div>
+      <div class="size">11 / 16 · 0.28em</div>
+      <div class="use">section tag</div>
+    </div>
+    <div class="scale-row">
+      <div class="label">Mono</div>
+      <div class="demo d-mono">GRTH · $4.82B · 21.4% CAGR</div>
+      <div class="size">13 / 20</div>
+      <div class="use">data, tickers</div>
+    </div>
+
+    <p class="note" style="margin-top: 20px;">For <b>1920×1080 decks</b>, multiply every size by ≈1.5× — the minimum body on a deck is 24px, never smaller. For <b>print</b>, body copy lives at 10–11pt, leading 14–15pt; the headline scale is unchanged.</p>
+  </section>
+
+  <!-- ===== 03 · PAIRINGS ===== -->
+  <section>
+    <div class="num"><span>03</span><span class="rule"></span><span>Canonical Pairings</span></div>
+    <h2>Three compositions <em>you'll use forever</em>.</h2>
+
+    <div class="pair pair-1">
+      <div class="pair-tag">01 · Editorial Hero</div>
+      <div class="eb"><span class="r"></span> The Grothouse Family · Est. 2003</div>
+      <h3>A diversified family office, <em>held across generations.</em></h3>
+      <p>Twelve operating entities. Twenty-one years of compounding. One disciplined capital stack, spanning real estate, financial infrastructure, charitable work, and the quietly operational edges of artificial intelligence.</p>
+    </div>
+
+    <div class="pair pair-2">
+      <div class="pair-tag">02 · Numeric Metric</div>
+      <div class="mono">AUM · Q3 2024</div>
+      <div class="num-big">$4.<em>82</em>B</div>
+      <div class="sub">Across 24 entities · 21.4% trailing 5-yr CAGR</div>
+    </div>
+
+    <div class="pair pair-3">
+      <div class="pair-tag">03 · Pull Quote</div>
+      <div class="eb">Family Office · Annual Letter</div>
+      <blockquote>"The question is never what returns we could earn this quarter — it is what the capital should be doing in fifty years."</blockquote>
+      <cite>A. Grothouse <span class="r">· Managing Partner</span></cite>
+    </div>
+  </section>
+
+  <!-- ===== 04 · RULES ===== -->
+  <section>
+    <div class="num"><span>04</span><span class="rule"></span><span>Usage Rules</span></div>
+    <h2>Five rules <em>never broken</em>.</h2>
+    <div class="rules">
+      <ol>
+        <li><b>Italic serif is the accent.</b> Use <em>italic Source Serif 4</em> for exactly one weight-bearing phrase per composition. Never italicize body copy for emphasis — use weight instead.</li>
+        <li><b>Uppercase lives in mono.</b> If text is ALL CAPS, it is set in JetBrains Mono, 10–11px, <code>letter-spacing: 0.28em</code>. Never set uppercase in the serif or sans.</li>
+        <li><b>Display wraps short.</b> Hero and H1 copy maxes out at ≈20 characters per line. Use <code>max-width: 20ch</code> and <code>text-wrap: balance</code>.</li>
+        <li><b>Numbers are serifs too.</b> Large numeric displays (AUM, prices, stats) use Source Serif 4, not the sans — italicize the modifier (e.g. <em>.82</em>) for emphasis.</li>
+        <li><b>Measure is 56–62ch.</b> Body paragraphs cap at <code>max-width: 62ch</code>. Leads sit at 56ch. Nothing wider, no exceptions.</li>
+      </ol>
+    </div>
+
+    <div class="dodont">
+      <div class="yes">
+        <div class="tag">✓ Do</div>
+        <ul>
+          <li>Use italic serif for accent phrases: <em>"built on faith"</em></li>
+          <li>Mix weights (400 body, 700 display) to build hierarchy.</li>
+          <li>Track mono eyebrows to 0.28em, uppercase, 11px max.</li>
+          <li>Use Source Serif 4 for large stat displays.</li>
+          <li>Cap line length at 62ch with <code>text-wrap: pretty</code>.</li>
+        </ul>
+      </div>
+      <div class="no">
+        <div class="tag">✕ Don't</div>
+        <ul>
+          <li>Substitute Playfair, Lora, or any other serif.</li>
+          <li>Use <em>italic</em> in body sans for emphasis — use weight.</li>
+          <li>Track the serif headline. It is drawn, not tracked.</li>
+          <li>Set buttons or form labels in the serif.</li>
+          <li>Use more than three font families on a single page.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 · PRESETS ===== -->
+  <section>
+    <div class="num"><span>05</span><span class="rule"></span><span>Preset Variations</span></div>
+    <h2>Same families, <em>five voices.</em></h2>
+    <p>Each entity can render in one of five type presets without introducing new families. The preset decides which of the three families leads the composition.</p>
+
+    <table class="tok-table">
+      <thead><tr><th>Preset</th><th>Display</th><th>Body</th><th>Accent behavior</th></tr></thead>
+      <tbody>
+        <tr><td class="n">editorial</td><td class="v">Source Serif 4 · 700</td><td class="v">Outfit · 400</td><td class="u"><em>Italic serif</em> on one phrase. The canonical default.</td></tr>
+        <tr><td class="n">brutalist</td><td class="v">JetBrains Mono · 700 UPPER</td><td class="v">JetBrains Mono · 400</td><td class="u">No italic. Tracking alone creates rhythm. 0-radius surfaces.</td></tr>
+        <tr><td class="n">glass</td><td class="v">Source Serif 4 · 700</td><td class="v">Outfit · 300</td><td class="u">Lighter weight body over translucent cards. Italic accent remains.</td></tr>
+        <tr><td class="n">minimal</td><td class="v">Outfit · 600</td><td class="v">Outfit · 400</td><td class="u">Sans-only. Hierarchy from weight + whitespace, no serif.</td></tr>
+        <tr><td class="n">maximalist</td><td class="v">Source Serif 4 · 700 @ 1.25× scale</td><td class="v">Outfit · 400</td><td class="u">Oversized serif display. Italic at display size. Gradient accent.</td></tr>
+      </tbody>
+    </table>
+
+    <p class="note">Most marketing surfaces should stay on <code>editorial</code>. Reach for <code>brutalist</code> for developer-tech surfaces, <code>minimal</code> for high-density data apps, <code>maximalist</code> for major announcements.</p>
+  </section>
+
+  <!-- ===== 06 · PRINT ===== -->
+  <section>
+    <div class="num"><span>06</span><span class="rule"></span><span>Print &amp; Collateral</span></div>
+    <h2>Ink on paper.</h2>
+    <p>The typographic system was designed print-first. All three families render cleanly in offset and digital print at any reasonable size.</p>
+    <ul style="margin: 12px 0 18px 0; padding-left: 22px; max-width: 62ch;">
+      <li style="margin-bottom:8px;"><b>Body</b> — 10–11pt Outfit Regular, leading 14–15pt, measure 60–68 characters.</li>
+      <li style="margin-bottom:8px;"><b>Display</b> — Source Serif 4 Bold, 36–72pt depending on format. Italic cuts for accent phrases.</li>
+      <li style="margin-bottom:8px;"><b>Caption / metadata</b> — 8pt JetBrains Mono Medium, tracked 0.22em if uppercase.</li>
+      <li style="margin-bottom:8px;"><b>Minimum print body</b> — 9pt. Never smaller. Footnotes may drop to 8pt in annual reports only.</li>
+      <li style="margin-bottom:8px;"><b>Letterhead</b> — Wordmark 24mm, 50mm top margin, 20mm side margins. Body starts at the golden-section line.</li>
+      <li><b>Business card</b> — 85×55mm. Monogram top-left (8mm). Name in Outfit Medium 9pt. Title in JetBrains Mono 7pt, tracked 0.18em.</li>
+    </ul>
+  </section>
+
+</main>
+
+<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+</button>
+<script src="kit/theme-toggle.js" defer></script>
+</body>
+</html>
