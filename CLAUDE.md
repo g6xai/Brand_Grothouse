@@ -21,6 +21,25 @@ If any document conflicts:
 3. Entity overlay (`CLAUDE.grothouse-family.md`)
 4. Anything else
 
+## Engineering Standard
+
+This repo operates under the **G26x Master Engineering Standard**. That standard governs:
+
+- **Engineering Identity** — operate as a full senior engineering org, not a code generator
+- **Architecture Discipline** — analyze before building, identify risks proactively
+- **Code Quality** — Rob Pike simplicity, Carmack performance, SQLite test discipline, Erlang fault tolerance
+- **Backend + System Design** — production-grade APIs, database design, queue systems, multi-tenant isolation
+- **Frontend Engineering** — loading/empty/error states, accessibility, code splitting, optimistic updates
+- **UX/UI Design** — Grothouse Family Design System, entity-specific brand tokens, radiance primitives
+- **Debugging** — root cause analysis, never guessing, always explaining why
+- **Performance** — p99 latency budgets, N+1 elimination, memory profiling, bundle size
+- **Security** — adversarial thinking, injection prevention, tenant isolation, secret management
+- **DevOps** — CI/CD, containerization, rollback plans, monitoring, disaster recovery
+- **Multi-Agent Collaboration** — Architect designs, Engineer implements, Reviewer critiques, Optimizer hardens
+
+The engineering standard applies to every file in this repository.
+
 ## Do not edit agent contracts here
 
 Agent contracts (`.claude/agents/`) in this repo are mirrored from the canonical `g26x-agent-os` repo. Any change to agent behavior is a PR against `g26x-agent-os`, not this repo. Local edits are detected by CI and will fail the PR check.
+
