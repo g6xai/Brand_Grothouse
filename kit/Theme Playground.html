@@ -1,26 +1,328 @@
 <!doctype html>
-<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="medium" data-theme="dark">
+<html lang="en" data-entity="grothouse_family" data-accent="blue" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Grothouse System — Theme Playground</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <title>Grothouse System — Token Playground</title>
+
+  <!-- No webfont link. The system stack is the whole type system, so there is
+       nothing to download; that is the point. -->
   <link rel="stylesheet" href="grothouse-system.css" />
-  <link rel="stylesheet" href="playground.css" />
+
+  <style>
+    /* Playground chrome only. Every value resolves to a system token — the
+       auditor must not be able to show you something the tokens cannot. */
+    .pg-head {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-material);
+      backdrop-filter: blur(var(--blur-material));
+      -webkit-backdrop-filter: blur(var(--blur-material));
+      border-bottom: 1px solid var(--color-material-border);
+    }
+    .pg-head select {
+      min-height: var(--tap-target);
+      padding: var(--space-2) var(--space-3);
+      font-family: inherit;
+      font-size: var(--text-body);
+      color: var(--color-ink);
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-control);
+    }
+    .pg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-4);
+    }
+    .pg-swatch {
+      height: 64px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--color-border);
+    }
+    .pg-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .pg-spec {
+      color: var(--color-secondary);
+      font-size: var(--text-caption);
+      line-height: var(--leading-caption);
+    }
+    .pg-ratio {
+      font-family: var(--font-id);
+      font-variant-numeric: tabular-nums;
+    }
+    /* Tabular data: list below 768px, table above. Never a raw wide table on
+       a phone, and never a table inside a horizontal scroller. */
+    .pg-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .pg-table th,
+    .pg-table td {
+      text-align: start;
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--text-caption);
+    }
+    .pg-table th { font-weight: 600; }
+    @media (max-width: 767px) {
+      .pg-table thead { display: none; }
+      .pg-table tr {
+        display: block;
+        padding: var(--space-3) 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .pg-table td { display: block; border: 0; padding: var(--space-1) 0; }
+      .pg-table td::before {
+        content: attr(data-label) " — ";
+        color: var(--color-secondary);
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
+  <header class="pg-head">
+    <strong class="hig-body">Token playground</strong>
+    <select id="entity" aria-label="Entity"></select>
+    <select id="theme" aria-label="Theme">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+    <span class="pg-spec" id="accent-readout"></span>
+  </header>
+
+  <main class="hig-container hig-section">
+    <h1 class="hig-display">Grothouse Design System</h1>
+    <p class="hig-body hig-prose">
+      Apple HIG. Black, white, grey, and one accent per surface. This page reads
+      every value from <code class="font-id">kit/tokens.json</code>, so it cannot
+      show you something the tokens do not actually say.
+    </p>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Colour</h2>
+      <p class="pg-spec">
+        Contrast ratios are measured by <code class="font-id">scripts/contrast.mjs</code>
+        against these exact surfaces. They are recorded in the token file, not inferred here.
+      </p>
+      <div class="pg-grid" id="swatches"></div>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Type</h2>
+      <p class="pg-spec">
+        One family, five sizes, 12px floor. Sentence case only — measured on
+        apple.com: zero uppercase-transformed elements and zero above 0.1em
+        tracking, across four page and viewport combinations.
+      </p>
+      <div id="type-samples"></div>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Radius, motion, space</h2>
+      <table class="pg-table" id="scalars">
+        <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Controls</h2>
+      <div class="pg-row">
+        <button class="hig-button hig-button-primary">Primary</button>
+        <button class="hig-button hig-button-secondary">Secondary</button>
+        <button class="hig-button hig-button-plain">Plain</button>
+      </div>
+      <p class="pg-spec">
+        Buttons are pills — Apple's own measure 980px radius. Inputs stay at the
+        12px control radius. One filled primary per screen.
+      </p>
+      <div class="pg-row">
+        <input class="hig-input" placeholder="17px prevents iOS focus zoom" />
+      </div>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Surfaces</h2>
+      <div class="pg-grid">
+        <div class="hig-card">
+          <h3 class="hig-title-2">Card</h3>
+          <p class="hig-body">16px radius, hairline border, token padding.</p>
+          <p class="hig-caption">Depth comes from surface-tone steps, not glow.</p>
+        </div>
+        <div class="hig-card hig-sunken">
+          <h3 class="hig-title-2">Sunken</h3>
+          <p class="hig-body">One step below the page.</p>
+        </div>
+        <div class="hig-card">
+          <h3 class="hig-title-2">Identifier</h3>
+          <p class="hig-body">NMLS <span class="font-id">1234567</span></p>
+          <p class="hig-caption">The only surviving monospace.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Sanctioned carousel</h2>
+      <p class="pg-spec">
+        A peer set, snapped, with the next item peeking. apple.com ships five of
+        these on its iPhone mobile page. A data table is never a carousel.
+      </p>
+      <div class="hig-carousel">
+        <div class="hig-card"><h3 class="hig-title-2">One</h3><p class="hig-body">Peer item.</p></div>
+        <div class="hig-card"><h3 class="hig-title-2">Two</h3><p class="hig-body">Peer item.</p></div>
+        <div class="hig-card"><h3 class="hig-title-2">Three</h3><p class="hig-body">Peer item.</p></div>
+        <div class="hig-card"><h3 class="hig-title-2">Four</h3><p class="hig-body">Peer item.</p></div>
+      </div>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Empty state</h2>
+      <div class="hig-card">
+        <div class="hig-empty">
+          <h3 class="hig-title-2">No entities yet</h3>
+          <p class="hig-body">Empty states are designed, never a blank region.</p>
+          <button class="hig-button hig-button-primary">Add an entity</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script src="tokens.js"></script>
-  <script src="playground-presets.js"></script>
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-  <script type="text/babel" src="playground-helpers.js"></script>
-  <script type="text/babel" src="playground-sidebar.jsx"></script>
-  <script type="text/babel" src="playground-preview.jsx"></script>
-  <script type="text/babel" src="playground.jsx"></script>
+  <script>
+    (function () {
+      var T = window.__GROTHOUSE_TOKENS__;
+      var root = document.documentElement;
+      var entitySel = document.getElementById('entity');
+      var themeSel = document.getElementById('theme');
+
+      T.entities.forEach(function (e) {
+        var o = document.createElement('option');
+        o.value = e.id;
+        o.textContent = e.name;
+        entitySel.appendChild(o);
+      });
+      entitySel.value = 'grothouse_family';
+
+      function currentEntity() {
+        return T.entities.filter(function (e) { return e.id === entitySel.value; })[0];
+      }
+
+      function swatch(label, value, ratio) {
+        var wrap = document.createElement('div');
+        var box = document.createElement('div');
+        box.className = 'pg-swatch';
+        box.style.background = value;
+        var name = document.createElement('p');
+        name.className = 'hig-body';
+        name.textContent = label;
+        var spec = document.createElement('p');
+        spec.className = 'pg-spec';
+        spec.innerHTML = '<span class="pg-ratio">' + value + '</span>' +
+          (ratio ? ' · <span class="pg-ratio">' + ratio + ':1</span>' : '');
+        wrap.appendChild(box);
+        wrap.appendChild(name);
+        wrap.appendChild(spec);
+        return wrap;
+      }
+
+      function render() {
+        var ent = currentEntity();
+        var theme = themeSel.value;
+        var accentKey = ent.accent;
+        var accent = T.color.accent[accentKey];
+        var surf = T.color[theme];
+
+        root.setAttribute('data-entity', ent.id);
+        root.setAttribute('data-accent', accentKey);
+        root.setAttribute('data-theme', theme);
+
+        document.getElementById('accent-readout').textContent =
+          accent.name + ' · ' + ent.group + ' · ' + ent.tagline;
+
+        /* Colour */
+        var host = document.getElementById('swatches');
+        host.textContent = '';
+        var accentHex = theme === 'dark' ? accent.dark : accent.light;
+        var accentRatio = accent.contrast[theme === 'dark' ? 'dark on darkBg' : 'light on lightBg'];
+        host.appendChild(swatch('Accent — ' + accent.name, accentHex, accentRatio));
+        if (accentKey === 'teal' && theme === 'light') {
+          host.appendChild(swatch('Accent text (below 22px)', accent.lightText,
+            accent.contrast['lightText on lightBg']));
+        }
+        host.appendChild(swatch('Background', surf.bg, null));
+        host.appendChild(swatch('Card', surf.card, null));
+        host.appendChild(swatch('Ink', surf.ink, surf.contrast['ink on bg']));
+        host.appendChild(swatch('Secondary', surf.secondary, surf.contrast['secondary on bg']));
+        host.appendChild(swatch('Border', surf.border, null));
+        host.appendChild(swatch('Success', T.color.status.success[theme], null));
+        host.appendChild(swatch('Warning', T.color.status.warning[theme], null));
+        host.appendChild(swatch('Error', T.color.status.error[theme], null));
+
+        /* Type */
+        var typeHost = document.getElementById('type-samples');
+        typeHost.textContent = '';
+        var classFor = {
+          display: 'hig-display', title1: 'hig-title-1', title2: 'hig-title-2',
+          body: 'hig-body', caption: 'hig-caption'
+        };
+        Object.keys(T.type.scale).forEach(function (key) {
+          var s = T.type.scale[key];
+          var line = document.createElement('p');
+          line.className = classFor[key];
+          line.textContent = 'Built on faith, driven by purpose.';
+          var spec = document.createElement('p');
+          spec.className = 'pg-spec';
+          spec.innerHTML = '<span class="pg-ratio">' + s.size + 'px / ' + s.line +
+            ' / ' + s.weight + '</span> — ' + s.role;
+          typeHost.appendChild(line);
+          typeHost.appendChild(spec);
+        });
+
+        /* Scalars */
+        var tb = document.querySelector('#scalars tbody');
+        tb.textContent = '';
+        var rows = [
+          ['radius-control', T.radius.control + 'px', 'button, input, select, badge, tab'],
+          ['radius-card', T.radius.card + 'px', 'card, sheet, modal, popover'],
+          ['radius-pill', T.radius.pill + 'px', 'buttons, status pills, avatars'],
+          ['motion-fast', T.motion.fast + 'ms', 'press feedback, hover, focus ring'],
+          ['motion-standard', T.motion.standard + 'ms', 'default — disclosure, tab, fade'],
+          ['motion-emphasis', T.motion.emphasis + 'ms', 'sheet present and dismiss'],
+          ['ease-out', T.motion.ease, 'every transition'],
+          ['tap-target', T.layout.tapTarget.coarsePointer + 'px', 'coarse pointer minimum']
+        ];
+        Object.keys(T.space).forEach(function (k) {
+          if (k === 'note') return;
+          rows.push(['space-' + k, T.space[k] + 'px', 'step ' + k]);
+        });
+        rows.forEach(function (r) {
+          var tr = document.createElement('tr');
+          [['Token', r[0]], ['Value', r[1]], ['Use', r[2]]].forEach(function (cell, i) {
+            var td = document.createElement('td');
+            td.setAttribute('data-label', cell[0]);
+            td.textContent = cell[1];
+            if (i < 2) td.className = 'pg-ratio';
+            tr.appendChild(td);
+          });
+          tb.appendChild(tr);
+        });
+      }
+
+      entitySel.addEventListener('change', render);
+      themeSel.addEventListener('change', render);
+      render();
+    })();
+  </script>
 </body>
 </html>

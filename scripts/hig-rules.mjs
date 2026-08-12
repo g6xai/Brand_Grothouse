@@ -36,6 +36,34 @@ export function inScope(relPath) {
   return SCOPE.include.some((rx) => rx.test(p));
 }
 
+/**
+ * The regions of a file that are CODE. Rules are counted against these only.
+ *
+ * A spec page has to be able to WRITE "never reach for overflow-x: hidden"
+ * without that sentence counting as an instance of overflow-x: hidden. Left
+ * unhandled, prose that names a banned pattern makes its category unable to
+ * reach zero — and a category that can never reach zero is the failure that
+ * makes the whole ratchet ignorable.
+ *
+ * So for HTML we scan only <style> bodies, style="" attributes and class
+ * attributes. Prose is documentation, not implementation. For CSS, JS, JSX and
+ * JSON the whole file is code.
+ */
+export function scannable(relPath, text) {
+  if (!/\.html$/i.test(relPath)) return text;
+
+  const parts = [];
+  for (const m of text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)) parts.push(m[1]);
+  for (const m of text.matchAll(/\sstyle\s*=\s*"([^"]*)"/gi)) parts.push(m[1]);
+  for (const m of text.matchAll(/\sstyle\s*=\s*'([^']*)'/gi)) parts.push(m[1]);
+  // Kept whole so class-attribute rules still see their surrounding syntax.
+  for (const m of text.matchAll(/\sclass(?:Name)?\s*=\s*"[^"]*"/gi)) parts.push(m[0]);
+  // <link href="...fonts.googleapis.com/css2?family=Source+Serif+4..."> is a
+  // real dependency on a retired face, not prose about one.
+  for (const m of text.matchAll(/<link\b[^>]*>/gi)) parts.push(m[0]);
+  return parts.join('\n');
+}
+
 /* ------------------------------------------------------------- helpers -- */
 
 const GRID = new Set([0, 4, 8, 12, 16, 24, 32, 48]);
@@ -75,18 +103,23 @@ export const RULES = [
     section: '§1.2',
     title: 'Retired font family (Source Serif 4 / Outfit / JetBrains Mono)',
     why: 'One family, five sizes. The system stack is the only UI face; mono survives only as .font-id for machine identifiers.',
-    pattern: /['"](?:Source Serif[^'"]*|Outfit|JetBrains Mono)['"]/g,
+    // Two forms: a font stack, and a webfont URL. The URL form matters because
+    // a <link> to Google Fonts is a real dependency on a retired face, not
+    // prose about one.
+    pattern: /['"](?:Source Serif[^'"]*|Outfit|JetBrains Mono)['"]|(?:Source\+Serif|family=Outfit|JetBrains\+Mono)/g,
     bad: [
       `--g-f-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;`,
       `font-family: 'JetBrains Mono', ui-monospace, monospace;`,
       `body: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],`,
       `"display": "Source Serif 4",`,
+      `<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400&display=swap" rel="stylesheet" />`,
     ],
     good: [
       `--font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", system-ui, sans-serif;`,
       `font-family: var(--font-system);`,
       `<p>The display face is the system stack at 34px.</p>`,
       `"sans": "-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif"`,
+      `<link rel="stylesheet" href="grothouse-system.css" />`,
     ],
   },
   {
@@ -309,18 +342,20 @@ export const RULES = [
     id: 'scroll/unsanctioned-horizontal',
     section: '§2.1',
     title: 'Horizontal scroll without snap — an overflow, not a carousel',
-    why: 'apple.com ships five snap-scrolling carousels on the iPhone mobile page, so horizontal scroll is not the defect — UNINTENTIONAL horizontal scroll is. scroll-snap-type in the same block is the machine-checkable difference between a deliberate carousel and a table that overflowed.',
-    // Matched against the whole declaration block so the sanctioning
-    // property can be seen. A carve-out the lint cannot see is how 66
-    // violations sat in DriveX's (auth) indefinitely.
+    why: 'apple.com ships five snap-scrolling carousels on the iPhone mobile page, so horizontal scroll is not the defect — UNINTENTIONAL horizontal scroll is. A deliberate inner scroller declares either scroll-snap-type (a carousel) or overscroll-behavior-inline (a scroll region that must not chain into browser back-navigation). Page layout and tables declare neither, which is the machine-checkable difference.',
+    // Matched against the whole declaration block so the sanctioning property
+    // can be SEEN. A carve-out the lint cannot see is how 66 violations sat in
+    // DriveX's (auth) indefinitely — the doc had an exception the rule never had.
     pattern: /\{[^{}]*overflow-x\s*:\s*(?:auto|scroll)[^{}]*\}/g,
-    keep: (m) => !/scroll-snap-type/.test(m[0]),
+    keep: (m) => !/scroll-snap-type|overscroll-behavior-inline/.test(m[0]),
     bad: [
       `.main { overflow-x: auto; }`,
       `.table-wrap { overflow-x: scroll; padding: 0; }`,
+      `.chart { overflow-x: auto; overscroll-behavior: contain; }`,
     ],
     good: [
       `.hig-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }`,
+      `.code-block { overflow-x: auto; overscroll-behavior-inline: contain; }`,
       `.a { overflow-x: clip; }`,
     ],
   },

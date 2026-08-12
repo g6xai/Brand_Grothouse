@@ -29,7 +29,7 @@
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { RULES, SECTIONS, inScope } from './hig-rules.mjs';
+import { RULES, SECTIONS, inScope, scannable } from './hig-rules.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASELINE = join(ROOT, 'design', 'hig-lint-baseline.json');
@@ -78,7 +78,8 @@ function scan() {
   const hits = [];
 
   for (const { abs, rel } of files) {
-    const text = readFileSync(abs, 'utf8');
+    // Code regions only — prose that NAMES a banned pattern is documentation.
+    const text = scannable(rel, readFileSync(abs, 'utf8'));
     for (const rule of RULES) {
       if (rule.files && !rule.files(rel)) continue;
       const n = countInText(rule, text);
@@ -95,8 +96,58 @@ function scan() {
 
 /* ------------------------------------------------------------ self-test -- */
 
+/**
+ * The HTML extractor is itself a probe, so it gets its own known-good and
+ * known-bad. If extraction silently swallowed <style> blocks, every HTML file
+ * would report zero and the migration would look finished while the retired
+ * system was still shipping.
+ */
+const EXTRACTION_FIXTURES = [
+  {
+    name: 'prose naming a banned pattern is NOT code',
+    html: `<p>Never reach for <span>overflow-x: hidden</span> as a shortcut.</p>`,
+    mustContain: [],
+    mustNotContain: ['overflow-x: hidden'],
+  },
+  {
+    name: '<style> body IS code',
+    html: `<style>.a { overflow-x: hidden; }</style><p>prose</p>`,
+    mustContain: ['overflow-x: hidden'],
+    mustNotContain: ['prose'],
+  },
+  {
+    name: 'style attribute IS code',
+    html: `<div style="border-radius: 3px;">text</div>`,
+    mustContain: ['border-radius: 3px'],
+    mustNotContain: ['>text<'],
+  },
+  {
+    name: 'class attribute IS code',
+    html: `<span class="text-xs uppercase">Label</span><p>the word uppercase in prose</p>`,
+    mustContain: ['class="text-xs uppercase"'],
+    mustNotContain: ['in prose'],
+  },
+  {
+    name: 'webfont link IS a real dependency',
+    html: `<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4" rel="stylesheet" />`,
+    mustContain: ['Source+Serif'],
+    mustNotContain: [],
+  },
+];
+
 function selfTest() {
   const failures = [];
+
+  for (const f of EXTRACTION_FIXTURES) {
+    const out = scannable('spec.html', f.html);
+    for (const s of f.mustContain) {
+      if (!out.includes(s)) failures.push(`extraction [${f.name}]: dropped ${JSON.stringify(s)}`);
+    }
+    for (const s of f.mustNotContain) {
+      if (out.includes(s)) failures.push(`extraction [${f.name}]: kept ${JSON.stringify(s)}`);
+    }
+  }
+
   for (const rule of RULES) {
     if (!rule.bad?.length || !rule.good?.length) {
       failures.push(`${rule.id}: rule ships without both bad and good fixtures`);

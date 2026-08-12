@@ -1,77 +1,142 @@
 <!doctype html>
-<html lang="en" data-entity="g26x" data-archetype="holding" data-surface="cool" data-glow="medium" data-preset="editorial" data-theme="light">
+<html lang="en" data-entity="g26x" data-accent="blue" data-theme="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>G26x · Logo Package — Est. 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<title>G26x — Logo Package</title>
 <link rel="stylesheet" href="kit/grothouse-system.css">
 <link rel="stylesheet" href="kit/theme-toggle.css" />
 <style>
-  body { margin: 0; font-family: var(--g-f-body); background: var(--g-bg); color: var(--g-fg); }
-  header { position: relative; padding: 80px 48px 44px; isolation: isolate; overflow: hidden; }
-  header > *:not(.g-aurora-mesh):not(.g-orb):not(.g-noise) { position: relative; z-index: 2; }
-  .eyebrow { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.34em; color: var(--g-accent); text-transform: uppercase; margin-bottom: 14px; }
-  h1 { font-family: var(--g-f-display); font-weight: 700; font-size: clamp(36px, 4.5vw, 60px); letter-spacing: -0.02em; margin: 0 0 16px; max-width: 22ch; color: var(--g-fg-strong); }
-  h1 .it { font-style: italic; font-weight: 400; background: linear-gradient(135deg, var(--g-accent), var(--g-accent-hot)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  header p { max-width: 620px; color: var(--g-fg-stone); font-size: 15px; line-height: 1.7; margin: 0; }
-
-  .packages { padding: 36px 48px 80px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
-  .pkg { background: var(--g-card); border: 1px solid var(--g-border); border-radius: var(--g-radii); overflow: hidden; position: relative; }
-  .pkg::before { content:""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--g-accent), transparent); opacity: .6; }
-  .pkg-head { display: flex; justify-content: space-between; align-items: baseline; padding: 22px 28px 18px; border-bottom: 1px solid var(--g-border); }
-  .pkg-head h2 { font-family: var(--g-f-display); font-weight: 700; font-size: 22px; margin: 0; color: var(--g-fg-strong); letter-spacing: -0.01em; }
-  .pkg-head .num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.3em; color: var(--g-accent); }
-  .pkg-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  .pkg-body.mono { grid-template-columns: 1fr 1fr; border-top: 1px dashed var(--g-border); }
-  .mode { padding: 40px; min-height: 320px; display: flex; align-items: center; justify-content: center; position: relative; }
-  .mode.dark  { background: radial-gradient(420px circle at center, rgba(var(--g-accent-rgb),0.18), transparent 70%), #0B0E14; border-right: 1px solid var(--g-border); }
-  .mode.light { background: #FFFFFF; }
-  .mode.black { background: #0B0E14; border-right: 1px solid var(--g-border); min-height: 220px; }
-  .mode.white { background: #FFFFFF; min-height: 220px; }
-  .mode::after { content: attr(data-label); position: absolute; top: 14px; left: 18px; font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; }
-  .mode.dark::after, .mode.black::after  { color: rgba(255,255,255,0.55); }
-  .mode.light::after, .mode.white::after { color: rgba(0,0,0,0.55); }
-  .mode svg, .mode object, .mode img { max-width: 100%; max-height: 260px; width: auto; height: auto; }
-  .pkg-foot { padding: 18px 28px; border-top: 1px solid var(--g-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-  .pkg-desc { color: var(--g-fg-stone); font-size: 13px; line-height: 1.6; max-width: 640px; margin: 0; }
-  .dl { display: flex; gap: 8px; }
-  .dl a { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--g-border); border-radius: 4px; color: var(--g-fg-muted); text-decoration: none; transition: all .15s; }
-  .dl a:hover { color: var(--g-accent); border-color: var(--g-accent); }
-
-  @media (max-width: 820px) {
-    .pkg-body { grid-template-columns: 1fr; }
-    .mode.dark { border-right: 0; border-bottom: 1px solid var(--g-border); }
+  .lg-eyebrow {
+    color: var(--color-primary-text);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    font-weight: 600;
   }
+  .lg-note {
+    border-inline-start: 3px solid var(--color-primary);
+    padding-inline-start: var(--space-4);
+  }
+  .lg-pkg {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: var(--space-6);
+    background: var(--color-card);
+  }
+  .lg-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .lg-num {
+    font-family: var(--font-id);
+    font-size: var(--text-caption);
+    color: var(--color-secondary);
+  }
+  .lg-proofs { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .lg-proofs { grid-template-columns: 1fr 1fr; } }
+
+  /* Proof grounds are deliberately theme-INDEPENDENT and use the CSS colour
+     keywords rather than tokens. A proof sheet exists to show the mark on the
+     ground it will actually be reproduced on; if these flipped with the page
+     theme the sheet would stop being a proof. This is the logo exemption
+     extending to the surface that proves the logo — the page chrome around it
+     is fully HIG. */
+  .lg-proof {
+    padding: var(--space-8);
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .lg-proof.on-black { background: black; }
+  .lg-proof.on-white { background: white; }
+  .lg-proof::after {
+    content: attr(data-label);
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-4);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+  }
+  .lg-proof.on-black::after { color: rgba(255, 255, 255, 0.65); }
+  .lg-proof.on-white::after { color: rgba(0, 0, 0, 0.6); }
+  .lg-proof img { max-width: 100%; max-height: 200px; width: auto; height: auto; }
+
+  .lg-foot { padding: var(--space-4); }
+  .lg-dl { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+  .lg-dl a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    font-weight: 600;
+    color: var(--color-primary-text);
+    text-decoration: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    transition: border-color var(--motion-fast) var(--ease-out);
+  }
+  .lg-dl a:hover { border-color: var(--color-primary); }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="g-aurora-mesh"></div>
-  <div class="g-orb g-orb-primary" style="width:500px;height:500px;top:-20%;left:-10%"></div>
-  <div class="g-orb g-orb-sky" style="width:360px;height:360px;top:0;right:-8%;animation-delay:-4s"></div>
-  <div class="g-noise"></div>
-  <div class="eyebrow">● G26X · Final Logo Package · Est. 2026</div>
-  <h1>Three marks. <span class="it">Four variants each.</span></h1>
-  <p>Monogram, Editorial Wordmark, Tech Modern — each with dedicated Dark and Light variants for brand-color reproduction, plus Black and White single-ink variants for print, embroidery, favicons, and subdued applications.</p>
-</header>
+<button class="g-theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+  <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+</button>
 
-<div class="packages">
+<main class="hig-container hig-section">
+  <p class="lg-eyebrow">G26x · Logo package</p>
+  <h1 class="hig-display">Three marks, four variants each</h1>
+  <p class="hig-body hig-prose">
+    Monogram, Editorial Wordmark and Tech Modern. Each has Dark and Light
+    variants for brand-colour reproduction, plus Black and White single-ink
+    variants for print, embroidery, favicons and subdued applications.
+  </p>
 
-  <section class="pkg">
-    <div class="pkg-head"><h2>Monogram</h2><span class="num">01 · GEOMETRIC</span></div>
-    <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/01-monogram/dark.svg" alt="" /></div>
-      <div class="mode light" data-label="● Light"><img src="logos/01-monogram/light.svg" alt="" /></div>
+  <div class="hig-card lg-note hig-section">
+    <h2 class="hig-title-2">Logos are exempt</h2>
+    <p class="hig-body">
+      The marks and the taglines keep their unique treatment — including the
+      serif display face in the Editorial Wordmark. That carve-out is explicit
+      and it stops at the artwork: this page, and every surface that surrounds a
+      logo, follows the Apple HIG standard like everything else.
+    </p>
+    <p class="hig-caption">
+      The proof grounds below are fixed black and white on purpose. A proof that
+      changed with the page theme would not be a proof.
+    </p>
+  </div>
+
+  <section class="lg-pkg">
+    <div class="lg-head">
+      <h2 class="hig-title-2">Monogram</h2>
+      <span class="lg-num">01 · geometric</span>
     </div>
-    <div class="pkg-body mono">
-      <div class="mode black" data-label="○ White / 1-color"><img src="logos/01-monogram/white.svg" alt="" /></div>
-      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/01-monogram/black.svg" alt="" /></div>
+    <div class="lg-proofs">
+      <div class="lg-proof on-black" data-label="Dark variant"><img src="logos/01-monogram/dark.svg" alt="G26x monogram, dark variant" /></div>
+      <div class="lg-proof on-white" data-label="Light variant"><img src="logos/01-monogram/light.svg" alt="G26x monogram, light variant" /></div>
+      <div class="lg-proof on-black" data-label="White, single ink"><img src="logos/01-monogram/white.svg" alt="G26x monogram, white single-ink variant" /></div>
+      <div class="lg-proof on-white" data-label="Black, single ink"><img src="logos/01-monogram/black.svg" alt="G26x monogram, black single-ink variant" /></div>
     </div>
-    <div class="pkg-foot">
-      <p class="pkg-desc">Open-ring G with the 2·6 stacked inside as mono numerals; the x sits as a cobalt cross. App icon, avatar, favicon. Mono variants for single-color print, embroidery, and subdued applications.</p>
-      <div class="dl">
+    <div class="lg-foot">
+      <p class="hig-body">
+        Open-ring G with 2 and 6 stacked inside as numerals; the x sits as a
+        cross. App icon, avatar, favicon. Single-ink variants for print,
+        embroidery and subdued applications.
+      </p>
+      <div class="lg-dl">
         <a href="logos/01-monogram/dark.svg" download>Dark SVG</a>
         <a href="logos/01-monogram/light.svg" download>Light SVG</a>
         <a href="logos/01-monogram/white.svg" download>White SVG</a>
@@ -80,19 +145,24 @@
     </div>
   </section>
 
-  <section class="pkg">
-    <div class="pkg-head"><h2>Editorial Wordmark</h2><span class="num">02 · PRIMARY LOCKUP</span></div>
-    <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/02-wordmark/dark.svg" alt="" /></div>
-      <div class="mode light" data-label="● Light"><img src="logos/02-wordmark/light.svg" alt="" /></div>
+  <section class="lg-pkg">
+    <div class="lg-head">
+      <h2 class="hig-title-2">Editorial Wordmark</h2>
+      <span class="lg-num">02 · primary lockup</span>
     </div>
-    <div class="pkg-body mono">
-      <div class="mode black" data-label="○ White / 1-color"><img src="logos/02-wordmark/white.svg" alt="" /></div>
-      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/02-wordmark/black.svg" alt="" /></div>
+    <div class="lg-proofs">
+      <div class="lg-proof on-black" data-label="Dark variant"><img src="logos/02-wordmark/dark.svg" alt="G26x editorial wordmark, dark variant" /></div>
+      <div class="lg-proof on-white" data-label="Light variant"><img src="logos/02-wordmark/light.svg" alt="G26x editorial wordmark, light variant" /></div>
+      <div class="lg-proof on-black" data-label="White, single ink"><img src="logos/02-wordmark/white.svg" alt="G26x editorial wordmark, white single-ink variant" /></div>
+      <div class="lg-proof on-white" data-label="Black, single ink"><img src="logos/02-wordmark/black.svg" alt="G26x editorial wordmark, black single-ink variant" /></div>
     </div>
-    <div class="pkg-foot">
-      <p class="pkg-desc">Source Serif 4 display with italic cobalt "x". The primary lockup — letterhead, reports, site header, annual statements. Mono variants strip the accent for single-ink reproduction.</p>
-      <div class="dl">
+    <div class="lg-foot">
+      <p class="hig-body">
+        Serif display with an italic accent x. The primary lockup — letterhead,
+        reports, site header, annual statements. This is the mark that carries
+        the typographic exemption; nothing else on a page may borrow it.
+      </p>
+      <div class="lg-dl">
         <a href="logos/02-wordmark/dark.svg" download>Dark SVG</a>
         <a href="logos/02-wordmark/light.svg" download>Light SVG</a>
         <a href="logos/02-wordmark/white.svg" download>White SVG</a>
@@ -101,19 +171,23 @@
     </div>
   </section>
 
-  <section class="pkg">
-    <div class="pkg-head"><h2>Tech Modern</h2><span class="num">03 · DIGITAL / MODERN</span></div>
-    <div class="pkg-body">
-      <div class="mode dark"  data-label="● Dark / Default"><img src="logos/03-tech/dark.svg" alt="" /></div>
-      <div class="mode light" data-label="● Light"><img src="logos/03-tech/light.svg" alt="" /></div>
+  <section class="lg-pkg">
+    <div class="lg-head">
+      <h2 class="hig-title-2">Tech Modern</h2>
+      <span class="lg-num">03 · digital</span>
     </div>
-    <div class="pkg-body mono">
-      <div class="mode black" data-label="○ White / 1-color"><img src="logos/03-tech/white.svg" alt="" /></div>
-      <div class="mode white" data-label="○ Black / 1-color"><img src="logos/03-tech/black.svg" alt="" /></div>
+    <div class="lg-proofs">
+      <div class="lg-proof on-black" data-label="Dark variant"><img src="logos/03-tech/dark.svg" alt="G26x tech modern mark, dark variant" /></div>
+      <div class="lg-proof on-white" data-label="Light variant"><img src="logos/03-tech/light.svg" alt="G26x tech modern mark, light variant" /></div>
+      <div class="lg-proof on-black" data-label="White, single ink"><img src="logos/03-tech/white.svg" alt="G26x tech modern mark, white single-ink variant" /></div>
+      <div class="lg-proof on-white" data-label="Black, single ink"><img src="logos/03-tech/black.svg" alt="G26x tech modern mark, black single-ink variant" /></div>
     </div>
-    <div class="pkg-foot">
-      <p class="pkg-desc">Mono G26 with the x rendered as a precision crosshair/cursor — the live-reticle gesture. Terminal-grade, API-aware. Best for tech-adjacent surfaces and modern digital contexts. Mono variants for terminal screenshots, dev-docs, single-ink print.</p>
-      <div class="dl">
+    <div class="lg-foot">
+      <p class="hig-body">
+        G26 with the x rendered as a precision crosshair. Best for tech-adjacent
+        surfaces, terminal screenshots and developer documentation.
+      </p>
+      <div class="lg-dl">
         <a href="logos/03-tech/dark.svg" download>Dark SVG</a>
         <a href="logos/03-tech/light.svg" download>Light SVG</a>
         <a href="logos/03-tech/white.svg" download>White SVG</a>
@@ -121,13 +195,8 @@
       </div>
     </div>
   </section>
+</main>
 
-</div>
-
-<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
-  <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-  <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-</button>
 <script src="kit/theme-toggle.js" defer></script>
 </body>
 </html>

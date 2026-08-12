@@ -1,162 +1,146 @@
 # Grothouse Product System
 
-> Brand is *how it looks*. Product is *what it does, how it flows, and how it speaks*. This spec defines product-level behavior per archetype, so entities differentiate on more than color.
+> Brand is *how it looks*. Product is *what it does, how it flows, and how it
+> speaks*. Under Apple HIG **how it looks is now identical across every
+> entity** — so this document covers only what survives that: information
+> architecture, voice, and the content each kind of entity must carry.
+
+**Canonical standard:** `c:/Users/tony.grothouse/code/DriveX/design/APPLE-HIG-STANDARD.md`
+**This repo's deltas:** [`docs/APPLE-HIG-STANDARD.md`](../docs/APPLE-HIG-STANDARD.md)
+
+## What changed
+
+The previous version of this document differentiated entities on **density
+scalars, motion scalars, hero treatments and component vocabularies** keyed to
+eight archetypes. All of that is retired.
+
+| Was | Now |
+|---|---|
+| Density 0.85× – 1.3× per archetype | One 8pt grid, seven values |
+| Motion 0.6× – 1.3× per archetype | 150 / 250 / 350ms for every entity |
+| Hero "terminal-with-orbs", "full-bleed" | One type ramp, one card, one button |
+| Per-archetype component swaps | One component set |
+| `kit/archetypes.json` as machine source | **Deleted** — it drove visual differentiation that no longer exists |
+| Entity badge in mono at 0.28em tracking | Sentence-case caption, 13px |
+| Type stack: serif / sans / mono | One system family |
+
+**Entities now differentiate on colour accent, copy, photography and
+information architecture. Not on visual form.**
+
+The `group` field in `tokens.json` is what remains of the archetype axis. It is
+**taxonomy only and has no visual consequence** — it selects the IA and voice
+below, nothing else.
 
 ## The inheritance chain
 
 ```
-base kit (tokens + radiance CSS)
+Apple HIG (canonical standard)     ← visual form, identical everywhere
    ↓
-archetype (IA, layout, motion, components, voice)  ← this doc
+kit/tokens.json                    ← two accents, one type ramp, one motion scale
    ↓
-entity (color accent, specific copy, photography, unique flair)
+group (IA + voice)                 ← this document
    ↓
-page/screen (final layout choices)
+entity (accent choice, copy, photography)
+   ↓
+page (content and layout choices)
 ```
 
-Every entity inherits from one of **8 archetypes**. The archetype decides:
-- Information architecture (which pages exist)
-- Navigation style (editorial, dense-utility, command-bar, image-forward, etc.)
-- Hero type (statement, split, terminal, full-bleed-photo, centered, asymmetric)
-- Density (spacing scalar — financial dense, charitable airy)
-- Motion scalar (0.6 for financial, 1.3 for AI/tech)
-- Component vocabulary (which showcase/metric/testimonial pattern to use)
-- Voice (vocabulary, tense, sentence length, CTA phrasing)
+## Groups — IA, voice, and required content
 
-All of this lives in `kit/archetypes.json` as the machine-readable source of truth.
+Visual form is omitted from every entry below, because it no longer varies.
 
-## The 8 archetypes
-
-### 1. `holding` — The parent / family brand
-**Feel:** authoritative, editorial, generational
+### `holding` — parent / family brand
 **Pages:** home · family · portfolio · stewardship · insights · contact
-**Hero:** Statement-with-photo (serif display, cobalt italic accent word, single photo)
-**Rhythm:** Spacious, generous whitespace
-**Motion:** Baseline (1.0)
-**Voice:** Timeless present. Words like *stewardship, generational, discipline, purpose, legacy.*
-**CTA:** "Learn More" · "Meet the Family"
+**Voice:** Timeless present. *Stewardship, generational, discipline, purpose, legacy.*
+**CTA:** "Learn more" · "Meet the family"
 
-### 2. `financial` — Capital-allocation, advisory
-**Feel:** disciplined, precise, data-forward
+### `financial` — capital allocation, advisory
 **Pages:** home · solutions · research · performance · disclosures · contact
-**Hero:** Split (copy left, data card right with live metrics)
-**Rhythm:** Tight, information-dense (density 1.3×)
-**Motion:** Reduced (0.6×) — calm, not flashy
-**Voice:** Short declarative. Words like *basis points, allocation, fiduciary.*
-**CTA:** "Request Prospectus" · "View Details"
+**Voice:** Short declarative. *Basis points, allocation, fiduciary.*
+**CTA:** "Request prospectus" · "View details"
 **Required:** Disclosure footer, compliance links, performance disclaimers
 
-### 3. `real_estate` — Property, development
-**Feel:** grounded, enduring, photographic
+### `real-estate` — property, development
 **Pages:** home · portfolio · investment · team · press · contact
-**Hero:** Full-bleed photograph with asymmetric text overlay
-**Rhythm:** Cinematic (density 0.85×, wide max-width 1400px)
-**Motion:** Gentle slide-up transitions (0.75×)
-**Voice:** Narrative past + present. Words like *acquired, located, completed, enduring.*
-**CTA:** "View Portfolio" · "Explore Property"
-**Required:** High-resolution photography, property location/size/year
+**Voice:** Narrative past and present. *Acquired, located, completed, enduring.*
+**CTA:** "View portfolio" · "Explore property"
+**Required:** High-resolution photography; property location, size and year
 
-### 4. `ai_tech` — AI, software, data platforms
-**Feel:** electric, terminal-grade, momentum-forward
+### `ai-tech` — AI, software, data platforms
 **Pages:** home · product · research · changelog · docs · contact
-**Hero:** Terminal/code block with floating orbs (asymmetric mega-type)
-**Rhythm:** Tight, dense (1.15×)
-**Motion:** Cranked (1.3×) — live counters, typing effects, orb drift
-**Voice:** Active continuous. Words like *inference, throughput, agentic, signal.*
-**CTA:** "Start Building" · "Get Started →"
+**Voice:** Active continuous. *Inference, throughput, agentic, signal.*
+**CTA:** "Start building" · "Get started"
 **Required:** Code sample, changelog entry, docs link
 
-### 5. `charitable` — Foundation, impact
-**Feel:** serene, purposeful, evidence-based
+### `charitable` — foundation, impact
 **Pages:** home · mission · programs · impact · apply · donate
-**Hero:** Centered mission statement (no photo, text does the work)
-**Rhythm:** Spacious, airy (0.9×, narrow 1040px max)
-**Motion:** Gentle fade (0.7×)
-**Voice:** Reflective present. Words like *because, families, generations, sustained.*
-**CTA:** "See Our Impact" · "Learn More"
+**Voice:** Reflective present. *Because, families, generations, sustained.*
+**CTA:** "See our impact" · "Learn more"
 **Required:** Impact numbers, beneficiary stories, grant process
 
-### 6. `consumer` — Direct-to-consumer products
-**Feel:** warm, approachable, benefit-forward
+### `consumer` — direct-to-consumer
 **Pages:** home · how-it-works · pricing · reviews · faq · get-started
-**Hero:** Split — benefit + lifestyle visual
-**Rhythm:** Moderate (1.0×)
-**Motion:** Friendly (1.1×)
-**Voice:** Second-person. *You, simple, faster, confident, here.*
-**CTA:** "Get Started"
-**Required:** 3-step process, social proof, pricing or "Free to try"
+**Voice:** Second person. *You, simple, faster, confident, here.*
+**CTA:** "Get started"
+**Required:** Three-step process, social proof, pricing or "free to try"
+**Accent:** teal — this is the group the colour law sends to Xperience Teal
 
-### 7. `platform` — B2B infrastructure, tooling
-**Feel:** systemic, toolkit-oriented, API-aware
+### `platform` — B2B infrastructure, tooling
 **Pages:** home · platform · integrations · pricing · docs · contact
-**Hero:** Split — capability copy + code snippet
-**Rhythm:** Moderate-dense (1.1×)
-**Motion:** Baseline (1.0×)
-**Voice:** Active present. Words like *pipeline, integrate, orchestrate, at scale.*
-**CTA:** "Request Demo"
+**Voice:** Active present. *Pipeline, integrate, orchestrate, at scale.*
+**CTA:** "Request demo"
 **Required:** Integration logos, throughput metrics, docs link
 
-### 8. `consulting` — Strategic advisory
-**Feel:** sharp, strategic, case-led
+### `consulting` — strategic advisory
 **Pages:** home · practices · case-studies · team · insights · contact
-**Hero:** Classic statement (strategic positioning)
-**Rhythm:** Moderate (1.05×)
-**Motion:** Slightly restrained (0.9×)
 **Voice:** Results-oriented. *Engagement, outcome, strategy, diligence, mandate.*
-**CTA:** "Start a Project"
+**CTA:** "Start a project"
 **Required:** Case study grid, named practices, office locations
 
-## Shared product primitives
+## Voice modulation
 
-Every entity, regardless of archetype, exposes:
-- **Entity badge** — ticker + archetype label (mono, 10px, 0.28em letter-spacing)
-- **Family breadcrumb** — small "A Grothouse Family company" tag in header or footer
-- **Cross-entity footer** — lists sibling entities with their accents
+1. Start from the Grothouse Family master voice — timeless, disciplined, purposeful.
+2. Modulate by the group's vocabulary and sentence length.
+3. Never cross groups: financial copy should not read like AI/tech copy.
 
-## Voice modulation rules
-
-Per-archetype vocabulary is listed in `archetypes.json > voice`. When Claude Code writes copy for an entity:
-
-1. Start from Grothouse Family's master voice (timeless, disciplined, purposeful)
-2. Modulate by archetype vocabulary + sentence length
-3. Never cross archetypes — financial copy should never read like AI/tech copy
-
-Example — same concept, three voices:
+Same concept, three voices:
 
 - **Holding:** "Built to endure across generations."
 - **Financial:** "Risk-adjusted returns. Long-duration capital."
-- **AI/Tech:** "Agentic systems. Production-grade inference."
+- **AI/tech:** "Agentic systems. Production-grade inference."
 
-## Component swaps by archetype
+**Sentence case in the UI regardless of voice.** Measured on apple.com: zero
+uppercase-transformed elements. Voice governs word choice, not letterforms.
 
-Any hero/section component exists in multiple archetypal forms. Pick by archetype:
+## Shared product primitives
 
-| Component      | holding            | financial         | real_estate       | ai_tech           | charitable         |
-|----------------|--------------------|-------------------|-------------------|-------------------|--------------------|
-| Hero           | statement-with-photo | split-with-data-card | full-bleed-photo  | terminal-with-orbs | mission-centered   |
-| Showcase       | portfolio-grid-3   | data-table        | property-masonry  | capability-grid   | impact-stories     |
-| Metric         | oversized-serif    | mono-numeric-grid | paired-with-photo | live-counter      | oversized-w-label  |
-| Testimonial    | pull-quote         | logo-strip        | principal-quote   | customer-logos    | beneficiary-story  |
-| Form           | editorial-stacked  | inline-compact    | inquiry-concierge | waitlist          | grant-application  |
+Every entity exposes:
 
-## How to use this in Claude Code
+- **Entity badge** — ticker plus group label, as a 13px sentence-case caption.
+  Never mono, never uppercase, never tracked.
+- **Family breadcrumb** — "A Grothouse Family company" in the header or footer.
+- **Cross-entity footer** — sibling entities. All render in the *current*
+  surface's accent; a footer is not a place to show twenty-four colours.
 
-When scaffolding a new entity site:
+## Scaffolding a new entity site
 
-1. Look up the entity in `kit/tokens.json` → get its `archetype`
-2. Read `kit/archetypes.json[archetype]` → get IA, layout, components, voice
-3. Read the archetype section above for the written description
-4. Build pages in the order listed under `ia.pages`
-5. Use the component pattern for that archetype from the table above
-6. Write copy using the archetype's voice vocabulary
-7. Apply brand layer (radiance primitives + entity accent) last — always the same
+1. Look up the entity in `kit/tokens.json` → get its `group` and `accent`.
+2. Read the group section above → IA, voice, required content.
+3. Set `data-entity`, `data-accent` and `data-theme` on `<html>`.
+4. Build pages in the order listed under **Pages**.
+5. Write copy in the group's voice.
+6. Use the one component set — `hig-*` classes or the React primitives.
 
-## What's NOT archetype-specific (always identical)
+There is no step where you pick a hero treatment, a density scalar or a motion
+speed. That was the old step 7, and it is gone.
 
-- Type stack (Source Serif 4 / Outfit / JetBrains Mono)
-- Radiance primitives (aurora, orbs, noise, glow, grid)
-- Button primitives, divider primitives, card base
-- Color palette (all blue-family, from tokens.json)
-- Entity badge format (ticker + archetype label)
+## What is always identical
 
-This keeps the family **visually coherent** while letting each entity feel like its own product.
+- Type: one system family, 34 / 28 / 22 / 17 / 13, floor 12px, sentence case
+- Radius: 12 control, 16 card, pill buttons
+- Motion: 150 / 250 / 350ms, one easing, reduced-motion zeroed
+- Space: 8pt grid, seven values
+- Depth: translucency and backdrop blur, surface-tone steps — never glow
+- Colour: black, white, grey, and one accent per surface
+
+**Exempt: logos and taglines.** Nothing else.

@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 jobs:
-  ratchet:
+  gate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,20 +23,44 @@ jobs:
       - name: Ratchet — no section may grow
         run: node scripts/hig-lint-ratchet.mjs
 
+      # kit/tokens.json is canonical. This fails if kit/tokens.js is stale or if
+      # any of the CSS token values drifted from the JSON.
+      - name: Token parity
+        run: node scripts/build-tokens.mjs --check
+
+      # A file can reach zero violations by being broken. This checks what the
+      # lint cannot see: dead links, unparseable JSON, an unusable tokens.js,
+      # unbalanced CSS.
+      - name: Assets and links
+        run: node scripts/check-assets.mjs
+
       # Proves in CI what was proven by hand: a violation added to a real file
       # fails the gate. Without this, a silently-broken ratchet reports green
       # forever and nobody finds out until the migration has already rotted.
-      - name: Prove the gate has teeth
+      - name: Prove the ratchet has teeth
         run: |
           cp kit/theme-toggle.css /tmp/tt.bak
           printf '\n.ci-sabotage { border-radius: 3px; }\n' >> kit/theme-toggle.css
           if node scripts/hig-lint-ratchet.mjs > /dev/null 2>&1; then
-            echo "::error::Ratchet passed with an injected violation — the gate is not enforcing."
             cp /tmp/tt.bak kit/theme-toggle.css
+            echo "::error::Ratchet passed with an injected violation — the gate is not enforcing."
             exit 1
           fi
           cp /tmp/tt.bak kit/theme-toggle.css
           echo "Gate correctly rejected an injected violation."
+
+      # Same idea for the parity check: prove it can see drift.
+      - name: Prove token parity has teeth
+        run: |
+          cp kit/grothouse-system.css /tmp/gs.bak
+          sed -i 's/--radius-card: 16px;/--radius-card: 20px;/' kit/grothouse-system.css
+          if node scripts/build-tokens.mjs --check > /dev/null 2>&1; then
+            cp /tmp/gs.bak kit/grothouse-system.css
+            echo "::error::Parity check passed with a drifted CSS value — it is not enforcing."
+            exit 1
+          fi
+          cp /tmp/gs.bak kit/grothouse-system.css
+          echo "Parity check correctly rejected a drifted value."
 
       - name: Report
         if: always()
