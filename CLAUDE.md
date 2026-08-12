@@ -160,11 +160,11 @@ system. Do not add those files here unless explicitly instructed.
 ├── Typography Spec.html         ← Families, scale, pairings, presets
 ├── Motion Spec.html             ← Easings, speeds, radiance, timings
 ├── G26x Logos.html              ← 3 marks × 4 variants
-├── archetypes.json              ← 8 archetypes, machine-readable
 ├── logos/                       ← 12 SVG files
 └── kit/
     ├── tokens.json              ← Source of truth
     ├── tokens.js                ← JS global
+    ├── archetypes.json          ← 8 archetypes, machine-readable
     ├── grothouse-system.css     ← Radiance + semantic tokens (light-default)
     ├── tailwind.preset.js
     ├── theme-toggle.css/.js     ← Drop-in toggle
