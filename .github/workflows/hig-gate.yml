@@ -1,0 +1,43 @@
+name: Apple HIG Gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  ratchet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The self-test runs inside the ratchet on every invocation, but running
+      # it as its own step means a rule regression is reported as a rule
+      # regression rather than as a mystery count change.
+      - name: Rule self-test (known-bad must match, known-good must not)
+        run: node scripts/hig-lint-ratchet.mjs --self-test
+
+      - name: Ratchet — no section may grow
+        run: node scripts/hig-lint-ratchet.mjs
+
+      # Proves in CI what was proven by hand: a violation added to a real file
+      # fails the gate. Without this, a silently-broken ratchet reports green
+      # forever and nobody finds out until the migration has already rotted.
+      - name: Prove the gate has teeth
+        run: |
+          cp kit/theme-toggle.css /tmp/tt.bak
+          printf '\n.ci-sabotage { border-radius: 3px; }\n' >> kit/theme-toggle.css
+          if node scripts/hig-lint-ratchet.mjs > /dev/null 2>&1; then
+            echo "::error::Ratchet passed with an injected violation — the gate is not enforcing."
+            cp /tmp/tt.bak kit/theme-toggle.css
+            exit 1
+          fi
+          cp /tmp/tt.bak kit/theme-toggle.css
+          echo "Gate correctly rejected an injected violation."
+
+      - name: Report
+        if: always()
+        run: node scripts/hig-lint-ratchet.mjs --report || true
