@@ -293,15 +293,35 @@ export const RULES = [
     id: 'scroll/overflow-x-hidden',
     section: '§2.1',
     title: 'overflow-x: hidden',
-    why: 'overflow-y: visible computes to auto when the other axis is auto/scroll/hidden, so overflow-x: hidden silently re-traps document scroll. clip is the only value that does not force the other axis.',
-    pattern: /overflow-x\s*:\s*(?:hidden|auto|scroll)/g,
+    why: 'overflow-y: visible computes to auto when the other axis is auto/scroll/hidden, so overflow-x: hidden silently re-traps document scroll. clip is the only value that does not force the other axis, and it is never a shortcut.',
+    pattern: /overflow-x\s*:\s*hidden/g,
     bad: [
       `overflow-x: hidden;`,
-      `.main { overflow-x: auto; }`,
+      `.wrap { overflow-x: hidden; padding: 0; }`,
     ],
     good: [
       `overflow-x: clip;`,
       `overflow: hidden;`,
+      `overflow-x: auto;`,
+    ],
+  },
+  {
+    id: 'scroll/unsanctioned-horizontal',
+    section: '§2.1',
+    title: 'Horizontal scroll without snap — an overflow, not a carousel',
+    why: 'apple.com ships five snap-scrolling carousels on the iPhone mobile page, so horizontal scroll is not the defect — UNINTENTIONAL horizontal scroll is. scroll-snap-type in the same block is the machine-checkable difference between a deliberate carousel and a table that overflowed.',
+    // Matched against the whole declaration block so the sanctioning
+    // property can be seen. A carve-out the lint cannot see is how 66
+    // violations sat in DriveX's (auth) indefinitely.
+    pattern: /\{[^{}]*overflow-x\s*:\s*(?:auto|scroll)[^{}]*\}/g,
+    keep: (m) => !/scroll-snap-type/.test(m[0]),
+    bad: [
+      `.main { overflow-x: auto; }`,
+      `.table-wrap { overflow-x: scroll; padding: 0; }`,
+    ],
+    good: [
+      `.hig-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }`,
+      `.a { overflow-x: clip; }`,
     ],
   },
   {

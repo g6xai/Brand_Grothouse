@@ -2,14 +2,14 @@
   "$comment": "Violation counts per section of the canonical Apple HIG standard. THIS FILE ONLY MOVES DOWN. Raising a number to make CI pass defeats the ratchet. Regenerate with: node scripts/hig-lint-ratchet.mjs --update",
   "standard": "c:/Users/tony.grothouse/code/DriveX/design/APPLE-HIG-STANDARD.md",
   "filesInScope": 20,
-  "total": 1341,
+  "total": 1338,
   "sections": {
     "§1.1": 234,
     "§1.2": 332,
     "§1.3": 78,
     "§1.4": 55,
     "§1.5": 61,
-    "§2.1": 5,
+    "§2.1": 2,
     "§4.0.1": 76,
     "§K.1": 500
   },
@@ -24,7 +24,8 @@
     "motion/off-scale-duration": 29,
     "colour/raw-hex": 78,
     "radiance/primitive": 76,
-    "scroll/overflow-x-hidden": 5,
+    "scroll/overflow-x-hidden": 0,
+    "scroll/unsanctioned-horizontal": 2,
     "scroll/document-constraint": 0,
     "kit/legacy-axis": 335,
     "kit/legacy-font-var": 165
