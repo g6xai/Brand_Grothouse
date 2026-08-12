@@ -1,96 +1,128 @@
 /**
- * Grothouse Design System — Tailwind v4 preset
- * Usage: import into your tailwind.config.js as `presets: [require('./tailwind.preset.js')]`
- * Or for Tailwind v4 CSS-first: @import the grothouse-system.css and use the @theme block below.
+ * Grothouse Design System — Tailwind preset (Apple HIG)
+ *
+ * Canonical standard: DriveX design/APPLE-HIG-STANDARD.md
+ * Local deltas:       docs/APPLE-HIG-STANDARD.md
+ * Token source:       kit/tokens.json (checked by scripts/build-tokens.mjs)
+ *
+ * Every value here resolves to a CSS custom property defined in
+ * grothouse-system.css. There are deliberately NO hex literals in this file:
+ * a preset that hard-codes colour is a second source of truth, and two
+ * sources of truth is how twenty-four entity skins stopped agreeing.
+ *
+ * Usage (Tailwind v3):
+ *   presets: [require('./kit/tailwind.preset.js')]
+ * Tailwind v4 (CSS-first): just @import grothouse-system.css — the tokens are
+ * already custom properties and need no preset at all.
  */
 
 module.exports = {
   theme: {
+    /* Spacing REPLACES rather than extends Tailwind's scale. Extending leaves
+       every half-step (0.5 1.5 2.5 3.5) and intermediate step (5 7 9 10 11 14)
+       available, and those are the values the 8pt grid exists to remove. Seven
+       values, plus px/full for borders and fills. */
+    spacing: {
+      0: '0px',
+      px: '1px',
+      1: 'var(--space-1)',
+      2: 'var(--space-2)',
+      3: 'var(--space-3)',
+      4: 'var(--space-4)',
+      6: 'var(--space-6)',
+      8: 'var(--space-8)',
+      12: 'var(--space-12)',
+      full: '100%',
+    },
+
+    /* Five sizes. Nothing below 12px exists to be reached for. */
+    fontSize: {
+      caption: ['var(--text-caption)', { lineHeight: 'var(--leading-caption)' }],
+      body: ['var(--text-body)', { lineHeight: 'var(--leading-body)' }],
+      'title-2': ['var(--text-title-2)', { lineHeight: 'var(--leading-title-2)' }],
+      'title-1': ['var(--text-title-1)', { lineHeight: 'var(--leading-title-1)' }],
+      display: ['var(--text-display)', { lineHeight: 'var(--leading-display)' }],
+    },
+
+    /* Two radii plus pills. Apple's own buttons measure 980px — buttons are
+       pills; inputs and selects stay at the control radius. */
+    borderRadius: {
+      none: '0px',
+      control: 'var(--radius-control)',
+      card: 'var(--radius-card)',
+      pill: 'var(--radius-pill)',
+      full: '9999px',
+    },
+
+    /* No wide tracking exists. Measured on apple.com: zero elements above
+       0.1em, across four page/viewport combinations. */
+    letterSpacing: {
+      tight: '-0.02em',
+      snug: '-0.015em',
+      normal: '0em',
+    },
+
+    transitionDuration: {
+      fast: 'var(--motion-fast)',
+      DEFAULT: 'var(--motion-standard)',
+      standard: 'var(--motion-standard)',
+      emphasis: 'var(--motion-emphasis)',
+    },
+
+    transitionTimingFunction: {
+      DEFAULT: 'var(--ease-out)',
+      out: 'var(--ease-out)',
+    },
+
     extend: {
       colors: {
-        // Base greys
-        slate: '#757C88',
-        stone: '#59788E',
-        spruce: '#2C3E4C',
-        mist: '#B8BCC8',
-        fog: '#D8DCE4',
-        // Entity-driven (CSS var backed — change [data-entity] to reskin)
-        accent:      'var(--g-accent)',
-        'accent-hot':'var(--g-accent-hot)',
-        secondary:   'var(--g-secondary)',
-        bg:          'var(--g-bg)',
-        'bg-deep':   'var(--g-bg-deep)',
-        card:        'var(--g-card)',
-        'card-mid':  'var(--g-card-mid)',
-        fg:          'var(--g-fg)',
-        'fg-strong': 'var(--g-fg-strong)',
-        'fg-muted':  'var(--g-fg-muted)',
-        'fg-stone':  'var(--g-fg-stone)',
+        primary: 'var(--color-primary)',
+        'primary-text': 'var(--color-primary-text)',
+        'on-primary': 'var(--color-on-primary)',
+        bg: 'var(--color-bg)',
+        card: 'var(--color-card)',
+        sunken: 'var(--color-sunken)',
+        ink: 'var(--color-ink)',
+        secondary: 'var(--color-secondary)',
+        border: 'var(--color-border)',
+        material: 'var(--color-material)',
+        success: 'var(--color-success)',
+        warning: 'var(--color-warning)',
+        error: 'var(--color-error)',
       },
+
       fontFamily: {
-        display: ['Source Serif 4', 'Source Serif Pro', 'Georgia', 'serif'],
-        body:    ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono:    ['JetBrains Mono', 'ui-monospace', 'monospace'],
+        /* One family. `id` is the only monospace, and it is for machine
+           identifiers where character alignment carries meaning — never
+           decoration. */
+        sans: 'var(--font-system)',
+        id: 'var(--font-id)',
       },
-      boxShadow: {
-        'glow-sm': '0 0 20px rgba(var(--g-accent-rgb), 0.25)',
-        'glow':    '0 0 30px rgba(var(--g-accent-rgb), 0.35)',
-        'glow-lg': '0 0 60px rgba(var(--g-accent-rgb), 0.45)',
-        'card-hover':
-          '0 20px 40px -12px rgba(0,0,0,0.35), 0 0 30px rgba(var(--g-accent-rgb), 0.18)',
+
+      fontWeight: {
+        /* Apple leans on 600 far more than 400: 17px/600 is the single most
+           common pairing measured on apple.com's home page. Semibold is the
+           default for labels and titles, not an emphasis. */
+        normal: '400',
+        semibold: '600',
+        bold: '700',
       },
-      backgroundImage: {
-        'accent-gradient': 'linear-gradient(135deg, var(--g-accent), var(--g-accent-hot))',
-        'divider-glow':
-          'linear-gradient(90deg, var(--g-accent), var(--g-accent-hot))',
+
+      maxWidth: {
+        container: 'var(--container-max)',
+        prose: '65ch',
       },
-      letterSpacing: {
-        industrial: '0.28em',
-        'industrial-wide': '0.32em',
+
+      minHeight: {
+        tap: 'var(--tap-target)',
       },
-      animation: {
-        'aurora-drift': 'g-drift 14s ease-in-out infinite',
+      minWidth: {
+        tap: 'var(--tap-target)',
       },
-      keyframes: {
-        'g-drift': {
-          '0%,100%': { transform: 'translate(0,0) scale(1)' },
-          '33%':     { transform: 'translate(28px,-22px) scale(1.08)' },
-          '66%':     { transform: 'translate(-22px,18px) scale(0.96)' },
-        },
+
+      backdropBlur: {
+        material: 'var(--blur-material)',
       },
     },
   },
 };
-
-/* =================================================================
-   TAILWIND v4 CSS-FIRST VERSION (recommended — matches g26x stack)
-   Paste this into your globals.css after @import "tailwindcss";
-   =================================================================
-
-@theme {
-  --color-slate:   #757C88;
-  --color-stone:   #59788E;
-  --color-spruce:  #2C3E4C;
-
-  --color-accent:      var(--g-accent);
-  --color-accent-hot:  var(--g-accent-hot);
-  --color-secondary:   var(--g-secondary);
-  --color-bg:          var(--g-bg);
-  --color-card:        var(--g-card);
-  --color-fg:          var(--g-fg);
-  --color-fg-strong:   var(--g-fg-strong);
-  --color-fg-muted:    var(--g-fg-muted);
-
-  --font-display: 'Source Serif 4', Georgia, serif;
-  --font-body:    'Outfit', sans-serif;
-  --font-mono:    'JetBrains Mono', monospace;
-
-  --tracking-industrial: 0.28em;
-
-  --shadow-glow-sm: 0 0 20px rgba(var(--g-accent-rgb), 0.25);
-  --shadow-glow:    0 0 30px rgba(var(--g-accent-rgb), 0.35);
-  --shadow-glow-lg: 0 0 60px rgba(var(--g-accent-rgb), 0.45);
-
-  --animate-aurora-drift: g-drift 14s ease-in-out infinite;
-}
-*/

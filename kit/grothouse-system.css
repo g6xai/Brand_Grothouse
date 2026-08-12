@@ -1,319 +1,451 @@
 /* =========================================================
-   GROTHOUSE DESIGN SYSTEM — Universal radiance layer
-   Drop into any site. Set CSS vars to reskin per entity.
+   GROTHOUSE DESIGN SYSTEM v2 — Apple HIG token layer
+
+   Canonical standard:
+     c:/Users/tony.grothouse/code/DriveX/design/APPLE-HIG-STANDARD.md
+   Local deltas:
+     docs/APPLE-HIG-STANDARD.md
+
+   Where this file and the canonical standard disagree, this file is the bug.
+
+   Black / white / grey plus ONE accent per surface. Set the accent with
+   [data-accent="blue"] (default) or [data-accent="teal"] on <html>. Light is
+   the default theme; [data-theme="dark"] inverts.
+
+   Every colour, size, radius and duration below is a token. A raw value in a
+   component is a violation — that is what kept twenty-four entity skins from
+   ever agreeing.
    ========================================================= */
 
 :root {
-  /* ---- Base greys (shared across all 24 entities) ---- */
-  --g-slate:  #757C88;
-  --g-stone:  #59788E;
-  --g-spruce: #2C3E4C;
-  --g-mist:   #B8BCC8;
-  --g-fog:    #D8DCE4;
+  /* ---- Accent: Co-Operate Blue (default) ----
+     Contrast measured by scripts/contrast.mjs against the surfaces below. */
+  --color-primary: #1249E5;          /* 6.20:1 on bg, 6.75:1 on card */
+  --color-primary-text: #1249E5;     /* accent text below 22px */
+  --color-on-primary: #FFFFFF;       /* 6.75:1 on primary */
 
-  /* ---- Per-entity tokens (overridden by [data-entity]) ---- */
-  --g-accent:         #3944BC;
-  --g-accent-hot:     #5464D8;
-  --g-secondary:      #1520A6;
-  --g-accent-rgb:     57, 68, 188;
-  --g-secondary-rgb:  21, 32, 166;
+  /* ---- Neutrals: light is the default surface ---- */
+  --color-bg: #F5F5F7;
+  --color-card: #FFFFFF;
+  --color-sunken: #EBEBEF;
+  --color-ink: #1D1D1F;              /* 15.46:1 on bg, 16.83:1 on card */
+  --color-secondary: #6E6E73;        /* 4.66:1 on bg, 5.07:1 on card */
+  --color-border: #D2D2D7;
 
-  /* Surfaces — default to LIGHT mode. Dark is a theme override below.
-     Pages SHOULD set data-theme="light" explicitly but this default
-     protects pages that forget. */
-  --g-bg:        #F0F2F5;
-  --g-bg-deep:   #E4E7EC;
-  --g-card:      #FFFFFF;
-  --g-card-mid:  #F5F7FA;
-  --g-fg:        #1A1D26;
-  --g-fg-strong: #0B0E14;
-  --g-fg-muted:  #6A6F7A;
-  --g-fg-stone:  var(--g-stone);
-  --g-border:        rgba(var(--g-accent-rgb), 0.14);
-  --g-border-strong: rgba(var(--g-accent-rgb), 0.24);
+  /* ---- Material: translucency + blur replaces the radiance layer ---- */
+  --color-material: rgba(245, 245, 247, 0.72);
+  --color-material-border: rgba(29, 29, 31, 0.08);
+  --blur-material: 20px;
 
-  /* Intensities (per-entity glow level) */
-  --g-orb-i:   1;
-  --g-noise-i: 0.35;
-  --g-glow-i:  1;
-  --g-grid-i:  1;
+  /* ---- Status: status only, never decoration ---- */
+  --color-success: #1E7A47;
+  --color-warning: #8A5A00;
+  --color-error: #B3261E;
 
-  /* Motion (per archetype) */
-  --g-speed:   1;     /* 0.5 = slow, 1 = normal, 1.5 = snappy */
-  --g-radii:   6px;
+  /* ---- Type: one family, five sizes ---- */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+                 "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-id: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  /* Fonts */
-  --g-f-display: 'Source Serif 4', 'Source Serif Pro', Georgia, serif;
-  --g-f-body:    'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --g-f-mono:    'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --text-display: 34px;   --leading-display: 1.15;
+  --text-title-1: 28px;   --leading-title-1: 1.2;
+  --text-title-2: 22px;   --leading-title-2: 1.27;
+  --text-body: 17px;      --leading-body: 1.47;
+  --text-caption: 13px;   --leading-caption: 1.38;
+
+  /* ---- Radius: two values plus pills ---- */
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* ---- Motion ---- */
+  --motion-fast: 150ms;
+  --motion-standard: 250ms;
+  --motion-emphasis: 350ms;
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* ---- Space: 8pt grid, seven values ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* ---- Layout ---- */
+  --container-max: 1200px;
+  --tap-target: 44px;
 }
 
-/* ============= SURFACE TONES =============
-   Light-mode surface values are the defaults (applied on all [data-surface]).
-   Dark-mode values only apply under [data-theme="dark"].
-   The Grothouse system is light-first; dark is an opt-in inversion. */
+/* ============= ACCENT: Xperience Teal =============
+   G26xM, Xperience, Zeus, consumer-facing surfaces.
 
-[data-surface="iceCool"]   { --g-bg: #F2F4F8; --g-bg-deep: #E8ECF2; --g-card: #FFFFFF; --g-card-mid: #F7F9FC; }
-[data-surface="cool"]      { --g-bg: #F0F2F5; --g-bg-deep: #E4E7EC; --g-card: #FFFFFF; --g-card-mid: #F5F7FA; }
-[data-surface="neutral"]   { --g-bg: #F4F4F2; --g-bg-deep: #EAEAE6; --g-card: #FFFFFF; --g-card-mid: #F7F7F4; }
-[data-surface="warm"]      { --g-bg: #F6F5F1; --g-bg-deep: #ECEBE5; --g-card: #FFFEFB; --g-card-mid: #F9F7F2; }
-[data-surface="emberWarm"] { --g-bg: #F8F4EE; --g-bg-deep: #EFE8DE; --g-card: #FFFDF8; --g-card-mid: #FAF5ED; }
+   #0E8C74 measures 3.84:1 on the light background. That clears the 3:1 bar
+   for UI boundaries, focus rings and text at 22px+, and FAILS the 4.5:1 bar
+   for body text — so accent-coloured text below 22px uses --color-primary-text
+   (#0B7A64, 4.84:1). The accent hex is fixed by the colour law and ships in
+   @g6xai/brand v2.1.0, so it is kept rather than forked. */
+[data-accent="teal"] {
+  --color-primary: #0E8C74;
+  --color-primary-text: #0B7A64;
+  --color-on-primary: #FFFFFF;
+}
 
-/* Dark-mode surface overrides */
-[data-theme="dark"][data-surface="iceCool"]   { --g-bg: #151A24; --g-bg-deep: #0F131B; --g-card: #1C2230; --g-card-mid: #242B3A; }
-[data-theme="dark"][data-surface="cool"]      { --g-bg: #181C26; --g-bg-deep: #131620; --g-card: #1F2431; --g-card-mid: #272D3C; }
-[data-theme="dark"][data-surface="neutral"]   { --g-bg: #1A1C22; --g-bg-deep: #14151B; --g-card: #23252D; --g-card-mid: #2B2D36; }
-[data-theme="dark"][data-surface="warm"]      { --g-bg: #1C1A17; --g-bg-deep: #15130F; --g-card: #272320; --g-card-mid: #302B27; }
-[data-theme="dark"][data-surface="emberWarm"] { --g-bg: #1F1A15; --g-bg-deep: #18130E; --g-card: #2A2320; --g-card-mid: #342C28; }
-
+/* ============= DARK THEME ============= */
 [data-theme="dark"] {
-  --g-fg:        #E8EAF0;
-  --g-fg-strong: #F5F6FA;
-  --g-fg-muted:  var(--g-slate);
-  --g-fg-stone:  #8A9BAD;
-  --g-border:        rgba(var(--g-accent-rgb), 0.16);
-  --g-border-strong: rgba(var(--g-accent-rgb), 0.28);
+  --color-primary: #5F7FFF;          /* 5.59:1 on bg, 5.13:1 on card */
+  --color-primary-text: #5F7FFF;
+  --color-on-primary: #0B0B0D;
+
+  --color-bg: #0B0B0D;
+  --color-card: #161618;
+  --color-sunken: #08080A;
+  --color-ink: #F5F5F7;              /* 18.06:1 on bg, 16.60:1 on card */
+  --color-secondary: #98989D;        /* 6.85:1 on bg, 6.29:1 on card */
+  --color-border: #2C2C2E;
+
+  --color-material: rgba(22, 22, 24, 0.72);
+  --color-material-border: rgba(255, 255, 255, 0.07);
+
+  --color-success: #3DD68C;
+  --color-warning: #E0B341;
+  --color-error: #E5736B;
 }
 
-/* ============= OVERLAY / SURFACE FILL TOKENS =============
-   Semi-opaque fills for sticky topbars, sunken wells, tile backgrounds.
-   Light values are default; dark values only apply under [data-theme="dark"]. */
-:root {
-  --g-bg-overlay:         rgba(255,255,255,0.82);  /* fixed topbar, nav */
-  --g-bg-overlay-strong:  rgba(255,255,255,0.94);  /* section pinned bars */
-  --g-surface-sunken:     rgba(var(--g-accent-rgb), 0.06);
-  --g-surface-raised:     rgba(var(--g-accent-rgb), 0.04);
-  --g-surface-raised-soft:rgba(var(--g-accent-rgb), 0.03);
-}
-[data-theme="dark"] {
-  --g-bg-overlay:         rgba(11,14,20,0.80);
-  --g-bg-overlay-strong:  rgba(11,14,20,0.92);
-  --g-surface-sunken:     rgba(0,0,0,0.50);
-  --g-surface-raised:     rgba(0,0,0,0.30);
-  --g-surface-raised-soft:rgba(0,0,0,0.25);
+[data-theme="dark"][data-accent="teal"] {
+  --color-primary: #14C8A6;          /* 9.22:1 on bg, 8.47:1 on card */
+  --color-primary-text: #14C8A6;
+  --color-on-primary: #0B0B0D;
 }
 
-/* ============= GLOW LEVELS ============= */
-[data-glow="subtle"]  { --g-orb-i: 0.5; --g-noise-i: 0.25; --g-glow-i: 0.5; --g-grid-i: 0.6; }
-[data-glow="medium"]  { --g-orb-i: 1.0; --g-noise-i: 0.35; --g-glow-i: 1.0; --g-grid-i: 1.0; }
-[data-glow="intense"] { --g-orb-i: 1.6; --g-noise-i: 0.45; --g-glow-i: 1.6; --g-grid-i: 1.2; }
+/* =========================================================
+   THE DOCUMENT SCROLLS
 
-/* ============= ARCHETYPE MOTION ============= */
-[data-archetype="holding"]     { --g-speed: 1.0;  --g-radii: 6px; }
-[data-archetype="financial"]   { --g-speed: 0.85; --g-radii: 4px; }
-[data-archetype="real_estate"] { --g-speed: 0.8;  --g-radii: 10px; }
-[data-archetype="ai_tech"]     { --g-speed: 1.3;  --g-radii: 3px; }
-[data-archetype="consumer"]    { --g-speed: 1.1;  --g-radii: 14px; }
-[data-archetype="charitable"]  { --g-speed: 0.7;  --g-radii: 10px; }
-[data-archetype="platform"]    { --g-speed: 1.0;  --g-radii: 4px; }
-[data-archetype="consulting"]  { --g-speed: 0.95; --g-radii: 4px; }
+   html and body stay static and visible. Pinning them stops mobile Safari
+   collapsing its URL bar, which permanently costs ~110px of viewport AND the
+   native back / share / tabs affordances. A fixed shell makes a product
+   behave like a kiosk.
 
-/* ============= UTILITIES ============= */
-.g-f-display { font-family: var(--g-f-display); letter-spacing: -0.01em; }
-.g-f-body    { font-family: var(--g-f-body); }
-.g-f-mono    { font-family: var(--g-f-mono); }
+   touch-action and overscroll-behavior are NOT set here. apple.com leaves
+   both auto; constraining them at document level is exactly what breaks
+   chrome collapse. overscroll-behavior: contain belongs on inner scroll
+   regions only — see .hig-carousel.
 
-.g-overline {
-  font-family: var(--g-f-mono);
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.32em; text-transform: uppercase;
-  color: var(--g-accent);
-}
-.g-tiny-label {
-  font-family: var(--g-f-mono);
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.28em; text-transform: uppercase;
-  color: var(--g-fg-muted);
+   Fixed chrome uses position: sticky/fixed on the ELEMENT.
+   ========================================================= */
+html,
+body {
+  position: static;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
 }
 
-/* ============= RADIANCE PRIMITIVES ============= */
-.g-aurora-mesh {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background:
-    radial-gradient(ellipse 900px 600px at 20% 80%, rgba(var(--g-accent-rgb),    calc(0.10 * var(--g-orb-i))), transparent 60%),
-    radial-gradient(ellipse 800px 500px at 80% 20%, rgba(var(--g-secondary-rgb), calc(0.08 * var(--g-orb-i))), transparent 60%),
-    radial-gradient(ellipse 700px 700px at 50% 50%, rgba(var(--g-accent-rgb),    calc(0.06 * var(--g-orb-i))), transparent 65%),
-    radial-gradient(ellipse 900px 600px at 70% 75%, rgba(var(--g-secondary-rgb), calc(0.08 * var(--g-orb-i))), transparent 65%);
-}
-[data-theme="light"] .g-aurora-mesh {
-  background:
-    radial-gradient(ellipse 900px 600px at 20% 80%, rgba(var(--g-accent-rgb),    calc(0.07 * var(--g-orb-i))), transparent 65%),
-    radial-gradient(ellipse 800px 500px at 80% 20%, rgba(var(--g-secondary-rgb), calc(0.05 * var(--g-orb-i))), transparent 65%),
-    radial-gradient(ellipse 700px 700px at 50% 50%, rgba(var(--g-accent-rgb),    calc(0.04 * var(--g-orb-i))), transparent 70%);
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-system);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-.g-orb {
-  position: absolute; border-radius: 50%;
-  pointer-events: none; filter: blur(60px);
-  opacity: calc(0.9 * var(--g-orb-i));
-  animation: g-drift calc(14s / var(--g-speed)) ease-in-out infinite;
-  z-index: 0;
+/* ============= TYPE =============
+   Sentence case only. Measured on apple.com: zero uppercase-transformed
+   elements and zero above 0.1em tracking, across four page/viewport
+   combinations. This is an observed rule, not a preference. */
+.hig-display {
+  font-size: var(--text-display);
+  line-height: var(--leading-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
-.g-orb-primary {
-  background: radial-gradient(circle,
-    rgba(var(--g-accent-rgb), 0.22) 0%,
-    rgba(var(--g-secondary-rgb), 0.12) 35%,
-    rgba(var(--g-secondary-rgb), 0.06) 65%, transparent 80%);
+.hig-title-1 {
+  font-size: var(--text-title-1);
+  line-height: var(--leading-title-1);
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
-.g-orb-sky {
-  background: radial-gradient(circle,
-    rgba(var(--g-accent-rgb), 0.20) 0%,
-    rgba(var(--g-accent-rgb), 0.09) 45%, transparent 75%);
+.hig-title-2 {
+  font-size: var(--text-title-2);
+  line-height: var(--leading-title-2);
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
-.g-orb-arctic {
-  background: radial-gradient(circle,
-    rgba(var(--g-accent-rgb), 0.18) 0%,
-    rgba(var(--g-accent-rgb), 0.08) 50%, transparent 80%);
-  filter: blur(50px);
+.hig-body {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 400;
 }
-[data-theme="light"] .g-orb { opacity: calc(0.55 * var(--g-orb-i)); }
-
-@keyframes g-drift {
-  0%, 100% { transform: translate(0,0) scale(1); }
-  33%      { transform: translate(28px,-22px) scale(1.08); }
-  66%      { transform: translate(-22px, 18px) scale(0.96); }
-}
-
-.g-noise {
-  position: absolute; inset: 0; pointer-events: none; z-index: 1;
-  opacity: var(--g-noise-i); mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.45 0'/></filter><rect width='128' height='128' filter='url(%23n)'/></svg>");
-  background-size: 128px 128px;
-}
-[data-theme="light"] .g-noise { opacity: calc(var(--g-noise-i) * 0.4); mix-blend-mode: multiply; }
-
-.g-grid-tex {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  opacity: var(--g-grid-i);
-  background-image:
-    linear-gradient(to right, rgba(100,120,160,0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(100,120,160,0.04) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-[data-theme="light"] .g-grid-tex {
-  background-image:
-    linear-gradient(to right, rgba(var(--g-accent-rgb), 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(var(--g-accent-rgb), 0.05) 1px, transparent 1px);
+.hig-caption {
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  font-weight: 400;
+  color: var(--color-secondary);
 }
 
-.g-text-glow {
-  text-shadow:
-    0 0 40px rgba(var(--g-accent-rgb), calc(0.35 * var(--g-glow-i))),
-    0 0 80px rgba(var(--g-secondary-rgb), calc(0.20 * var(--g-glow-i)));
-}
-.g-text-sparkle {
-  text-shadow:
-    0 0 20px rgba(var(--g-accent-rgb), calc(0.50 * var(--g-glow-i))),
-    0 0 60px rgba(var(--g-secondary-rgb), calc(0.25 * var(--g-glow-i)));
-}
-[data-theme="light"] .g-text-glow    { text-shadow: 0 0 30px rgba(var(--g-accent-rgb), calc(0.12 * var(--g-glow-i))); }
-[data-theme="light"] .g-text-sparkle { text-shadow: 0 0 20px rgba(var(--g-accent-rgb), calc(0.15 * var(--g-glow-i))); }
-
-.g-divider-glow {
-  height: 1px; width: 80px;
-  background: linear-gradient(90deg, var(--g-accent), var(--g-accent-hot));
-  box-shadow:
-    0 0 12px rgba(var(--g-accent-rgb), calc(0.5 * var(--g-glow-i))),
-    0 0 24px rgba(var(--g-accent-rgb), calc(0.3 * var(--g-glow-i)));
-  border-radius: 1px;
+/* The only surviving monospace: machine identifiers where character
+   alignment carries meaning. Not a decorative treatment. */
+.font-id {
+  font-family: var(--font-id);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ============= BUTTON ============= */
-.g-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 14px 22px;
-  font-family: var(--g-f-mono);
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  border-radius: var(--g-radii);
-  transition: all calc(.3s / var(--g-speed)) ease;
-  border: 0; cursor: pointer;
-}
-.g-btn-primary {
-  background: linear-gradient(135deg, var(--g-accent), var(--g-accent-hot));
-  color: #fff;
-  box-shadow:
-    0 0 0 1px rgba(var(--g-accent-rgb),0.4) inset,
-    0 8px 24px rgba(var(--g-accent-rgb),0.25),
-    0 0 30px rgba(var(--g-accent-rgb), calc(0.25 * var(--g-glow-i)));
-}
-.g-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 0 1px rgba(var(--g-accent-rgb),0.6) inset,
-    0 12px 32px rgba(var(--g-accent-rgb),0.4),
-    0 0 50px rgba(var(--g-accent-rgb), calc(0.5 * var(--g-glow-i)));
-}
-.g-btn-ghost {
-  background: transparent; color: var(--g-fg-strong);
-  border: 1px solid var(--g-border-strong);
-}
-.g-btn-ghost:hover {
-  border-color: var(--g-accent);
-  box-shadow: 0 0 24px rgba(var(--g-accent-rgb), calc(0.3 * var(--g-glow-i)));
+/* Numeric columns. */
+.hig-numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
 }
 
-/* ============= GLOW CARD ============= */
-.g-card {
-  position: relative;
-  background: var(--g-card);
-  border: 1px solid var(--g-border);
-  border-radius: var(--g-radii);
-  padding: 28px 26px 24px;
-  transition: all calc(.4s / var(--g-speed)) cubic-bezier(.2,.7,.2,1);
+/* Containment — text never escapes its box. */
+.hig-truncate {
   overflow: hidden;
-  isolation: isolate;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.g-card::before {
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--g-accent), var(--g-accent-hot));
-  box-shadow: 0 0 10px rgba(var(--g-accent-rgb),0.5);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform calc(.5s / var(--g-speed)) ease;
+.hig-wrap-safe {
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
-.g-card::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(var(--g-accent-rgb), 0.10), transparent 60%);
-  opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 0;
-}
-.g-card > * { position: relative; z-index: 1; }
-.g-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--g-border-strong);
-  box-shadow:
-    0 20px 40px -12px rgba(0,0,0,0.35),
-    0 0 30px rgba(var(--g-accent-rgb), calc(0.18 * var(--g-glow-i)));
-}
-.g-card:hover::before { transform: scaleX(1); }
-.g-card:hover::after  { opacity: 1; }
-
-/* ============= SECTION ============= */
-.g-section {
-  position: relative;
-  padding: 120px 40px;
-  overflow: hidden;
-  isolation: isolate;
-  background: var(--g-bg);
-  color: var(--g-fg);
-}
-.g-section-deep { background: var(--g-bg-deep); }
-.g-section-inner {
-  position: relative; z-index: 2;
-  max-width: 1120px; margin: 0 auto;
+.hig-prose {
+  max-width: 65ch;
 }
 
-/* ============= BASE ============= */
-html[data-entity] body {
-  background: var(--g-bg);
-  color: var(--g-fg);
-  font-family: var(--g-f-body);
-  transition: background-color .6s ease, color .6s ease;
+/* ============= SURFACES ============= */
+.hig-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+@media (min-width: 768px) {
+  .hig-card {
+    padding: var(--space-6);
+  }
 }
 
-@media (max-width: 920px) {
-  .g-section { padding: 80px 24px; }
+.hig-sunken {
+  background: var(--color-sunken);
+  border-radius: var(--radius-card);
+}
+
+/* Depth comes from materials, not from atmospheric gradients. */
+.hig-material {
+  background: var(--color-material);
+  backdrop-filter: blur(var(--blur-material));
+  -webkit-backdrop-filter: blur(var(--blur-material));
+  border-bottom: 1px solid var(--color-material-border);
+}
+
+.hig-separator {
+  height: 1px;
+  background: var(--color-border);
+  border: 0;
+  margin: 0;
+}
+
+/* ============= CONTROLS =============
+   Apple's own buttons measure 980px radius — buttons are pills. Inputs and
+   selects stay at the 12px control radius. */
+.hig-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target);
+  padding: var(--space-3) var(--space-6);
+  font-family: inherit;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: var(--leading-body);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color var(--motion-fast) var(--ease-out),
+              border-color var(--motion-fast) var(--ease-out),
+              opacity var(--motion-fast) var(--ease-out);
+}
+
+/* One filled primary per screen. Everything else is outline or plain. */
+.hig-button-primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.hig-button-primary:hover {
+  opacity: 0.88;
+}
+.hig-button-secondary {
+  background: transparent;
+  color: var(--color-primary-text);
+  border-color: var(--color-border);
+}
+.hig-button-secondary:hover {
+  border-color: var(--color-primary);
+}
+.hig-button-plain {
+  background: transparent;
+  color: var(--color-primary-text);
+  border-color: transparent;
+  padding: var(--space-3) var(--space-2);
+}
+
+.hig-input {
+  width: 100%;
+  min-height: var(--tap-target);
+  padding: var(--space-3) var(--space-4);
+  font-family: inherit;
+  /* 17px is what stops iOS Safari auto-zooming the viewport on focus. */
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--color-ink);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+.hig-input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Focus is always visible and always the accent. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-control);
+}
+
+/* Tap targets: keyed to pointer type, not viewport width. A touch laptop at
+   1024px is still a touch device. */
+@media (pointer: coarse) {
+  .hig-button,
+  .hig-input,
+  .hig-tap {
+    min-height: var(--tap-target);
+    min-width: var(--tap-target);
+  }
+}
+
+/* ============= LAYOUT ============= */
+.hig-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+@media (min-width: 768px) {
+  .hig-container {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+  }
+}
+
+.hig-section {
+  padding-top: var(--space-12);
+  padding-bottom: var(--space-12);
+}
+
+.hig-stack > * + * {
+  margin-top: var(--space-4);
+}
+
+/* Sticky chrome sits on the ELEMENT, never on the document. */
+.hig-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  max-height: 64px;
+}
+
+/* Safe areas on every fixed edge. */
+.hig-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.hig-safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ============= SANCTIONED HORIZONTAL CAROUSEL =============
+   apple.com's iPhone page ships five of these on mobile. Unintentional
+   horizontal scroll is the defect, not horizontal scroll.
+
+   A carousel needs ALL of: a peer set (never one record split across
+   columns), snap, the next item peeking at the edge, inline overscroll
+   containment, paging controls at >=768px, inset from the page gutter, and
+   every item reachable somewhere without horizontal scroll.
+
+   A DATA TABLE IS NEVER A CAROUSEL. */
+.hig-carousel {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+}
+.hig-carousel::-webkit-scrollbar {
+  display: none;
+}
+.hig-carousel > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+  /* The peek IS the affordance — without it the content looks complete. */
+  max-width: 86%;
+}
+@media (min-width: 768px) {
+  .hig-carousel > * {
+    max-width: 48%;
+  }
+}
+
+/* Native scrollbars on fine pointers; hidden on touch. Hiding them globally
+   removes the only affordance telling a mouse user that content continues. */
+@media (pointer: coarse) {
+  html,
+  html * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar,
+  html *::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ============= STATES =============
+   Every list and data panel ships empty, loading and error. No blank
+   regions, no bare spinners. */
+.hig-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-12) var(--space-4);
+  text-align: center;
+  color: var(--color-secondary);
+}
+.hig-skeleton {
+  background: var(--color-sunken);
+  border-radius: var(--radius-control);
+  animation: hig-pulse 350ms var(--ease-out) infinite alternate;
+}
+@keyframes hig-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.55; }
+}
+
+/* ============= REDUCED MOTION =============
+   Zeroes all of it. Not a softening — a zero. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }
