@@ -43,6 +43,7 @@ const js = `${banner}window.__GROTHOUSE_TOKENS__ = ${JSON.stringify(tokens, null
 const CSS_CONTRACT = [
   // selector, css var, expected value
   [':root', '--color-primary', tokens.color.accent.blue.light],
+  [':root', '--color-primary-fill', tokens.color.accent.blue.fillLight],
   [':root', '--color-bg', tokens.color.light.bg],
   [':root', '--color-card', tokens.color.light.card],
   [':root', '--color-sunken', tokens.color.light.sunken],
@@ -75,13 +76,16 @@ const CSS_CONTRACT = [
   [':root', '--container-max', `${tokens.layout.maxWidth}px`],
   ['[data-accent="teal"]', '--color-primary', tokens.color.accent.teal.light],
   ['[data-accent="teal"]', '--color-primary-text', tokens.color.accent.teal.lightText],
+  ['[data-accent="teal"]', '--color-primary-fill', tokens.color.accent.teal.fillLight],
   ['[data-theme="dark"]', '--color-primary', tokens.color.accent.blue.dark],
+  ['[data-theme="dark"]', '--color-primary-fill', tokens.color.accent.blue.fillDark],
   ['[data-theme="dark"]', '--color-bg', tokens.color.dark.bg],
   ['[data-theme="dark"]', '--color-card', tokens.color.dark.card],
   ['[data-theme="dark"]', '--color-ink', tokens.color.dark.ink],
   ['[data-theme="dark"]', '--color-secondary', tokens.color.dark.secondary],
   ['[data-theme="dark"]', '--color-border', tokens.color.dark.border],
   ['[data-theme="dark"][data-accent="teal"]', '--color-primary', tokens.color.accent.teal.dark],
+  ['[data-theme="dark"][data-accent="teal"]', '--color-primary-fill', tokens.color.accent.teal.fillDark],
 ];
 
 /**

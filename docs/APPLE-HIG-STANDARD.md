@@ -95,10 +95,30 @@ The hex is fixed by the colour law and ships in production today in
 `@g6xai/brand` v2.1.0. Forking it here would create a third definition of the
 same brand colour, which is the failure this whole conversion exists to stop.
 
-**Resolution:** keep `#0E8C74` as `--color-primary` for fills, focus rings, UI
-boundaries and text at 22px+. Add `--color-primary-text` `#0B7A64` (4.84:1 on
-bg, 5.27:1 on card) for accent-coloured text below 22px and for filled-button
-labels. Both values and both ratios are recorded in `tokens.json`.
+**Resolution — the accent splits into three roles**, because one value cannot
+serve all three:
+
+| Token | Is | Teal light |
+|---|---|---|
+| `--color-primary` | the accent **on** a page surface — borders, focus rings, icons | `#0E8C74` |
+| `--color-primary-text` | accent-coloured **text** below 22px | `#0B7A64` (4.84:1) |
+| `--color-primary-fill` | a filled **background** carrying `--color-on-primary` | `#0B7A64` (white on it: 5.27:1) |
+
+For blue all three coincide. For teal on light they do not.
+
+> **This was found in review, not by the gate.** The first version of this
+> conversion collapsed fill into `--color-primary`, so `.hig-button-primary`
+> rendered white on `#0E8C74` — **4.18:1**, below the 4.5:1 needed for a 17px
+> button label. Every consumer-facing entity's primary CTA failed contrast.
+>
+> A raw hex is checkable by regex; an insufficient ratio between two tokens is
+> not. `scripts/contrast.mjs` existed but was **advisory** — run by hand, and
+> its pair list did not include the filled-button combination. **A pair the
+> audit does not name is a pair nobody measured.**
+>
+> It is now a gate: it asserts all 22 shipped pairs against per-pair thresholds,
+> exits non-zero on failure, and runs in CI with a sabotage step that reverts
+> the fill and confirms the gate fails. Add the pair when you add the component.
 
 **This is the one place the kit is knowingly carrying a colour that cannot be
 used for body text.** It is recorded here so the trade is visible rather than

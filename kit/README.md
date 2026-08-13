@@ -31,11 +31,18 @@ kit/
 One accent per surface, always consumed as `--color-primary`. **A raw hex in a
 component is a violation.**
 
-> **The teal has a constraint.** `#0E8C74` measures 3.84:1 on the light
-> background — it clears the 3:1 bar for UI boundaries and 22px+ text, and fails
-> the 4.5:1 bar for body text. Use `--color-primary-text` (`#0B7A64`, 4.84:1)
-> for accent text below 22px and for filled-button labels. See
-> [`docs/APPLE-HIG-STANDARD.md` §2.2](../docs/APPLE-HIG-STANDARD.md).
+> **The teal has a constraint**, so the accent carries three roles:
+>
+> | Token | Use |
+> |---|---|
+> | `--color-primary` | accent **on** a surface — borders, focus rings, icons |
+> | `--color-primary-text` | accent **text** below 22px |
+> | `--color-primary-fill` | filled **background** under `--color-on-primary` |
+>
+> For blue all three coincide. For teal on light they do not — `#0E8C74`
+> measures 3.84:1 on the light background, so text and fills both step down to
+> `#0B7A64`. Collapsing fill into `--color-primary` ships a 4.18:1 button
+> label. See [`docs/APPLE-HIG-STANDARD.md` §2.2](../docs/APPLE-HIG-STANDARD.md).
 
 Every ratio in `tokens.json` is measured by `node scripts/contrast.mjs`, not
 asserted. Re-run it before changing a colour.

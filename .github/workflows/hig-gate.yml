@@ -28,6 +28,13 @@ jobs:
       - name: Token parity
         run: node scripts/build-tokens.mjs --check
 
+      # Asserts every colour pair the kit actually renders against its required
+      # ratio. Added after review caught a 4.18:1 primary button label that the
+      # lint could not see: a raw hex is checkable by regex, an insufficient
+      # contrast between two tokens is not.
+      - name: Contrast
+        run: node scripts/contrast.mjs
+
       # A file can reach zero violations by being broken. This checks what the
       # lint cannot see: dead links, unparseable JSON, an unusable tokens.js,
       # unbalanced CSS.
@@ -61,6 +68,20 @@ jobs:
           fi
           cp /tmp/gs.bak kit/grothouse-system.css
           echo "Parity check correctly rejected a drifted value."
+
+      # And for the contrast gate: collapsing the teal fill back into the
+      # accent is the exact defect review found. It must fail.
+      - name: Prove the contrast gate has teeth
+        run: |
+          cp scripts/contrast.mjs /tmp/ct.bak
+          sed -i "s/fillLight: '#0B7A64'/fillLight: '#0E8C74'/" scripts/contrast.mjs
+          if node scripts/contrast.mjs > /dev/null 2>&1; then
+            cp /tmp/ct.bak scripts/contrast.mjs
+            echo "::error::Contrast gate passed with a 4.18:1 button label — it is not enforcing."
+            exit 1
+          fi
+          cp /tmp/ct.bak scripts/contrast.mjs
+          echo "Contrast gate correctly rejected a sub-4.5:1 button label."
 
       - name: Report
         if: always()

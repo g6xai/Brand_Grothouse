@@ -20,9 +20,16 @@
 :root {
   /* ---- Accent: Co-Operate Blue (default) ----
      Contrast measured by scripts/contrast.mjs against the surfaces below. */
+  /* Three accent roles, because one value cannot serve all three:
+       --color-primary       the accent ON a page surface — borders, focus rings, icons
+       --color-primary-text  accent-coloured TEXT below 22px
+       --color-primary-fill  a filled BACKGROUND with --color-on-primary on top
+     For blue all three coincide. For teal on light they do not, and collapsing
+     them is what shipped a 4.18:1 button label. */
   --color-primary: #1249E5;          /* 6.20:1 on bg, 6.75:1 on card */
   --color-primary-text: #1249E5;     /* accent text below 22px */
-  --color-on-primary: #FFFFFF;       /* 6.75:1 on primary */
+  --color-primary-fill: #1249E5;     /* filled control background */
+  --color-on-primary: #FFFFFF;       /* 6.75:1 on the fill */
 
   /* ---- Neutrals: light is the default surface ---- */
   --color-bg: #F5F5F7;
@@ -85,10 +92,14 @@
    for UI boundaries, focus rings and text at 22px+, and FAILS the 4.5:1 bar
    for body text — so accent-coloured text below 22px uses --color-primary-text
    (#0B7A64, 4.84:1). The accent hex is fixed by the colour law and ships in
-   @g6xai/brand v2.1.0, so it is kept rather than forked. */
+   @g6xai/brand v2.1.0, so it is kept rather than forked.
+
+   The FILL is the same darker value: white on #0E8C74 is 4.18:1, which fails
+   for a 17px button label. White on #0B7A64 is 5.27:1. */
 [data-accent="teal"] {
   --color-primary: #0E8C74;
   --color-primary-text: #0B7A64;
+  --color-primary-fill: #0B7A64;
   --color-on-primary: #FFFFFF;
 }
 
@@ -96,6 +107,7 @@
 [data-theme="dark"] {
   --color-primary: #5F7FFF;          /* 5.59:1 on bg, 5.13:1 on card */
   --color-primary-text: #5F7FFF;
+  --color-primary-fill: #5F7FFF;     /* dark ink on it: 5.59:1 */
   --color-on-primary: #0B0B0D;
 
   --color-bg: #0B0B0D;
@@ -116,6 +128,7 @@
 [data-theme="dark"][data-accent="teal"] {
   --color-primary: #14C8A6;          /* 9.22:1 on bg, 8.47:1 on card */
   --color-primary-text: #14C8A6;
+  --color-primary-fill: #14C8A6;     /* dark ink on it: 9.22:1 */
   --color-on-primary: #0B0B0D;
 }
 
@@ -269,8 +282,10 @@ body {
 }
 
 /* One filled primary per screen. Everything else is outline or plain. */
+/* The fill, NOT --color-primary. For teal on light those differ, and using
+   --color-primary here rendered a 4.18:1 button label. */
 .hig-button-primary {
-  background: var(--color-primary);
+  background: var(--color-primary-fill);
   color: var(--color-on-primary);
 }
 .hig-button-primary:hover {

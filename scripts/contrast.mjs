@@ -33,40 +33,78 @@ if (a && b) {
   process.exit(n >= 4.5 ? 0 : 1);
 }
 
-/* The pairs the kit actually ships. Every one of these numbers appears in
-   kit/tokens.json next to its value. */
+/**
+ * Every colour pair the kit actually renders, with the threshold that pair
+ * must clear. Run with no arguments this is a GATE, not a report: it exits
+ * non-zero if any pair falls below its minimum.
+ *
+ * `min` is 4.5 for text below 22px, 3.0 for UI boundaries and large text.
+ *
+ * > This list is the fix for a real defect. `--color-primary` was used as a
+ * > filled-button background with `--color-on-primary` on top, and for teal in
+ * > the light theme that pair measures 4.18:1 — below the 4.5:1 needed for a
+ * > 17px button label. It shipped because this file was advisory, run by hand,
+ * > and its pair list did not include the filled-button combination. A pair the
+ * > audit does not name is a pair nobody measured. Add the pair when you add
+ * > the component.
+ */
 const LIGHT = { bg: '#F5F5F7', card: '#FFFFFF', ink: '#1D1D1F', secondary: '#6E6E73' };
 const DARK = { bg: '#0B0B0D', card: '#161618', ink: '#F5F5F7', secondary: '#98989D' };
 
+const BLUE = { light: '#1249E5', dark: '#5F7FFF', fillLight: '#1249E5', fillDark: '#5F7FFF' };
+const TEAL = { light: '#0E8C74', dark: '#14C8A6', text: '#0B7A64', fillLight: '#0B7A64', fillDark: '#14C8A6' };
+
 const PAIRS = [
-  ['light ink on bg', LIGHT.ink, LIGHT.bg],
-  ['light ink on card', LIGHT.ink, LIGHT.card],
-  ['light secondary on bg', LIGHT.secondary, LIGHT.bg],
-  ['light secondary on card', LIGHT.secondary, LIGHT.card],
-  ['dark ink on bg', DARK.ink, DARK.bg],
-  ['dark ink on card', DARK.ink, DARK.card],
-  ['dark secondary on bg', DARK.secondary, DARK.bg],
-  ['dark secondary on card', DARK.secondary, DARK.card],
-  ['-- blue accent --', null, null],
-  ['blue dark #5F7FFF on dark bg', '#5F7FFF', DARK.bg],
-  ['blue dark #5F7FFF on dark card', '#5F7FFF', DARK.card],
-  ['blue light #3A55E0 on light bg', '#3A55E0', LIGHT.bg],
-  ['blue light #3A55E0 on light card', '#3A55E0', LIGHT.card],
-  ['white on blue light #3A55E0', '#FFFFFF', '#3A55E0'],
-  ['-- teal accent --', null, null],
-  ['teal dark #14C8A6 on dark bg', '#14C8A6', DARK.bg],
-  ['teal dark #14C8A6 on dark card', '#14C8A6', DARK.card],
-  ['teal light #0E8C74 on light bg', '#0E8C74', LIGHT.bg],
-  ['teal light #0E8C74 on light card', '#0E8C74', LIGHT.card],
-  ['white on teal light #0E8C74', '#FFFFFF', '#0E8C74'],
+  ['-- neutrals --'],
+  ['light ink on bg', LIGHT.ink, LIGHT.bg, 4.5],
+  ['light ink on card', LIGHT.ink, LIGHT.card, 4.5],
+  ['light secondary on bg', LIGHT.secondary, LIGHT.bg, 4.5],
+  ['light secondary on card', LIGHT.secondary, LIGHT.card, 4.5],
+  ['dark ink on bg', DARK.ink, DARK.bg, 4.5],
+  ['dark ink on card', DARK.ink, DARK.card, 4.5],
+  ['dark secondary on bg', DARK.secondary, DARK.bg, 4.5],
+  ['dark secondary on card', DARK.secondary, DARK.card, 4.5],
+
+  ['-- blue accent as text and UI --'],
+  ['blue light on bg', BLUE.light, LIGHT.bg, 4.5],
+  ['blue light on card', BLUE.light, LIGHT.card, 4.5],
+  ['blue dark on bg', BLUE.dark, DARK.bg, 4.5],
+  ['blue dark on card', BLUE.dark, DARK.card, 4.5],
+
+  ['-- teal accent as text and UI --'],
+  // #0E8C74 is UI-only on light: 3.84:1 clears 3.0 and fails 4.5 on purpose.
+  ['teal light on bg (UI only)', TEAL.light, LIGHT.bg, 3.0],
+  ['teal light on card (UI only)', TEAL.light, LIGHT.card, 3.0],
+  ['teal light TEXT on bg', TEAL.text, LIGHT.bg, 4.5],
+  ['teal light TEXT on card', TEAL.text, LIGHT.card, 4.5],
+  ['teal dark on bg', TEAL.dark, DARK.bg, 4.5],
+  ['teal dark on card', TEAL.dark, DARK.card, 4.5],
+
+  ['-- filled buttons: label on fill --'],
+  ['white on blue fill light', '#FFFFFF', BLUE.fillLight, 4.5],
+  ['dark ink on blue fill dark', DARK.bg, BLUE.fillDark, 4.5],
+  ['white on teal fill light', '#FFFFFF', TEAL.fillLight, 4.5],
+  ['dark ink on teal fill dark', DARK.bg, TEAL.fillDark, 4.5],
 ];
 
 let worst = Infinity;
-for (const [label, fg, bg] of PAIRS) {
+const failures = [];
+for (const [label, fg, bg, min] of PAIRS) {
   if (!fg) { console.log(`\n  ${label}`); continue; }
   const n = contrast(fg, bg);
-  const large = /accent .* on (dark|light) (bg|card)/.test(label);
-  console.log(`  ${label.padEnd(34)} ${String(r2(n)).padStart(6)}:1  ${verdict(n, large)}`);
-  if (!label.startsWith('--')) worst = Math.min(worst, n);
+  const ok = n >= min;
+  if (!ok) failures.push(`${label} — ${r2(n)}:1, needs ${min}:1`);
+  console.log(
+    `  ${ok ? ' ' : 'x'} ${label.padEnd(32)} ${String(r2(n)).padStart(6)}:1  (min ${min})  ${verdict(n, min === 3)}`
+  );
+  worst = Math.min(worst, n);
 }
-console.log(`\n  lowest ratio in the set: ${r2(worst)}:1\n`);
+
+console.log(`\n  lowest ratio in the set: ${r2(worst)}:1`);
+if (failures.length) {
+  console.error(`\n  CONTRAST GATE FAILED\n`);
+  for (const f of failures) console.error(`    x ${f}`);
+  console.error('');
+  process.exit(1);
+}
+console.log(`  contrast ok — ${PAIRS.filter((p) => p[1]).length} shipped pairs clear their thresholds\n`);
