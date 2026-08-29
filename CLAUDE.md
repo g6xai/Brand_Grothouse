@@ -49,88 +49,147 @@ Agent contracts (`.claude/agents/`) in this repo are mirrored from the canonical
 
 # Grothouse Brand System
 
-This project contains **The Grothouse Family brand system** — guidelines,
-tokens, typography spec, motion spec, and logos. It is the foundation that
-sites, products, and collateral build on top of. It does NOT contain those
-artifacts itself.
+This project is **the brand kit** — the token source, the specs that teach it,
+and the gate that enforces it. It is the foundation sites, products and
+collateral build on. It does **not** contain those artifacts.
+
+## 🔴 Apple HIG is the standard — CEO ruling 2026-08-12
+
+**The canonical standard is `c:/Users/tony.grothouse/code/DriveX/design/APPLE-HIG-STANDARD.md`.**
+Read that file. It is 917 lines, measured against apple.com rather than
+asserted, and it carries a decision log recording where its own rules were
+reversed by re-measurement.
+
+**Do not copy it into this repo.** A duplicated standard across fifteen repos
+guarantees divergence, and this org has paid for that twice. This repo records
+only its own deltas, in `docs/APPLE-HIG-STANDARD.md`.
+
+**Precedence:** canonical standard → `docs/APPLE-HIG-STANDARD.md` →
+`kit/tokens.json` → everything else. **Where any file here disagrees with the
+canonical standard, the standard wins and the local file is the bug.**
 
 ## Canonical defaults — always
 
-**The Grothouse Family** (family-level, holding archetype)
-- Accent: Cobalt `#3944BC` (dark) / `#1338BE` (light)
-- Secondary: Azure `#5464D8` (dark) / `#1520A6` (light)
-- Surface: `cool` · Glow: `medium` · Archetype: `holding`
-- Preset: `editorial` · Layout: `classic`
-- **Theme: `light` (default)** — the family is designed light-first.
-  Dark mode is a user preference, not the brand's native voice.
+**The Grothouse Family**
+- Accent: **Co-Operate Blue** — `#5F7FFF` dark / `#1249E5` light
+- Theme: **`light`** (default). Dark is a user preference.
+- Group: `holding` — taxonomy only, **no visual consequence**
 
-Unless the user explicitly names a different entity from `kit/tokens.json`,
-always start with The Grothouse Family.
+```html
+<html data-entity="grothouse_family" data-accent="blue" data-theme="light">
+```
 
-## Core rules
+Unless the user names a different entity from `kit/tokens.json`, start here.
 
-1. **Import `kit/grothouse-system.css` as the base layer.** It defines every
-   radiance primitive (aurora mesh, orbs, noise, glow, cards, buttons, dividers)
-   and reads everything from CSS variables. All defaults are light-mode;
-   `[data-theme="dark"]` overrides flip values for dark mode.
-2. **Set entity attrs on `<html>` — always include `data-theme="light"` explicitly:**
-   ```html
-   <html data-entity="grothouse_family"
-         data-archetype="holding"
-         data-surface="cool"
-         data-glow="medium"
-         data-preset="editorial"
-         data-theme="light">
-   ```
-3. **Never invent colors.** All 24 entity accents sit in the blue family
-   (hue 210–260°). Pick from `kit/tokens.json > entities`. Use the `.light`
-   variant when rendering on light surfaces (default); use `.dark` only under
-   `data-theme="dark"`.
-4. **Typography:** Source Serif 4 (display) · Outfit (body) · JetBrains Mono (mono).
-   Load via Google Fonts. See `Typography Spec.html` for the ten-step scale.
-5. **Motion:** all transitions inherit archetype speed multipliers. See
-   `Motion Spec.html` for easing tokens, radiance levels, and timing tables.
-6. **Drop-in theme toggle:** include `kit/theme-toggle.css` + `kit/theme-toggle.js`
-   for a standard sun/moon toggle that persists to localStorage.
-7. **React projects:** use `ThemeProvider`, `Radiance`, `GlowCard`, `Section`,
-   `Display`, `DividerGlow` from `kit/react/index.jsx`.
-8. **Tailwind projects:** extend with `kit/tailwind.preset.js`.
+## The colour law
 
-## Five style presets (Style DNA)
-
-Each entity can render in one of five presets. `editorial` is the canonical default.
-
-| Preset | Character |
+| Scope | Accent |
 |---|---|
-| `editorial` | Serif display, generous whitespace, subtle radiance |
-| `brutalist` | Mono-first, 0-radius, heavy borders |
-| `glass` | Frosted translucent cards, max radiance |
-| `minimal` | Sans-only, flat, near-monochrome |
-| `maximalist` | Gradients everywhere, oversize type |
+| Grothouse default, platforms, websites, logos | Co-Operate Blue `#5F7FFF` / `#1249E5` |
+| G26xM, Xperience, Zeus, consumer-facing | Xperience Teal `#14C8A6` / `#0E8C74` |
 
-## Four hero layouts
+One accent per surface, always consumed as `--color-primary`. **A raw hex in a
+component is a violation.**
 
-`classic` (default) · `split` (copy + data visual) · `centered` · `asymmetric`
+> ⚠️ **The teal fails AA for body text**, so the accent carries **three** roles.
+> Using the wrong one already shipped a 4.18:1 button label once.
+>
+> | Token | Use | Teal light |
+> |---|---|---|
+> | `--color-primary` | accent **on** a surface — borders, focus rings, icons | `#0E8C74` |
+> | `--color-primary-text` | accent **text** below 22px | `#0B7A64` |
+> | `--color-primary-fill` | filled **background** under `--color-on-primary` | `#0B7A64` |
+>
+> For blue all three coincide. **Never use `--color-primary` as a filled
+> background.** See `docs/APPLE-HIG-STANDARD.md` §2.2.
 
-## 24 entities
+**Never invent a colour.** Every value lives in `kit/tokens.json` with a
+measured contrast ratio. Measure with `node scripts/contrast.mjs` — do not
+assert.
 
-See `kit/tokens.json`. Organized by archetype:
-- **Holding:** G26x · Grothouse Family
-- **Real Estate:** GXRE · Hearth · Residential · Commercial
-- **Financial:** RevoSure · The 5th Yr
-- **AI/Tech:** Co-Operate · G6x AI · Unorthodox Labs · Neural Vault
-- **Consumer:** Xperience Mortgage · HobbyBox
-- **Charitable:** The Foundation
-- **Platforms:** G6x Intelligence · Axon · Hive · OptX · ReVault · Node
-- **Consulting:** G6 Consulting · GXMG · Family Office
+## The system
+
+| | |
+|---|---|
+| **Type** | One system family. 34 / 28 / 22 / **17 default** / 13. **12px floor.** **Sentence case only** — measured on apple.com: zero uppercase elements, zero above 0.1em tracking. |
+| **Mono** | `.font-id` only, for machine identifiers where alignment carries meaning. Never decoration. |
+| **Radius** | 12 control · 16 card · **pill buttons** (Apple's measure 980px) |
+| **Motion** | 150 / **250 default** / 350ms, `cubic-bezier(0.32, 0.72, 0, 1)`. `prefers-reduced-motion` zeroes all of it. |
+| **Space** | 8pt grid, seven values: 4 / 8 / 12 / 16 / 24 / 32 / 48. Every Tailwind half-step is banned. |
+| **Depth** | Translucency + backdrop blur, surface-tone steps. **Not glow.** |
+
+## 📱 Mobile — the most-often-broken rules
+
+1. **The document scrolls.** `html`/`body` stay `position: static`,
+   `overflow: visible`. Pinning them stops mobile Safari collapsing its URL bar,
+   costing ~110px of viewport **and** the native back/share/tabs affordances.
+   Fixed chrome uses `sticky`/`fixed` **on the element**.
+2. **Never set `touch-action` or `overscroll-behavior` on `html`/`body`.**
+   apple.com leaves both `auto`.
+3. 🚨 **The trap:** `overflow-y: visible` computes to **`auto`** whenever the
+   other axis is `auto`/`scroll`/`hidden`. So one `overflow-x: auto` silently
+   re-traps document scroll. **`overflow-x: clip` is the only value that does
+   not force the other axis.** Never reach for `overflow-x: hidden`.
+
+**Horizontal carousels are sanctioned** — apple.com ships five on its iPhone
+mobile page. Unintentional horizontal scroll is the defect. A deliberate
+scroller declares `scroll-snap-type` (carousel) or `overscroll-behavior-inline`
+(scroll region); the lint reads the declaration block, so the sanction is
+visible to the rule and not only to a comment. **A data table is never a
+carousel.**
+
+## Retired — do not reintroduce
+
+The four-axis matrix (accent × surface tone × glow level × archetype), all
+radiance primitives (`g-aurora-mesh`, `g-orb*`, `g-noise`, `g-grid-tex`,
+`g-text-glow`, `g-divider-glow`), Source Serif 4 / Outfit / JetBrains Mono, the
+uppercase wide-tracked industrial overline, the five style presets, archetype
+radii, and archetype speed multipliers. `kit/archetypes.json` is deleted.
+
+**Exempt: logos and taglines only.** They keep their unique treatment,
+including the serif face in the Editorial Wordmark. The exemption stops at the
+artwork.
+
+## Gates — run before pushing, read the exit code
+
+```bash
+node scripts/hig-lint-ratchet.mjs             # no section may grow
+node scripts/hig-lint-ratchet.mjs --report    # per-rule, per-file detail
+node scripts/build-tokens.mjs --check         # tokens.js + CSS match tokens.json
+node scripts/check-assets.mjs                 # dead links, JSON, CSS balance
+```
+
+**All sections currently read 0**, so the baseline is all zeros and the rules
+are a **hard ban** — any new violation fails CI.
+
+- `kit/tokens.json` is canonical. `kit/tokens.js` is **generated**; regenerate
+  with `node scripts/build-tokens.mjs`. Hand-editing it fails `--check`.
+- The baseline **only moves down**. `--update` checks for growth before it
+  writes and refuses — you cannot raise the ceiling through the tool.
+- Changing a rule requires re-baselining against the **pre-change tree**, not
+  your working tree. See `docs/APPLE-HIG-STANDARD.md` §3.1.
+- Every rule ships known-bad and known-good fixtures; the self-test runs on
+  every invocation. **A probe never checked against a known-good input is not
+  evidence.**
+
+## Consumers
+
+**`@g6xai/brand` is NOT this repo** — it is `Xperience-G26xM/packages/brand/`,
+a separate published package. Verified 2026-08-12: **no repo imports this kit at
+build time.** Every reference is documentary. So there is no build to break —
+but the fix does not propagate automatically either.
+
+Known divergences with `@g6xai/brand` v2.1.0 (body 16px vs 17, Manrope vs system
+stack, 140/200/320ms motion, an uppercase eyebrow) are recorded in
+`docs/APPLE-HIG-STANDARD.md` §4 and are **not** resolved by this repo.
 
 ## What this project IS
 
-- Brand Guidelines, Typography Spec, Motion Spec (3 HTML documents)
-- Logo package (3 marks × 4 variants each)
+- Brand Guidelines, Typography Spec, Motion Spec, Logo package (HTML)
 - Design tokens (`kit/tokens.json` is source of truth)
-- Radiance CSS primitives + React primitives + Tailwind preset
-- Theme Playground for auditing tokens
+- CSS token layer, React primitives, Tailwind preset
+- The HIG gate: ratchet, rules with fixtures, token parity, asset check
+- Token Playground for auditing
 
 ## What this project is NOT
 
@@ -138,36 +197,35 @@ See `kit/tokens.json`. Organized by archetype:
 - Not a component library (tokens + primitives only)
 - Not marketing collateral
 
-When the user asks for a site, product UI, deck, letterhead, or any
-artifact that builds on the brand — that is new work that references this
-system. Do not add those files here unless explicitly instructed.
-
-## Quick commands
-
-- **Explore themes visually:** open `kit/Theme Playground.html`
-- **Read the brand rules:** open `Brand Guidelines.html`
-- **Audit type:** open `Typography Spec.html`
-- **Audit motion:** open `Motion Spec.html`
-- **Add a new entity:** append to `kit/tokens.json > entities` — all primitives
-  auto-reskin.
+When the user asks for a site, product UI, deck or letterhead — that is new work
+that *references* this system. Do not add those files here.
 
 ## Files
 
 ```
 /
-├── index.html                   ← Brand system hub
-├── Brand Guidelines.html        ← Master document
-├── Typography Spec.html         ← Families, scale, pairings, presets
-├── Motion Spec.html             ← Easings, speeds, radiance, timings
-├── G26x Logos.html              ← 3 marks × 4 variants
-├── logos/                       ← 12 SVG files
+├── index.html                     Brand system hub
+├── Brand Guidelines.html          Master document
+├── Typography Spec.html           One family, five sizes
+├── Motion Spec.html               Durations, easing, reduced motion
+├── G26x Logos.html                Three marks, four variants
+├── docs/APPLE-HIG-STANDARD.md     This repo's deltas + precedence
+├── design/hig-lint-baseline.json  Violation counts; only moves down
+├── logos/                         12 SVG files
+├── scripts/
+│   ├── hig-lint-ratchet.mjs       The gate
+│   ├── hig-rules.mjs              Rules, each with its own fixtures
+│   ├── build-tokens.mjs           Generate + verify the mirrors
+│   ├── check-assets.mjs           Dead links, JSON, CSS balance
+│   └── contrast.mjs               Measure, do not assert
 └── kit/
-    ├── tokens.json              ← Source of truth
-    ├── tokens.js                ← JS global
-    ├── archetypes.json          ← 8 archetypes, machine-readable
-    ├── grothouse-system.css     ← Radiance + semantic tokens (light-default)
+    ├── tokens.json                Source of truth
+    ├── tokens.js                  GENERATED — do not edit
+    ├── grothouse-system.css       Token layer + primitives
     ├── tailwind.preset.js
-    ├── theme-toggle.css/.js     ← Drop-in toggle
+    ├── theme-toggle.css/.js
     ├── react/index.jsx
+    ├── README.md
+    ├── product-spec.md            IA + voice (visual differentiation retired)
     └── Theme Playground.html
 ```

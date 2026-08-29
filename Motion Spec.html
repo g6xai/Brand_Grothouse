@@ -1,395 +1,199 @@
 <!doctype html>
-<html lang="en" data-entity="grothouse_family" data-archetype="holding" data-surface="cool" data-glow="medium" data-preset="editorial" data-theme="light">
+<html lang="en" data-entity="grothouse_family" data-accent="blue" data-theme="light">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Motion Spec — The Grothouse Family</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="kit/grothouse-system.css" />
-<link rel="stylesheet" href="kit/theme-toggle.css" />
-<style>
-  :root { color-scheme: light; }
-  html, body { background: var(--g-bg); color: var(--g-fg); }
-  body { margin: 0; font-family: var(--g-f-body); font-size: 15px; line-height: 1.65; }
-  main { max-width: 1080px; margin: 0 auto; padding: 80px 60px 160px; }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Motion Spec — Grothouse Design System</title>
+  <link rel="stylesheet" href="kit/grothouse-system.css" />
+  <link rel="stylesheet" href="kit/theme-toggle.css" />
+  <style>
+    .mo-eyebrow {
+      color: var(--color-primary-text);
+      font-size: var(--text-caption);
+      line-height: var(--leading-caption);
+      font-weight: 600;
+    }
+    .mo-spec {
+      color: var(--color-secondary);
+      font-size: var(--text-caption);
+      line-height: var(--leading-caption);
+      font-family: var(--font-id);
+    }
+    .mo-table { width: 100%; border-collapse: collapse; }
+    .mo-table th, .mo-table td {
+      text-align: start;
+      padding: var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--text-caption);
+      line-height: var(--leading-caption);
+    }
+    .mo-table th { font-weight: 600; }
+    .mo-table td:first-child { font-family: var(--font-id); }
+    @media (max-width: 767px) {
+      .mo-table thead { display: none; }
+      .mo-table tr { display: block; padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border); }
+      .mo-table td { display: block; border: 0; padding: var(--space-1) 0; }
+      .mo-table td::before { content: attr(data-label) " — "; color: var(--color-secondary); }
+    }
+    .mo-note {
+      border-inline-start: 3px solid var(--color-primary);
+      padding-inline-start: var(--space-4);
+    }
 
-  .crumb { font-family: var(--g-f-mono); font-size: 10px; letter-spacing: 0.22em; color: var(--g-fg-muted); text-transform: uppercase; margin-bottom: 8px; }
-  .crumb a { color: var(--g-accent); border-bottom: 1px solid rgba(var(--g-accent-rgb),.3); text-decoration: none; }
-
-  .eyebrow { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); margin-bottom: 22px; display: flex; align-items: center; gap: 14px; }
-  .eyebrow .rule { flex: 1; max-width: 120px; height: 1px; background: var(--g-accent); opacity: .5; }
-  h1.page { font-family: var(--g-f-display); font-weight: 700; font-size: clamp(44px, 4.8vw, 72px); line-height: 1.04; letter-spacing: -0.022em; margin: 0 0 18px; color: var(--g-fg-strong); max-width: 22ch; }
-  h1.page em { font-style: italic; font-weight: 400; color: var(--g-accent); }
-  .lead { color: var(--g-fg-stone); font-size: 17px; line-height: 1.6; max-width: 56ch; margin: 0 0 40px; }
-
-  section { padding-top: 72px; border-top: 1px dashed var(--g-border); margin-top: 72px; }
-  section:first-of-type { border-top: 0; margin-top: 24px; padding-top: 0; }
-  .num { font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--g-accent); display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-  .num .rule { flex: 1; height: 1px; background: var(--g-border); }
-  h2 { font-family: var(--g-f-display); font-weight: 700; font-size: 36px; line-height: 1.12; letter-spacing: -0.012em; color: var(--g-fg-strong); margin: 0 0 16px; max-width: 28ch; }
-  h2 em { font-style: italic; font-weight: 400; color: var(--g-accent); }
-  h3 { font-family: var(--g-f-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-accent); margin: 40px 0 14px; }
-  p { margin: 0 0 14px; max-width: 62ch; }
-  p.note { color: var(--g-fg-muted); font-size: 13px; font-style: italic; }
-
-  .tok-table { width: 100%; border-collapse: collapse; margin: 14px 0 24px; }
-  .tok-table th, .tok-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 12px; vertical-align: top; }
-  .tok-table th { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-fg-muted); background: var(--g-card); }
-  .tok-table td.n { color: var(--g-accent); font-weight: 700; white-space: nowrap; }
-  .tok-table td.v { color: var(--g-fg-strong); }
-  .tok-table td.u { color: var(--g-fg); font-family: var(--g-f-body); font-size: 13px; }
-
-  /* ============= EASING DEMO ============= */
-  .ease-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 18px 0 26px; }
-  .ease { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 18px; }
-  .ease .name { font-family: var(--g-f-mono); font-size: 11px; font-weight: 700; color: var(--g-accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
-  .ease .use { font-size: 12px; color: var(--g-fg-muted); font-style: italic; margin-bottom: 14px; min-height: 34px; }
-  .ease .track { height: 6px; background: var(--g-border); border-radius: 3px; position: relative; margin-bottom: 6px; overflow: hidden; }
-  .ease .dot { position: absolute; top: 50%; left: 0; width: 14px; height: 14px; margin-top: -7px; margin-left: -7px; background: var(--g-accent); border-radius: 50%; animation: ease-run 2.4s infinite; box-shadow: 0 0 14px rgba(var(--g-accent-rgb), .5); }
-  .ease[data-ease="linear"]   .dot { animation-timing-function: linear; }
-  .ease[data-ease="smooth"]   .dot { animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
-  .ease[data-ease="gentle"]   .dot { animation-timing-function: cubic-bezier(.25, .1, .25, 1); }
-  .ease[data-ease="snappy"]   .dot { animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
-  .ease[data-ease="authoritative"] .dot { animation-timing-function: cubic-bezier(.6, 0, .3, 1); }
-  .ease[data-ease="emphasized"] .dot { animation-timing-function: cubic-bezier(.2, 0, 0, 1); }
-  @keyframes ease-run { 0%,100% { left: 0; } 48%,52% { left: 100%; } }
-  .ease code { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-fg-muted); display: block; margin-top: 6px; }
-
-  /* ============= RADIANCE LEVEL DEMOS ============= */
-  .glow-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 18px 0 26px; }
-  .glow { position: relative; height: 220px; border-radius: 4px; overflow: hidden; border: 1px solid var(--g-border); background: var(--g-card); }
-  .glow .label { position: absolute; top: 14px; left: 16px; z-index: 3; font-family: var(--g-f-mono); font-size: 10px; font-weight: 700; letter-spacing: 0.26em; color: var(--g-accent); text-transform: uppercase; }
-  .glow .caption { position: absolute; bottom: 14px; left: 16px; right: 16px; z-index: 3; font-family: var(--g-f-display); font-style: italic; color: var(--g-fg-strong); font-size: 14px; }
-  .orb { position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
-  .orb.a { width: 200px; height: 200px; top: -40px; left: -40px; background: rgba(var(--g-accent-rgb), .6); animation: orb-drift-a 9s ease-in-out infinite; }
-  .orb.b { width: 160px; height: 160px; bottom: -40px; right: -30px; background: rgba(var(--g-accent-rgb), .4); animation: orb-drift-b 11s ease-in-out infinite; }
-  @keyframes orb-drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,30px) scale(1.1); } }
-  @keyframes orb-drift-b { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,-20px) scale(1.08); } }
-
-  .glow.subtle .orb.a { opacity: .4; animation-duration: 13s; }
-  .glow.subtle .orb.b { opacity: .25; animation-duration: 16s; }
-  .glow.medium .orb.a { opacity: .85; animation-duration: 9s; }
-  .glow.medium .orb.b { opacity: .65; animation-duration: 11s; }
-  .glow.intense .orb.a { opacity: 1; animation-duration: 7s; filter: blur(32px); }
-  .glow.intense .orb.b { opacity: .9; animation-duration: 9s; filter: blur(28px); }
-  .glow.intense::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(var(--g-accent-rgb), .2), transparent 65%); }
-
-  /* ============= ARCHETYPE SPEED TIMELINE ============= */
-  .speeds { display: grid; gap: 8px; margin: 18px 0 26px; }
-  .speed-row { display: grid; grid-template-columns: 160px 80px 1fr 60px; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px dashed var(--g-border); }
-  .speed-row .arc { font-family: var(--g-f-display); font-size: 15px; font-weight: 600; color: var(--g-fg-strong); }
-  .speed-row .arc small { display: block; font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; color: var(--g-accent); letter-spacing: 0.24em; text-transform: uppercase; margin-top: 2px; }
-  .speed-row .mult { font-family: var(--g-f-mono); font-size: 12px; color: var(--g-fg); text-align: right; }
-  .speed-row .mult strong { color: var(--g-accent); }
-  .speed-row .track { height: 6px; background: var(--g-border); border-radius: 3px; position: relative; overflow: hidden; }
-  .speed-row .track .pulse { position: absolute; top: 0; bottom: 0; left: 0; width: 30px; background: var(--g-accent); border-radius: 3px; box-shadow: 0 0 12px rgba(var(--g-accent-rgb), .5); animation: track-pulse var(--dur) linear infinite; }
-  @keyframes track-pulse { 0% { left: -30px; } 100% { left: calc(100% + 0px); } }
-  .speed-row .ms { font-family: var(--g-f-mono); font-size: 10px; color: var(--g-fg-muted); text-align: right; }
-
-  /* ============= INTERACTION TIMINGS ============= */
-  .timing-table { width: 100%; border-collapse: collapse; }
-  .timing-table th, .timing-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--g-border); font-family: var(--g-f-mono); font-size: 12px; vertical-align: top; }
-  .timing-table th { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--g-fg-muted); background: var(--g-card); }
-  .timing-table td.lbl { color: var(--g-accent); font-weight: 700; white-space: nowrap; }
-  .timing-table td.u { font-family: var(--g-f-body); font-size: 13px; color: var(--g-fg); }
-
-  /* ============= DO / DONT ============= */
-  .dodont { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0 28px; }
-  .dodont > div { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 22px 26px; }
-  .dodont .tag { font-family: var(--g-f-mono); font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 14px; }
-  .dodont .yes .tag { color: #3B8F4A; }
-  .dodont .no .tag  { color: #B63D4B; }
-  .dodont .yes { border-left: 3px solid #3B8F4A; }
-  .dodont .no  { border-left: 3px solid #B63D4B; }
-  .dodont ul { margin: 0; padding-left: 18px; }
-  .dodont li { margin-bottom: 6px; font-size: 13px; line-height: 1.55; }
-
-  .panel { background: var(--g-card); border: 1px solid var(--g-border); border-radius: 4px; padding: 24px 28px; margin: 18px 0 26px; }
-  pre { margin: 0; font-family: var(--g-f-mono); font-size: 12px; line-height: 1.7; color: var(--g-fg-strong); overflow-x: auto; }
-
-  @media (max-width: 860px) {
-    main { padding: 40px 24px 120px; }
-    .glow-grid { grid-template-columns: 1fr; }
-    .dodont { grid-template-columns: 1fr; }
-    .speed-row { grid-template-columns: 1fr; gap: 6px; }
-  }
-</style>
+    /* Live demos. Every duration below is a token — a spec that hard-codes its
+       own examples is teaching the thing it forbids. */
+    .mo-stage {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      min-height: var(--tap-target);
+    }
+    .mo-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: var(--color-primary);
+    }
+    .mo-demo:hover .mo-dot { transform: translateX(48px); }
+    .mo-fast .mo-dot { transition: transform var(--motion-fast) var(--ease-out); }
+    .mo-standard .mo-dot { transition: transform var(--motion-standard) var(--ease-out); }
+    .mo-emphasis .mo-dot { transition: transform var(--motion-emphasis) var(--ease-out); }
+  </style>
 </head>
 <body>
-<main>
-  <div class="crumb"><a href="index.html">Brand System</a> · Motion Spec</div>
-  <div class="eyebrow"><span class="rule"></span> Motion Spec · Grothouse · v1.0</div>
-  <h1 class="page">Motion as <em>atmosphere</em>. Never theatrics.</h1>
-  <p class="lead">The Grothouse family moves slowly on purpose. Aurora meshes drift. Orbs breathe. UI chrome responds crisply but quietly. The archetype a design inherits decides the <em>speed</em> of that atmosphere — a holding company breathes; an AI product snaps. The grammar is the same.</p>
+  <button class="g-theme-toggle" data-theme-toggle aria-label="Switch to dark mode">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
 
-  <!-- ========= 01 · PRINCIPLES ========= -->
-  <section>
-    <div class="num"><span>01</span><span class="rule"></span><span>Motion Principles</span></div>
-    <h2>Four rules for every motion <em>the family ships</em>.</h2>
+  <main class="hig-container hig-section">
+    <p class="mo-eyebrow">Grothouse Design System</p>
+    <h1 class="hig-display">Motion</h1>
+    <p class="hig-body hig-prose">
+      Three durations, one easing, and a hard stop for anyone who asks for less
+      motion. The archetype speed multipliers — 1.3&times; for ai_tech, 0.7&times;
+      for charitable, and the six others — are retired. Every entity moves at the
+      same speed.
+    </p>
 
-    <h3>01 · Motion runs on cellos, not snares</h3>
-    <p>The default rhythm of the family is slow, continuous, breathing. Fast hits and sharp bounces belong to the AI/Tech archetype alone. All other motion is <em>legato</em> — easing in and out, never snapping into place.</p>
+    <section class="hig-section">
+      <h2 class="hig-title-1">The scale</h2>
+      <table class="mo-table">
+        <thead><tr><th>Token</th><th>Duration</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr>
+            <td data-label="Token">--motion-fast</td>
+            <td data-label="Duration">150ms</td>
+            <td data-label="Use">Press feedback, hover, focus ring</td>
+          </tr>
+          <tr>
+            <td data-label="Token">--motion-standard</td>
+            <td data-label="Duration">250ms</td>
+            <td data-label="Use">DEFAULT — disclosure, tab switch, fade, list reorder</td>
+          </tr>
+          <tr>
+            <td data-label="Token">--motion-emphasis</td>
+            <td data-label="Duration">350ms</td>
+            <td data-label="Use">Sheet present and dismiss, full-screen transition</td>
+          </tr>
+          <tr>
+            <td data-label="Token">--ease-out</td>
+            <td data-label="Duration">cubic-bezier(0.32, 0.72, 0, 1)</td>
+            <td data-label="Use">Every transition. There is no second easing.</td>
+          </tr>
+        </tbody>
+      </table>
 
-    <h3>02 · Radiance drifts, it does not march</h3>
-    <p>The aurora mesh and orbs move on independent, prime-ratio durations (7s, 9s, 11s, 13s) so they never sync into a visible beat. If you can predict the motion after watching for ten seconds, it's wrong.</p>
-
-    <h3>03 · UI chrome is snappier than the background</h3>
-    <p>Hovers, focus rings, and button states resolve in <em>150ms</em>. The background radiance takes 7–13 seconds to cycle. This contrast — crisp foreground, slow background — is the family's motion signature.</p>
-
-    <h3>04 · <code>prefers-reduced-motion</code> is a full stop</h3>
-    <p>When the user has reduced motion enabled, <em>every</em> orb, aurora, drift, and parallax stops. Cards, transitions, and color changes still work, but all ambient animation freezes. This is non-negotiable.</p>
-  </section>
-
-  <!-- ========= 02 · EASING ========= -->
-  <section>
-    <div class="num"><span>02</span><span class="rule"></span><span>Easing Curves</span></div>
-    <h2>Six curves. <em>Six moods.</em></h2>
-    <p>Every motion in the family resolves through one of six curves. Pick the curve by <em>what the motion means</em>, not by what looks nice.</p>
-
-    <div class="ease-grid">
-      <div class="ease" data-ease="smooth">
-        <div class="name">smooth</div>
-        <div class="use">Default for 90% of UI. Balanced acceleration in and out.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>cubic-bezier(.4, 0, .2, 1)</code>
+      <div class="hig-card mo-note">
+        <p class="hig-body">
+          250ms is the default and covers most cases. Two documented exceptions:
+          250ms on a button press reads as lag — press feedback has to be
+          sub-200ms to feel attached to the finger. 250ms on a full-height sheet
+          reads as abrupt; Apple's own sheet presentation is roughly 350ms.
+        </p>
       </div>
-      <div class="ease" data-ease="gentle">
-        <div class="name">gentle</div>
-        <div class="use">Charitable, editorial. Soft, almost apologetic.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>cubic-bezier(.25, .1, .25, 1)</code>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Feel the difference</h2>
+      <p class="hig-caption">Hover each row. If you have reduced motion enabled, nothing moves — that is correct.</p>
+
+      <div class="hig-card mo-demo mo-fast">
+        <div class="mo-stage"><div class="mo-dot"></div><p class="mo-spec">150ms — fast</p></div>
       </div>
-      <div class="ease" data-ease="authoritative">
-        <div class="name">authoritative</div>
-        <div class="use">Holding, financial. Deliberate departure, firm arrival.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>cubic-bezier(.6, 0, .3, 1)</code>
+      <div class="hig-card mo-demo mo-standard">
+        <div class="mo-stage"><div class="mo-dot"></div><p class="mo-spec">250ms — standard</p></div>
       </div>
-      <div class="ease" data-ease="snappy">
-        <div class="name">snappy</div>
-        <div class="use">AI/Tech only. Near-instant start, gentle landing.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>cubic-bezier(.2, .8, .2, 1)</code>
+      <div class="hig-card mo-demo mo-emphasis">
+        <div class="mo-stage"><div class="mo-dot"></div><p class="mo-spec">350ms — emphasis</p></div>
       </div>
-      <div class="ease" data-ease="emphasized">
-        <div class="name">emphasized</div>
-        <div class="use">Hero transitions, page reveals. Material-style emphasis.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>cubic-bezier(.2, 0, 0, 1)</code>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">Reduced motion is a zero, not a softening</h2>
+      <div class="hig-card mo-note">
+        <p class="hig-body">
+          <span class="font-id">prefers-reduced-motion: reduce</span> sets every
+          animation and transition duration to <span class="font-id">0ms</span>
+          and disables smooth scrolling. It does not halve the duration or swap a
+          slide for a fade — a user who asks for no motion gets no motion.
+        </p>
+        <p class="hig-caption">
+          The rule lives in grothouse-system.css and applies to every element,
+          including pseudo-elements. Nothing opts out.
+        </p>
       </div>
-      <div class="ease" data-ease="linear">
-        <div class="name">linear</div>
-        <div class="use">Orb drift, aurora mesh. Only for infinite ambient motion.</div>
-        <div class="track"><div class="dot"></div></div>
-        <code>linear</code>
+    </section>
+
+    <section class="hig-section">
+      <h2 class="hig-title-1">What motion is for</h2>
+      <table class="mo-table">
+        <thead><tr><th>Do</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td data-label="Do">Confirm a touch landed</td>
+            <td data-label="Why">The only feedback a finger gets on glass</td>
+          </tr>
+          <tr>
+            <td data-label="Do">Show where a thing came from</td>
+            <td data-label="Why">A sheet rising from the bottom edge says how to dismiss it</td>
+          </tr>
+          <tr>
+            <td data-label="Do">Preserve continuity across a state change</td>
+            <td data-label="Why">A list that reorders instantly looks like a different list</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="hig-card mo-note">
+        <p class="hig-body">
+          <strong>Retired with the radiance layer:</strong> the 14-second orb
+          drift loop, the aurora mesh, the cursor-tracking card glow, and the
+          card hover lift. An infinite decorative animation behind content
+          contradicts deferring to that content — and it never stops, so it costs
+          battery on every device that renders it.
+        </p>
       </div>
-    </div>
+    </section>
 
-    <h3>Tokens</h3>
-    <table class="tok-table">
-      <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
-      <tbody>
-        <tr><td class="n">--g-e-smooth</td><td class="v">cubic-bezier(.4, 0, .2, 1)</td><td class="u">Default UI transitions.</td></tr>
-        <tr><td class="n">--g-e-gentle</td><td class="v">cubic-bezier(.25, .1, .25, 1)</td><td class="u">Charitable, editorial archetypes.</td></tr>
-        <tr><td class="n">--g-e-auth</td><td class="v">cubic-bezier(.6, 0, .3, 1)</td><td class="u">Holding, financial.</td></tr>
-        <tr><td class="n">--g-e-snappy</td><td class="v">cubic-bezier(.2, .8, .2, 1)</td><td class="u">AI/Tech only.</td></tr>
-        <tr><td class="n">--g-e-emph</td><td class="v">cubic-bezier(.2, 0, 0, 1)</td><td class="u">Hero page transitions.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ========= 03 · ARCHETYPE SPEEDS ========= -->
-  <section>
-    <div class="num"><span>03</span><span class="rule"></span><span>Archetype Speed Multipliers</span></div>
-    <h2>Each archetype breathes at <em>its own tempo</em>.</h2>
-    <p>All base durations are multiplied by the archetype's <code>animationSpeed</code>. A base hover transition of 150ms becomes 128ms under Financial, 195ms under AI/Tech. The bars below pulse at the actual archetype-scaled duration for a standard 600ms reveal.</p>
-
-    <div class="speeds">
-      <div class="speed-row" style="--dur: 600ms"><div class="arc">AI / Tech <small>ai_tech</small></div><div class="mult"><strong>1.3×</strong> faster</div><div class="track"><div class="pulse"></div></div><div class="ms">460ms</div></div>
-      <div class="speed-row" style="--dur: 780ms"><div class="arc">Consumer <small>consumer</small></div><div class="mult"><strong>1.1×</strong> faster</div><div class="track"><div class="pulse"></div></div><div class="ms">545ms</div></div>
-      <div class="speed-row" style="--dur: 860ms"><div class="arc">Holding <small>holding</small></div><div class="mult"><strong>1.0×</strong> base</div><div class="track"><div class="pulse"></div></div><div class="ms">600ms</div></div>
-      <div class="speed-row" style="--dur: 860ms"><div class="arc">Platform <small>platform</small></div><div class="mult"><strong>1.0×</strong> base</div><div class="track"><div class="pulse"></div></div><div class="ms">600ms</div></div>
-      <div class="speed-row" style="--dur: 910ms"><div class="arc">Consulting <small>consulting</small></div><div class="mult"><strong>0.95×</strong></div><div class="track"><div class="pulse"></div></div><div class="ms">632ms</div></div>
-      <div class="speed-row" style="--dur: 1020ms"><div class="arc">Financial <small>financial</small></div><div class="mult"><strong>0.85×</strong></div><div class="track"><div class="pulse"></div></div><div class="ms">706ms</div></div>
-      <div class="speed-row" style="--dur: 1080ms"><div class="arc">Real Estate <small>real_estate</small></div><div class="mult"><strong>0.8×</strong></div><div class="track"><div class="pulse"></div></div><div class="ms">750ms</div></div>
-      <div class="speed-row" style="--dur: 1240ms"><div class="arc">Charitable <small>charitable</small></div><div class="mult"><strong>0.7×</strong> slower</div><div class="track"><div class="pulse"></div></div><div class="ms">857ms</div></div>
-    </div>
-
-    <p class="note">Speed multipliers apply to UI transitions and component animations. Radiance durations (7s / 9s / 11s / 13s orb cycles) are fixed — they do not scale per archetype.</p>
-  </section>
-
-  <!-- ========= 04 · RADIANCE LEVELS ========= -->
-  <section>
-    <div class="num"><span>04</span><span class="rule"></span><span>Radiance Levels</span></div>
-    <h2>Three dials. <em>One atmosphere.</em></h2>
-    <p>Each entity picks a glow level — <code>subtle</code>, <code>medium</code>, or <code>intense</code>. The level controls orb opacity, noise texture strength, and whether the aurora mesh wash is visible.</p>
-
-    <div class="glow-grid">
-      <div class="glow subtle">
-        <div class="label">Subtle</div>
-        <div class="orb a"></div><div class="orb b"></div>
-        <div class="caption">Financial, real estate — barely-there presence.</div>
+    <section class="hig-section">
+      <h2 class="hig-title-1">Scroll is not an animation surface</h2>
+      <div class="hig-card mo-note">
+        <p class="hig-body">
+          No scroll hijacking. No scroll-linked animation beyond a border or
+          shadow appearing once <span class="font-id">scrollTop &gt; 0</span>.
+          Sticky headers cap at 64px.
+        </p>
+        <p class="hig-body">
+          The document scrolls — html and body stay static and visible. Pinning
+          them stops mobile Safari collapsing its URL bar, which permanently costs
+          about 110px of viewport and the native back, share and tabs
+          affordances.
+        </p>
       </div>
-      <div class="glow medium">
-        <div class="label">Medium · default</div>
-        <div class="orb a"></div><div class="orb b"></div>
-        <div class="caption">Holding, consumer, charitable — confident atmosphere.</div>
-      </div>
-      <div class="glow intense">
-        <div class="label">Intense</div>
-        <div class="orb a"></div><div class="orb b"></div>
-        <div class="caption">AI/Tech, hero announcements only.</div>
-      </div>
-    </div>
+    </section>
+  </main>
 
-    <h3>Level tokens</h3>
-    <table class="tok-table">
-      <thead><tr><th>Level</th><th>Orb opacity</th><th>Noise</th><th>Glow</th><th>Grid</th><th>Orb cycle</th></tr></thead>
-      <tbody>
-        <tr><td class="n">subtle</td><td class="v">0.5×</td><td class="v">0.25</td><td class="v">0.5×</td><td class="v">0.6</td><td class="v">13s / 16s</td></tr>
-        <tr><td class="n">medium</td><td class="v">1.0×</td><td class="v">0.35</td><td class="v">1.0×</td><td class="v">1.0</td><td class="v">9s / 11s</td></tr>
-        <tr><td class="n">intense</td><td class="v">1.6×</td><td class="v">0.45</td><td class="v">1.6×</td><td class="v">1.2</td><td class="v">7s / 9s</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Orb drift anatomy</h3>
-    <p>Each orb moves through a <em>prime-ratio pair</em> of durations so the two never sync. The standard pair is 9s (primary orb) and 11s (secondary orb) — they resync only every 99 seconds. Intensification reduces the pair to 7s/9s (resync every 63s); subtle extends to 13s/16s (208s).</p>
-    <div class="panel">
-<pre>.orb-a { animation: drift-a 9s linear infinite; }
-.orb-b { animation: drift-b 11s linear infinite; }
-
-@keyframes drift-a {
-  0%, 100% { transform: translate(0, 0)       scale(1.00); }
-  50%      { transform: translate(40px, 30px) scale(1.08); }
-}
-@keyframes drift-b {
-  0%, 100% { transform: translate(0, 0)        scale(1.00); }
-  50%      { transform: translate(-30px, -20px) scale(1.06); }
-}</pre>
-    </div>
-  </section>
-
-  <!-- ========= 05 · INTERACTION TIMINGS ========= -->
-  <section>
-    <div class="num"><span>05</span><span class="rule"></span><span>Interaction Timings</span></div>
-    <h2>Every UI state <em>has a duration</em>.</h2>
-    <p>These are the base timings (archetype multiplier = 1.0). Multiply by the archetype's <code>animationSpeed</code> for the shipped value.</p>
-
-    <table class="timing-table">
-      <thead><tr><th>Motion</th><th>Base duration</th><th>Easing</th><th>Purpose</th></tr></thead>
-      <tbody>
-        <tr><td class="lbl">Hover · button</td><td>150ms</td><td>smooth</td><td class="u">Background + border accent fade.</td></tr>
-        <tr><td class="lbl">Hover · card</td><td>200ms</td><td>smooth</td><td class="u">Border brightens, glow swells softly.</td></tr>
-        <tr><td class="lbl">Focus ring</td><td>120ms</td><td>smooth</td><td class="u">Input focus outline appears.</td></tr>
-        <tr><td class="lbl">Button press</td><td>80ms down / 140ms up</td><td>snappy / smooth</td><td class="u">Quick visual acknowledgement.</td></tr>
-        <tr><td class="lbl">Modal open</td><td>320ms</td><td>emphasized</td><td class="u">Backdrop + scale-in 0.96 → 1.0.</td></tr>
-        <tr><td class="lbl">Modal close</td><td>200ms</td><td>smooth</td><td class="u">Backdrop + fade 1.0 → 0, no scale.</td></tr>
-        <tr><td class="lbl">Page transition</td><td>450ms</td><td>emphasized</td><td class="u">Hero text stagger in, 60ms per line.</td></tr>
-        <tr><td class="lbl">Reveal on scroll</td><td>600ms</td><td>smooth</td><td class="u">opacity 0→1, translate 12px→0.</td></tr>
-        <tr><td class="lbl">Tab switch</td><td>180ms</td><td>smooth</td><td class="u">Indicator slides, content cross-fades.</td></tr>
-        <tr><td class="lbl">Theme toggle</td><td>200ms</td><td>smooth</td><td class="u">Color variables interpolate. No flash.</td></tr>
-        <tr><td class="lbl">Numeric counter</td><td>1400ms</td><td>emphasized</td><td class="u">Count-up animations on stat reveals.</td></tr>
-        <tr><td class="lbl">Orb drift</td><td>9000ms / 11000ms</td><td>linear</td><td class="u">Ambient radiance. Infinite loop.</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Duration tokens</h3>
-    <table class="tok-table">
-      <thead><tr><th>Token</th><th>Value</th><th>Use</th></tr></thead>
-      <tbody>
-        <tr><td class="n">--g-d-xs</td><td class="v">80ms</td><td class="u">Press feedback.</td></tr>
-        <tr><td class="n">--g-d-sm</td><td class="v">150ms</td><td class="u">Hover, focus.</td></tr>
-        <tr><td class="n">--g-d-md</td><td class="v">300ms</td><td class="u">Modal, tab.</td></tr>
-        <tr><td class="n">--g-d-lg</td><td class="v">600ms</td><td class="u">Reveal, stagger.</td></tr>
-        <tr><td class="n">--g-d-xl</td><td class="v">1400ms</td><td class="u">Numeric counter.</td></tr>
-        <tr><td class="n">--g-d-drift</td><td class="v">9000ms</td><td class="u">Orb cycle, base.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- ========= 06 · STAGGERING ========= -->
-  <section>
-    <div class="num"><span>06</span><span class="rule"></span><span>Staggering &amp; Sequencing</span></div>
-    <h2>When multiple things move, <em>they do not all move at once</em>.</h2>
-
-    <ul style="margin: 10px 0 20px; padding-left: 22px; max-width: 62ch;">
-      <li style="margin-bottom: 8px;"><b>Hero reveal</b> — eyebrow (0ms) → headline (60ms) → accent phrase (160ms) → lead (260ms) → CTA (380ms). Each on 450ms emphasized.</li>
-      <li style="margin-bottom: 8px;"><b>Card grid reveal</b> — cards enter with 40ms stagger. Max stagger capped at 280ms so the last card doesn't feel abandoned.</li>
-      <li style="margin-bottom: 8px;"><b>Navigation</b> — nav items never stagger on load. They appear instantly with the page. Only content staggers.</li>
-      <li style="margin-bottom: 8px;"><b>Numeric reveal</b> — stat labels fade in (300ms), then numbers count up (1400ms emphasized). The count is the event, not the appearance.</li>
-      <li><b>Form field focus</b> — label color, border color, and focus ring all animate simultaneously at 120ms. No staggering within a single input.</li>
-    </ul>
-
-    <div class="panel">
-<pre>/* Hero stagger example */
-.hero .eyebrow { animation: reveal 450ms var(--g-e-emph)    0ms both; }
-.hero h1       { animation: reveal 450ms var(--g-e-emph)   60ms both; }
-.hero .accent  { animation: reveal 450ms var(--g-e-emph)  160ms both; }
-.hero .lead    { animation: reveal 450ms var(--g-e-emph)  260ms both; }
-.hero .cta     { animation: reveal 450ms var(--g-e-emph)  380ms both; }
-
-@keyframes reveal {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}</pre>
-    </div>
-  </section>
-
-  <!-- ========= 07 · ACCESSIBILITY ========= -->
-  <section>
-    <div class="num"><span>07</span><span class="rule"></span><span>Accessibility</span></div>
-    <h2><code>prefers-reduced-motion</code> <em>is a full stop</em>.</h2>
-    <p>When the user has reduced motion enabled, all orb drift, aurora mesh, parallax, count-up animations, and decorative ambient motion stops. UI chrome transitions (hover, focus, modal) can continue at reduced duration (80ms) or disable entirely — both are acceptable.</p>
-
-    <div class="panel">
-<pre>@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  .orb, .aurora, .noise { animation: none !important; }
-  .counter-up           { animation: none !important; }
-}</pre>
-    </div>
-
-    <p class="note">This snippet lives at the bottom of <code>kit/grothouse-system.css</code>. Never override it in an application stylesheet.</p>
-  </section>
-
-  <!-- ========= 08 · DO / DON'T ========= -->
-  <section>
-    <div class="num"><span>08</span><span class="rule"></span><span>Do &amp; Don't</span></div>
-    <h2>The motion <em>temperament</em>.</h2>
-    <div class="dodont">
-      <div class="yes">
-        <div class="tag">✓ Do</div>
-        <ul>
-          <li>Let orbs breathe on prime-ratio durations (7/9/11/13s).</li>
-          <li>Match the archetype's speed multiplier for every UI transition.</li>
-          <li>Stagger hero reveals at 60–80ms intervals, capped at 380ms total.</li>
-          <li>Count up large stats over 1400ms, emphasized easing.</li>
-          <li>Respect <code>prefers-reduced-motion</code> without exception.</li>
-        </ul>
-      </div>
-      <div class="no">
-        <div class="tag">✕ Don't</div>
-        <ul>
-          <li>Bounce. No overshoot easing, no spring physics, no elastic.</li>
-          <li>Animate the serif display letters individually — the wordmark never wobbles.</li>
-          <li>Use parallax scrolling. The family's surfaces are flat by design.</li>
-          <li>Stagger more than 6 elements — it reads as gimmick, not reveal.</li>
-          <li>Use <code>ease-in-out</code> shorthand. Always specify the named cubic-bezier.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<button class="g-theme-toggle" data-theme-toggle title="Toggle theme">
-  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-</button>
-<script src="kit/theme-toggle.js" defer></script>
+  <script src="kit/theme-toggle.js"></script>
 </body>
 </html>

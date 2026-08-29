@@ -1,124 +1,124 @@
 # Grothouse Design System
 
-One shared radiance language, **24 distinct entity skins**.
+Apple HIG. Black, white, grey, and **one accent per surface**.
+
+**Canonical standard:** `c:/Users/tony.grothouse/code/DriveX/design/APPLE-HIG-STANDARD.md`
+**This repo's deltas:** [`docs/APPLE-HIG-STANDARD.md`](../docs/APPLE-HIG-STANDARD.md)
+
+Where anything here disagrees with the canonical standard, **the standard wins
+and this file is the bug.**
 
 ## What's in the box
 
 ```
 kit/
-├── tokens.json              ← Single source of truth (24 entities + archetypes + surfaces)
-├── tokens.js                ← Same tokens as a JS global (for static HTML)
-├── grothouse-system.css     ← Universal radiance layer (drop into any site)
-├── tailwind.preset.js       ← Tailwind v3 preset + v4 @theme snippet
-├── react/index.jsx          ← React primitives (ThemeProvider, Radiance, GlowCard, …)
-├── playground.css
-├── playground.jsx
-└── Theme Playground.html    ← Live 24-entity switcher
+├── tokens.json              ← SOURCE OF TRUTH
+├── tokens.js                ← GENERATED from tokens.json — do not edit
+├── grothouse-system.css     ← The token layer + primitives
+├── tailwind.preset.js       ← Tailwind bindings (no hex, all var())
+├── theme-toggle.css/.js     ← Drop-in light/dark toggle
+├── react/index.jsx          ← React primitives
+└── Theme Playground.html    ← Live token audit, all 24 entities
 ```
 
-## How the theme axis works
+## The colour law
 
-Every entity is a composition of **four tokens**:
+| Accent | Scope | Dark | Light |
+|---|---|---|---|
+| Co-Operate Blue | Grothouse default, platforms, websites, logos | `#5F7FFF` | `#1249E5` |
+| Xperience Teal | G26xM, Xperience, Zeus, consumer-facing | `#14C8A6` | `#0E8C74` |
 
-| Token         | Options                                                | What it controls                     |
-|---------------|--------------------------------------------------------|--------------------------------------|
-| `accent`      | Any hex + its light-mode twin                          | Brand color (plus auto "hot" hover)  |
-| `secondary`   | Any hex + its light-mode twin                          | Orb cores, mesh depth                |
-| `surfaceTone` | `iceCool` · `cool` · `neutral` · `warm` · `emberWarm`  | Black/white/grey temperature         |
-| `glowLevel`   | `subtle` · `medium` · `intense`                        | Orb/noise/glow/grid intensity preset |
-| `archetype`   | `holding` · `financial` · `real_estate` · `ai_tech` · `consumer` · `charitable` · `platform` · `consulting` | Motion speed + corner radii |
+One accent per surface, always consumed as `--color-primary`. **A raw hex in a
+component is a violation.**
 
-This keeps everything **black/white/grey + one brand color** while giving every site a unique fingerprint.
+> **The teal has a constraint**, so the accent carries three roles:
+>
+> | Token | Use |
+> |---|---|
+> | `--color-primary` | accent **on** a surface — borders, focus rings, icons |
+> | `--color-primary-text` | accent **text** below 22px |
+> | `--color-primary-fill` | filled **background** under `--color-on-primary` |
+>
+> For blue all three coincide. For teal on light they do not — `#0E8C74`
+> measures 3.84:1 on the light background, so text and fills both step down to
+> `#0B7A64`. Collapsing fill into `--color-primary` ships a 4.18:1 button
+> label. See [`docs/APPLE-HIG-STANDARD.md` §2.2](../docs/APPLE-HIG-STANDARD.md).
 
-## Three ways to consume the system
+Every ratio in `tokens.json` is measured by `node scripts/contrast.mjs`, not
+asserted. Re-run it before changing a colour.
 
-### 1. Plain HTML / any stack
+## The system
+
+| | |
+|---|---|
+| **Type** | One family (system stack). 34 / 28 / 22 / **17 default** / 13. Floor 12px. Sentence case only. |
+| **Radius** | 12 control · 16 card · pill buttons |
+| **Motion** | 150 / **250 default** / 350ms, `cubic-bezier(0.32, 0.72, 0, 1)`. Reduced motion zeroes all of it. |
+| **Space** | 8pt grid, seven values: 4 / 8 / 12 / 16 / 24 / 32 / 48 |
+| **Depth** | Translucency + backdrop blur, and surface-tone steps. Not glow. |
+
+## Consuming the system
+
+### Plain HTML
 
 ```html
-<html data-entity="cooperate"
-      data-archetype="ai_tech"
-      data-surface="iceCool"
-      data-glow="intense"
-      data-theme="dark">
+<html data-entity="grothouse_family" data-accent="blue" data-theme="light">
 <head>
-  <link rel="stylesheet" href="grothouse-system.css">
-  <style>
-    :root {
-      --g-accent: #5F7FFF;
-      --g-accent-hot: #8299FF;
-      --g-secondary: #8B6FFF;
-      --g-accent-rgb: 95, 127, 255;
-      --g-secondary-rgb: 139, 111, 255;
-    }
-  </style>
+  <link rel="stylesheet" href="kit/grothouse-system.css">
 </head>
 <body>
-  <section class="g-section">
-    <div class="g-aurora-mesh"></div>
-    <div class="g-orb g-orb-primary" style="width:520px;height:520px;top:-10%;left:-8%"></div>
-    <div class="g-noise"></div>
-    <div class="g-section-inner">…</div>
-  </section>
+  <main class="hig-container hig-section">
+    <h1 class="hig-display">Built on faith, driven by purpose.</h1>
+    <div class="hig-card">
+      <h2 class="hig-title-2">Card</h2>
+      <p class="hig-body">Body copy at 17px.</p>
+    </div>
+    <button class="hig-button hig-button-primary">Primary</button>
+  </main>
 </body>
 </html>
 ```
 
-### 2. Next.js + Tailwind (matches your g26x stack)
+No webfont link. The system stack ships with the operating system.
+
+### Tailwind
 
 ```js
 // tailwind.config.js
 module.exports = {
   presets: [require('./kit/tailwind.preset.js')],
-  content: ['./app/**/*.{tsx,jsx}']
+  content: ['./app/**/*.{tsx,jsx}'],
 };
 ```
 
-Import the CSS once in `app/layout.tsx`:
+The preset **replaces** Tailwind's spacing and radius scales rather than
+extending them — extending would leave every half-step (`0.5 1.5 2.5`) and
+intermediate step (`5 7 9 10 11 14`) available, and removing those is the entire
+reason the 8pt grid exists.
+
+On Tailwind v4 you need no preset at all: the tokens are already CSS custom
+properties, so `@import` the stylesheet.
+
+### React
 
 ```jsx
-import './kit/grothouse-system.css';
-import tokens from './kit/tokens.json';
+import { ThemeProvider, Container, Display, Body, Card, Button } from './kit/react';
 
-export default function Layout({ children, params }) {
-  const entity = tokens.entities.find(e => e.id === params.entity);
-  return (
-    <html data-entity={entity.id}
-          data-archetype={entity.archetype}
-          data-surface={entity.surfaceTone}
-          data-glow={entity.glowLevel}
-          data-theme="dark">
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
-Then use Tailwind classes that read from CSS vars:
-
-```jsx
-<h1 className="font-display text-fg-strong">
-  Built on <span className="text-accent italic">Faith.</span>
-</h1>
-<button className="bg-accent-gradient shadow-glow text-white …">Get Started</button>
-```
-
-### 3. React components
-
-```jsx
-import { ThemeProvider, Section, Radiance, GlowCard, Display, DividerGlow } from './kit/react';
-
-<ThemeProvider entity="foundation" theme="dark">
-  <Section deep>
-    <Radiance mesh orbs noise grid />
-    <SectionInner>
-      <Display glow as="h1">Rooted in Faith</Display>
-      <DividerGlow />
-    </SectionInner>
-  </Section>
+<ThemeProvider entity="xperience_mortgage" theme="light">
+  <Container>
+    <Display>Curated by you, for you.</Display>
+    <Card>
+      <Body>The accent follows the entity — teal, here.</Body>
+      <Button variant="primary">Start</Button>
+    </Card>
+  </Container>
 </ThemeProvider>
 ```
 
-## Adding a new entity
+The accent is read from the entity and cannot be passed in. Letting a caller
+override it is how a third accent appears.
+
+## Adding an entity
 
 Append to `tokens.json > entities`:
 
@@ -128,33 +128,50 @@ Append to `tokens.json > entities`:
   "name": "Entity Name",
   "ticker": "ENT",
   "tagline": "Short promise.",
-  "archetype": "platform",
-  "surfaceTone": "cool",
-  "glowLevel": "medium",
-  "accent":    { "dark": "#...", "light": "#...", "name": "Label" },
-  "secondary": { "dark": "#...", "light": "#...", "name": "Label" }
+  "group": "platform",
+  "accent": "blue"
 }
 ```
 
-That's it. Every primitive (aurora, orbs, glows, borders, button, card, divider) re-colors automatically.
+`group` is taxonomy only — it has **no visual consequence**. That was the point
+of retiring the archetype axis.
 
-## The Theme Playground
+Then regenerate the mirror:
 
-Open `kit/Theme Playground.html`. Use the sidebar to:
-- Search + filter by archetype
-- Click any of the 24 entities to reskin the entire preview instantly
-- Toggle each radiance layer (mesh / orbs / noise / grid)
-- Switch dark ↔ light
-- Copy-to-clipboard the theme as CSS, JSON, or the React provider snippet
+```bash
+node scripts/build-tokens.mjs
+```
 
-## Current 24 entities
+## Gates
 
-Holding: G26x · The Grothouse Family
-Real Estate: GXRE · Hearth Interiors · G26x Residential · G26x Commercial
-Management: GXMG · Family Office
-Charitable: The Foundation
-Consumer: Xperience Mortgage · HobbyBox
-AI/Tech: Co-Operate · G6x AI · Unorthodox Labs · Neural Vault
-Platforms: G6x Intelligence · Axon · Hive · OptX · ReVault · Node
-Financial: RevoSure · The 5th Yr
-Consulting: G6 Consulting
+All of these run in CI on every pull request.
+
+```bash
+node scripts/hig-lint-ratchet.mjs             # no section may grow
+node scripts/hig-lint-ratchet.mjs --report    # per-rule, per-file detail
+node scripts/build-tokens.mjs --check         # tokens.js and CSS match tokens.json
+node scripts/check-assets.mjs                 # dead links, JSON, CSS balance
+node scripts/contrast.mjs '#0E8C74' '#FFFFFF' # measure a pair
+```
+
+Every section currently reads **0**, so the baseline is all zeros and the rules
+are a **hard ban** — any new violation fails the gate.
+
+`kit/tokens.js` is generated. Editing it by hand fails `--check`.
+
+## What was retired
+
+The four-axis matrix (accent × surface tone × glow level × archetype), all
+radiance primitives (`g-aurora-mesh`, `g-orb*`, `g-noise`, `g-grid-tex`,
+`g-text-glow`, `g-divider-glow`), the serif/sans/mono three-face split, the five
+style presets, archetype radii, and archetype speed multipliers.
+
+**Exempt: logos and taglines.** Nothing else.
+
+## The 24 entities
+
+Rendered live from `tokens.json` in [Brand Guidelines](../Brand%20Guidelines.html)
+and the [Token Playground](Theme%20Playground.html), so no list here can drift
+from the source.
+
+Teal: Xperience Mortgage · HobbyBox. Everything else: blue.
